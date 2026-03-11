@@ -122,6 +122,7 @@ THESIS_META = {
 
 N_SIMS = 8000
 
+@st.cache_data
 def run_monte_carlo(df):
     rows = []
     for _, row in df.iterrows():
@@ -152,6 +153,7 @@ def run_lp(df, budget):
             shadow = round(abs(c.pi), 4)
     return df, exp, shadow
 
+@st.cache_data
 def build_frontier(df, steps=35):
     max_b = df['cost'].sum()
     rows, prev_g, prev_b = [], 0.0, 0.0
@@ -179,9 +181,21 @@ def chart_portfolio(df):
         ax.text(row['p_gold']+0.012, i, f"{row['p_gold']:.0%}",
                 ha='left', va='center', fontsize=7, fontfamily='monospace',
                 color='#555' if row['selected'] else '#ddd')
+    # "funded" / "not selected" label on first occurrence of each
+    labeled = set()
+    for i, (_, row) in enumerate(df_s.iterrows()):
+        tag = 'funded' if row['selected'] else 'not selected'
+        if tag not in labeled:
+            ax.text(-0.565, i, tag, ha='left', va='center', fontsize=6,
+                    fontfamily='monospace',
+                    color='#555' if row['selected'] else '#ccc',
+                    style='italic')
+            labeled.add(tag)
     ax.set_xlim(-0.58, 1.2)
     ax.set_yticks([])
-    ax.set_xlabel('P(gold)  ·  ghost bar = P(medal)', fontsize=8, color='#888', labelpad=5)
+    ax.set_xlabel('P(gold)', fontsize=8, color='#888', labelpad=5)
+    ax.text(0.98, -0.06, 'light extension = P(medal)', transform=ax.transAxes,
+            ha='right', va='top', fontsize=6.5, fontfamily='monospace', color='#bbb')
     ax.tick_params(axis='x', labelsize=7.5, colors='#888')
     ax.spines['bottom'].set_color('#ccc')
     ax.spines['bottom'].set_linewidth(0.8)
@@ -197,6 +211,11 @@ def chart_frontier(frontier, budget, exp_golds):
     ax.plot(frontier['budget'], frontier['exp_golds'], color='#1a1a1a', lw=1.3, zorder=3)
     ax.axvline(budget, color='#ccc', lw=0.8, ls='--', zorder=1)
     ax.scatter([budget], [exp_golds], color='#1a1a1a', s=30, zorder=5)
+    ax.annotate(f"{exp_golds:.2f}",
+                xy=(budget, exp_golds),
+                xytext=(budget + 0.3, exp_golds + 0.04),
+                fontsize=7, color='#1a1a1a', fontfamily='monospace',
+                arrowprops=dict(arrowstyle='-', color='#ccc', lw=0.6))
     peak = frontier.loc[frontier['shadow_price'].idxmax()]
     ax.annotate(f"peak return\nat {peak['budget']:.1f} units",
                 xy=(peak['budget'], peak['exp_golds']),
@@ -226,10 +245,11 @@ def chart_shadow(frontier, budget):
     return fig
 
 def render_tab(raw_df, context, key):
-    df = run_monte_carlo(raw_df)
+    mc_df = run_monte_carlo(raw_df)
     max_b = float(raw_df['cost'].sum())
-    budget = st.slider('Capital deployed', 0.5, max_b, min(5.0, max_b), step=0.1, key=key)
-    df, exp_golds, shadow = run_lp(df, budget)
+    budget = st.slider('Capital budget (units)', 0.5, max_b, min(5.0, max_b), step=0.1, key=key,
+                       help='One unit ≈ annual program funding allocation. Programs cost 0.8–1.2 units each.')
+    df, exp_golds, shadow = run_lp(mc_df, budget)
     selected = df[df['selected'] == 1]
     n_funded = len(selected)
     budget_used = round(selected['cost'].sum(), 1) if not selected.empty else 0.0
@@ -237,10 +257,10 @@ def render_tab(raw_df, context, key):
 
     st.markdown(f"""
     <div class="kpi-row">
-        <div class="kpi"><div class="kpi-value">{exp_golds:.2f}</div><div class="kpi-label">Expected golds</div><div class="kpi-sub">portfolio return</div></div>
+        <div class="kpi"><div class="kpi-value">{exp_golds:.2f}</div><div class="kpi-label">Expected golds</div><div class="kpi-sub">avg medals across simulations</div></div>
         <div class="kpi"><div class="kpi-value">{n_funded}</div><div class="kpi-label">Programs funded</div><div class="kpi-sub">of {len(df)} evaluated</div></div>
         <div class="kpi"><div class="kpi-value">{budget_used}</div><div class="kpi-label">Capital deployed</div><div class="kpi-sub">of {budget:.1f} available</div></div>
-        <div class="kpi"><div class="kpi-value">{shadow:.3f}</div><div class="kpi-label">Marginal medal value</div><div class="kpi-sub">per unit at this level</div></div>
+        <div class="kpi"><div class="kpi-value">{"—" if shadow == 0.0 else f"{shadow:.3f}"}</div><div class="kpi-label">Marginal medal value</div><div class="kpi-sub">{"frontier has flattened" if shadow == 0.0 else "expected golds per unit added"}</div></div>
         <div class="kpi"><div class="kpi-value">{p_any:.0%}</div><div class="kpi-label">P(any medal)</div><div class="kpi-sub">across portfolio</div></div>
     </div>
     """, unsafe_allow_html=True)
@@ -251,24 +271,47 @@ def render_tab(raw_df, context, key):
     st.markdown("## Investment theses")
     c1, c2, c3 = st.columns(3)
     for col, (thesis, meta) in zip([c1,c2,c3], THESIS_META.items()):
-        n = len(df[df['thesis']==thesis])
-        ns = len(df[(df['thesis']==thesis)&(df['selected']==1)])
+        t_df = df[df['thesis']==thesis]
+        t_sel = t_df[t_df['selected']==1]
+        n, ns = len(t_df), len(t_sel)
+        avg_pg = t_sel['p_gold'].mean() if not t_sel.empty else 0.0
+        total_cost = t_sel['cost'].sum() if not t_sel.empty else 0.0
         with col:
-            st.markdown(f"""<div class="thesis-card"><div class="thesis-label">{thesis}</div>
+            st.markdown(f"""<div class="thesis-card" style="border-left-color:{meta['color']};">
+            <div class="thesis-label">{thesis}</div>
             <div class="thesis-name">{ns} of {n} funded</div>
+            <div style="font-family:'DM Mono',monospace;font-size:0.68rem;color:#888;margin:0.25rem 0 0.15rem 0;">
+              avg P(gold) {avg_pg:.0%} &nbsp;·&nbsp; cost {total_cost:.1f} units
+            </div>
             <div class="thesis-desc">{meta['desc']}</div></div>""", unsafe_allow_html=True)
 
     st.markdown('<hr>', unsafe_allow_html=True)
+
+    # Funded programs quick-scan
+    if not selected.empty:
+        pills = ''.join(
+            f'<span style="display:inline-block;font-family:\'DM Mono\',monospace;font-size:0.65rem;'
+            f'letter-spacing:0.06em;border:1px solid #1a1a1a;padding:0.15rem 0.55rem;margin:0.2rem 0.3rem 0.2rem 0;'
+            f'color:#1a1a1a;">{r["sport"]} · {r["discipline"]} <span style="color:#888;">{r["p_gold"]:.0%}</span></span>'
+            for _, r in selected.sort_values('p_gold', ascending=False).iterrows()
+        )
+        st.markdown(
+            f'<div style="margin-bottom:1.4rem;"><div style="font-family:\'DM Mono\',monospace;font-size:0.62rem;'
+            f'letter-spacing:0.1em;text-transform:uppercase;color:#888;margin-bottom:0.4rem;">Funded programs</div>'
+            f'{pills}</div>',
+            unsafe_allow_html=True
+        )
+
     cl, cr = st.columns([1.1, 1])
 
     with cl:
         st.markdown("## Portfolio")
-        st.markdown("### P(gold) by program · dark = funded · ghost = not selected")
+        st.markdown("### P(gold) by program")
         st.pyplot(chart_portfolio(df), use_container_width=True)
         plt.close()
 
     with cr:
-        frontier = build_frontier(df)
+        frontier = build_frontier(mc_df)
         st.markdown("## Efficient frontier")
         st.markdown("### Expected golds across capital levels")
         st.pyplot(chart_frontier(frontier, budget, exp_golds), use_container_width=True)
@@ -293,120 +336,87 @@ def render_tab(raw_df, context, key):
         </div>
         """, unsafe_allow_html=True)
 
-    with st.expander("Full portfolio data"):
-        show = df[['sport','discipline','thesis','p_gold','p_medal','cost','win_streak','sentiment','selected']].copy()
-        show.columns = ['Sport','Discipline','Thesis','P(gold)','P(medal)','Cost','Streak','Readiness','Funded']
-        show = show.sort_values('P(gold)', ascending=False)
-        def hl(row):
-            return ['background-color:#f0f0ec;font-weight:500']*len(row) if row['Funded'] else ['']*len(row)
-        st.dataframe(show.style.apply(hl,axis=1)
+    st.markdown("## Full portfolio data")
+    show = df[['sport','discipline','thesis','p_gold','p_medal','cost','win_streak','sentiment','selected']].copy()
+    show.columns = ['Sport','Discipline','Thesis','P(gold)','P(medal)','Cost','Streak','Readiness','Funded']
+    show = show.sort_values('P(gold)', ascending=False)
+    show['Funded'] = show['Funded'].map({1: '✓', 0: '—'})
+    def hl(row):
+        return ['background-color:#f0f0ec;font-weight:500']*len(row) if row['Funded'] == '✓' else ['']*len(row)
+    st.dataframe(
+        show.style
+            .apply(hl, axis=1)
+            .bar(subset=['P(gold)'], color='#1a1a1a', vmin=0, vmax=1)
+            .bar(subset=['P(medal)'], color='#aaa', vmin=0, vmax=1)
             .format({'P(gold)':'{:.0%}','P(medal)':'{:.0%}','Cost':'{:.1f}','Readiness':'{:.2f}'})
-            .hide(axis='index'), use_container_width=True, height=320)
+            .hide(axis='index'),
+        use_container_width=True
+    )
 
 
 # ── App header ────────────────────────────────────────────────
 st.markdown("# USOPC Portfolio Investment Analytics")
-st.markdown("""<div class="harris-quote">
-"We've brought all that together into one team that is going to focus on investing in
-national governing bodies like it's a portfolio of investments."
-<br>— Rocky Harris, USOPC Chief of Sport & Athlete Services, 2024
-</div>""", unsafe_allow_html=True)
+st.markdown("""<div style="font-family:'DM Mono',monospace;font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:#888;margin:-0.2rem 0 1.2rem 0;">LA 2028 &nbsp;·&nbsp; French Alps 2030 &nbsp;·&nbsp; Rocky Harris allocation framework</div>""", unsafe_allow_html=True)
 
-st.markdown("""<p class="caption">NGB programs evaluated simultaneously across the quad.
-Capital allocated to maximize expected medals. The efficient frontier shows where additional
-investment stops buying returns. Marginal medal value tells you what one more unit is worth
-at any funding level.</p>""", unsafe_allow_html=True)
-
-# ── Harris Framework Summary ──────────────────────────────────
-with st.expander("▸  The Harris Framework — how USOPC thinks about NGB investment"):
-    st.markdown("""
+st.markdown("""
 <div class="harris-framework">
-<h4>Rocky Harris · USOPC Chief of Sport &amp; Athlete Services · 2024 Allocation Overhaul</h4>
-
-<p>In 2024, USOPC reorganized its high performance and NGB support functions under a single
-portfolio investment model. Harris described the shift explicitly: rather than siloed funding
-by sport, every NGB program is evaluated on the same three inputs simultaneously.</p>
-
+<h4>Rocky Harris · 2024 Allocation Overhaul — three inputs evaluated simultaneously</h4>
 <table>
-<tr><td>Medal probability</td><td>Estimated likelihood of podium performance across the quad. The IRR equivalent — primary return metric for capital allocation decisions.</td></tr>
-<tr><td>Revenue across quad</td><td>Commercial value generated by the NGB: sponsorship, media rights, fan engagement. High-revenue programs justify floor-level maintenance capital even at lower medal probability.</td></tr>
-<tr><td>Cost to field team</td><td>Full loaded cost to send athletes to competition. Determines capital efficiency — a high-probability program with low cost is the optimal investment.</td></tr>
+<tr><td>Medal probability</td><td>Estimated likelihood of podium performance across the quad. Primary return metric for allocation decisions.</td></tr>
+<tr><td>Revenue across quad</td><td>Commercial value generated by the NGB. High-revenue programs justify maintenance capital even at lower medal probability.</td></tr>
+<tr><td>Cost to field team</td><td>Full loaded cost to send athletes to competition. High probability + low cost = optimal investment.</td></tr>
 </table>
 
-<p style="margin-top:1rem;"><strong>83% of quad resources flow directly to athlete programs.</strong>
-The remaining 17% covers NGB infrastructure and administrative support. This ratio is the
-strategic commitment: athlete outcomes are the primary return metric, not organizational overhead.</p>
-
-<p><strong>What the model adds:</strong> Harris's framework describes the allocation logic but
-doesn't operationalize it computationally. This model makes the three-input evaluation explicit —
-running Monte Carlo simulations on medal probability, applying LP/IP optimization across the
-full program portfolio, and generating an efficient frontier that shows exactly where the
-marginal value of additional capital turns negative. The preparation gap analysis
-(dominant program, first Olympics, low readiness signal) adds a fourth input Harris's
-public framework doesn't address: the systematic underperformance risk that Kiss and Cry
-identified across generational favorites at the Games.</p>
+<h4 style="margin-top:1rem;">How the numbers are calculated</h4>
+<table>
+<tr><td>P(gold), P(medal)</td><td>8,000 Monte Carlo simulations per program. Athlete score drawn from Normal(mean, std). Field drawn from Normal(mean × 0.91, std × 1.4). P(gold) = fraction where athlete beats field. Protect + first Olympics programs take an exponential preparation gap penalty.</td></tr>
+<tr><td>Expected golds</td><td>Sum of P(gold) across funded programs. If two programs have P(gold) = 0.7 and 0.6, expected golds = 1.3 — the average number of golds you'd win across many simulated Games, not a guaranteed count.</td></tr>
+<tr><td>P(any medal)</td><td>1 − ∏(1 − P(medal)) across funded programs, assuming independence.</td></tr>
+<tr><td>Which programs to fund</td><td>Binary LP: maximize ΣP(gold)·x subject to Σcost·x ≤ budget, x ∈ {0,1}.</td></tr>
+<tr><td>Marginal medal value</td><td>LP shadow price on the budget constraint — expected golds gained per one additional unit of capital at the current level. Drops to zero when the frontier flattens.</td></tr>
+<tr><td>Efficient frontier</td><td>LP solved at 35 budget levels from 0.5 → max capital. Traces the maximum achievable expected golds at each funding level.</td></tr>
+</table>
 </div>
 """, unsafe_allow_html=True)
 
-st.markdown('<hr>', unsafe_allow_html=True)
+# ── Games tabs — chronological ─────────────────────────────────
+tab1, tab2, tab3, tab4 = st.tabs([
+    "LA 2028  ·  Summer Olympic",
+    "LA 2028  ·  Summer Paralympic",
+    "French Alps 2030  ·  Winter Olympic",
+    "French Alps 2030  ·  Winter Paralympic",
+])
 
-# ── Games selector → sub-tabs ─────────────────────────────────
-st.markdown("### Select games")
-games_choice = st.selectbox(
-    label="",
-    options=["LA 2028  ·  Summer Olympic", "French Alps 2030  ·  Winter Olympic",
-             "LA 2028  ·  Summer Paralympic", "French Alps 2030  ·  Winter Paralympic"],
-    label_visibility="collapsed"
-)
-
-st.markdown('<hr>', unsafe_allow_html=True)
-
-if games_choice == "LA 2028  ·  Summer Olympic":
+with tab1:
     render_tab(SUMMER, context=(
         'Home soil. Maximum commercial and competitive stakes. Programs with Paris 2024 '
         'breakout results are the primary development thesis. Perennially dominant programs '
-        '(Soccer Women, Basketball Men) require maintenance capital — marginal return on '
-        'additional investment above the floor is low.'
+        '(Soccer Women, Basketball Men) require maintenance capital — low marginal return above the floor.'
     ), key='budget_summer')
 
-elif games_choice == "French Alps 2030  ·  Winter Olympic":
+with tab2:
+    st.markdown("""<div class="harris-quote"><span class="para-badge">Paralympic</span>
+    Same framework, harder data problem. Classification volatility, adaptive equipment cycles,
+    and thinner historical data make readiness signals harder to read.</div>""", unsafe_allow_html=True)
+    render_tab(PARA_SUMMER, context=(
+        'LA 2028 is a home Games for Paralympic sport with significant commercial upside. '
+        'Classification-stable programs in Swimming and Athletics carry the highest medal probability. '
+        'Development thesis concentrated in Cycling and Archery.'
+    ), key='budget_para_summer')
+
+with tab3:
     render_tab(WINTER, context=(
         'Milan 2026 is the analytical baseline. The preparation gap identified in 2026 — '
         'dominant program, first Olympics, low readiness signal — is the primary capital '
-        'allocation question for the 2030 cycle. Programs that close that gap compound it. '
-        'Programs that ignore it repeat it.'
+        'allocation question for the 2030 cycle. Programs that close that gap compound it.'
     ), key='budget_winter')
 
-elif games_choice == "LA 2028  ·  Summer Paralympic":
-    st.markdown("""<div class="harris-quote">
-    <span class="para-badge">Paralympic</span>
-    The USOPC's 2024 allocation overhaul explicitly extended the portfolio investment model
-    to Paralympic sport. The preparation gap is wider in Paralympic programs — classification
-    volatility, adaptive equipment cycles, and thinner historical data make readiness signals
-    harder to read. The same framework applies; the data problem is harder.
-    </div>""", unsafe_allow_html=True)
-    render_tab(PARA_SUMMER, context=(
-        'LA 2028 is a home Games for Paralympic sport with significant commercial upside. '
-        'Classification-stable programs in Swimming and Athletics carry the highest '
-        'medal probability. Sitting Volleyball and Wheelchair Basketball represent '
-        'floor-protection maintenance capital. Development thesis concentrated in '
-        'Cycling and Archery — programs with ascending competitive trajectory and '
-        'meaningful preparation gap to close.'
-    ), key='budget_para_summer')
-
-elif games_choice == "French Alps 2030  ·  Winter Paralympic":
-    st.markdown("""<div class="harris-quote">
-    <span class="para-badge">Paralympic</span>
-    Winter Paralympic sport has the thinnest competitive data in the USOPC portfolio.
-    Para Alpine and Sled Hockey carry the established programs. Para Biathlon, XC Skiing,
-    and Wheelchair Curling are development investments with high variance and limited
-    historical baseline — the preparation gap analysis is most uncertain here,
-    and most valuable if right.
-    </div>""", unsafe_allow_html=True)
+with tab4:
+    st.markdown("""<div class="harris-quote"><span class="para-badge">Paralympic</span>
+    Thinnest competitive data in the portfolio. Preparation gap analysis is most uncertain here —
+    and most valuable if right.</div>""", unsafe_allow_html=True)
     render_tab(PARA_WINTER, context=(
-        'Sled Hockey is the anchor maintenance program. Para Alpine carries the '
-        'Protect thesis — established program, meaningful preparation gap in '
-        'equipment-dependent disciplines. Development capital is thin here by design: '
-        'Winter Paralympic programs have fewer pathways and narrower athlete pipelines '
-        'than their Summer counterparts.'
+        'Sled Hockey is the anchor maintenance program. Para Alpine carries the Protect thesis. '
+        'Development capital is thin by design: Winter Paralympic programs have fewer pathways '
+        'and narrower athlete pipelines than Summer counterparts.'
     ), key='budget_para_winter')
