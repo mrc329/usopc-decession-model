@@ -239,7 +239,7 @@ def render_tab(raw_df, context, key):
 
     st.markdown(f"""
     <div class="kpi-row">
-        <div class="kpi"><div class="kpi-value">{exp_golds:.2f}</div><div class="kpi-label">Expected golds</div><div class="kpi-sub">portfolio return</div></div>
+        <div class="kpi"><div class="kpi-value">{exp_golds:.2f}</div><div class="kpi-label">Expected golds</div><div class="kpi-sub">avg medals across simulations</div></div>
         <div class="kpi"><div class="kpi-value">{n_funded}</div><div class="kpi-label">Programs funded</div><div class="kpi-sub">of {len(df)} evaluated</div></div>
         <div class="kpi"><div class="kpi-value">{budget_used}</div><div class="kpi-label">Capital deployed</div><div class="kpi-sub">of {budget:.1f} available</div></div>
         <div class="kpi"><div class="kpi-value">{shadow:.3f}</div><div class="kpi-label">Marginal medal value</div><div class="kpi-sub">per unit at this level</div></div>
@@ -321,7 +321,7 @@ st.markdown("""
 <h4 style="margin-top:1rem;">How the numbers are calculated</h4>
 <table>
 <tr><td>P(gold), P(medal)</td><td>8,000 Monte Carlo simulations per program. Athlete score drawn from Normal(mean, std). Field drawn from Normal(mean × 0.91, std × 1.4). P(gold) = fraction where athlete beats field. Protect + first Olympics programs take an exponential preparation gap penalty.</td></tr>
-<tr><td>Expected golds</td><td>Sum of P(gold) across funded programs — a probability sum, not a count.</td></tr>
+<tr><td>Expected golds</td><td>Sum of P(gold) across funded programs. If two programs have P(gold) = 0.7 and 0.6, expected golds = 1.3 — the average number of golds you'd win across many simulated Games, not a guaranteed count.</td></tr>
 <tr><td>P(any medal)</td><td>1 − ∏(1 − P(medal)) across funded programs, assuming independence.</td></tr>
 <tr><td>Which programs to fund</td><td>Binary LP: maximize ΣP(gold)·x subject to Σcost·x ≤ budget, x ∈ {0,1}.</td></tr>
 <tr><td>Marginal medal value</td><td>LP shadow price on the budget constraint — expected golds gained per one additional unit of capital at the current level. Drops to zero when the frontier flattens.</td></tr>
