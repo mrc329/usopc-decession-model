@@ -69,63 +69,69 @@ rcParams.update({
 # age_vs_peak = years relative to peak age (positive = past peak → wider std)
 # prior_olympics = Games attended before this cycle (scales preparation gap)
 SUMMER = pd.DataFrame([
-    dict(sport='Gymnastics',    discipline='All-Around',     thesis='Protect',  mean_pre=96.5, std_pre=3.1, mean_prev=91.2, mean_prev2=97.5, mean_prev3=95.4, age_vs_peak=-3, prior_olympics=0, first_olympics=1, win_streak=11, sentiment=0.24, cost=1.2, pro_pipeline=0.0),
-    dict(sport='Gymnastics',    discipline='Floor Exercise', thesis='Protect',  mean_pre=96.0, std_pre=1.6, mean_prev=94.5, mean_prev2=96.1, mean_prev3=95.8, age_vs_peak= 5, prior_olympics=2, first_olympics=0, win_streak=4,  sentiment=0.67, cost=1.1, pro_pipeline=0.0),
-    dict(sport='Track & Field', discipline='Sprint',         thesis='Develop',  mean_pre=78.4, std_pre=5.6, mean_prev=71.8, mean_prev2=69.4, mean_prev3=74.2, age_vs_peak=-5, prior_olympics=0, first_olympics=1, win_streak=2,  sentiment=0.58, cost=0.9, pro_pipeline=0.0),
-    dict(sport='Swimming',      discipline='Distance',       thesis='Maintain', mean_pre=93.5, std_pre=4.8, mean_prev=92.1, mean_prev2=94.2, mean_prev3=90.1, age_vs_peak= 2, prior_olympics=3, first_olympics=0, win_streak=6,  sentiment=0.71, cost=0.9, pro_pipeline=0.0),
-    dict(sport='Swimming',      discipline='Sprint',         thesis='Develop',  mean_pre=89.2, std_pre=4.9, mean_prev=95.8, mean_prev2=88.4, mean_prev3=93.2, age_vs_peak=-3, prior_olympics=0, first_olympics=1, win_streak=4,  sentiment=0.66, cost=0.9, pro_pipeline=0.0),
-    dict(sport='Soccer',        discipline='Women',          thesis='Maintain', mean_pre=91.5, std_pre=2.8, mean_prev=78.3, mean_prev2=71.5, mean_prev3=91.8, age_vs_peak= 1, prior_olympics=2, first_olympics=0, win_streak=3,  sentiment=0.69, cost=1.0, pro_pipeline=0.4),
-    dict(sport='Diving',        discipline='Platform',       thesis='Develop',  mean_pre=74.2, std_pre=6.8, mean_prev=72.8, mean_prev2=73.5, mean_prev3=71.8, age_vs_peak=-5, prior_olympics=0, first_olympics=1, win_streak=1,  sentiment=0.55, cost=0.8, pro_pipeline=0.0),
-    dict(sport='Basketball',    discipline='Men',            thesis='Maintain', mean_pre=92.0, std_pre=2.0, mean_prev=93.5, mean_prev2=94.2, mean_prev3=95.1, age_vs_peak= 1, prior_olympics=2, first_olympics=0, win_streak=5,  sentiment=0.72, cost=1.0, pro_pipeline=0.4),
-    dict(sport='Rowing',        discipline='Women Eight',    thesis='Maintain', mean_pre=90.2, std_pre=2.4, mean_prev=91.8, mean_prev2=92.4, mean_prev3=93.1, age_vs_peak= 0, prior_olympics=2, first_olympics=0, win_streak=4,  sentiment=0.74, cost=0.9, pro_pipeline=0.0),
-    dict(sport='Track & Field', discipline='Middle Distance',thesis='Develop',  mean_pre=81.5, std_pre=6.1, mean_prev=79.4, mean_prev2=82.1, mean_prev3=79.5, age_vs_peak=-3, prior_olympics=0, first_olympics=0, win_streak=3,  sentiment=0.60, cost=0.9, pro_pipeline=0.0),
-    dict(sport='Wrestling',     discipline='Freestyle',      thesis='Develop',  mean_pre=76.8, std_pre=7.4, mean_prev=74.2, mean_prev2=72.8, mean_prev3=71.4, age_vs_peak=-3, prior_olympics=0, first_olympics=1, win_streak=1,  sentiment=0.53, cost=0.8, pro_pipeline=0.0),
-    dict(sport='Volleyball',    discipline='Beach Women',    thesis='Protect',  mean_pre=93.1, std_pre=3.8, mean_prev=95.2, mean_prev2=87.3, mean_prev3=98.2, age_vs_peak= 0, prior_olympics=2, first_olympics=0, win_streak=5,  sentiment=0.66, cost=1.0, pro_pipeline=0.0),
-    dict(sport='Volleyball',    discipline='Beach Men',      thesis='Develop',  mean_pre=81.4, std_pre=6.2, mean_prev=79.8, mean_prev2=79.1, mean_prev3=78.4, age_vs_peak= 0, prior_olympics=0, first_olympics=0, win_streak=3,  sentiment=0.61, cost=0.9, pro_pipeline=0.0),
-    dict(sport='Volleyball',    discipline='Indoor Women',   thesis='Maintain', mean_pre=88.6, std_pre=3.4, mean_prev=87.1, mean_prev2=90.2, mean_prev3=89.7, age_vs_peak= 1, prior_olympics=2, first_olympics=0, win_streak=2,  sentiment=0.67, cost=1.0, pro_pipeline=0.4),
-    dict(sport='Field Hockey',  discipline='Women',          thesis='Develop',  mean_pre=77.5, std_pre=6.8, mean_prev=74.8, mean_prev2=72.4, mean_prev3=70.8, age_vs_peak= 0, prior_olympics=0, first_olympics=0, win_streak=1,  sentiment=0.57, cost=0.9, pro_pipeline=0.0),
+    dict(sport='Gymnastics',    discipline='All-Around',     thesis='Protect',  mean_pre=96.5, std_pre=3.1, mean_prev=91.2, mean_prev2=97.5, mean_prev3=95.4, age_vs_peak=-3, prior_olympics=0, first_olympics=1, win_streak=11, sentiment=0.24, cost=1.2, pro_pipeline=0.0, pipeline_erosion=0.0),
+    dict(sport='Gymnastics',    discipline='Floor Exercise', thesis='Protect',  mean_pre=96.0, std_pre=1.6, mean_prev=94.5, mean_prev2=96.1, mean_prev3=95.8, age_vs_peak= 5, prior_olympics=2, first_olympics=0, win_streak=4,  sentiment=0.67, cost=1.1, pro_pipeline=0.0, pipeline_erosion=0.0),
+    dict(sport='Track & Field', discipline='Sprint',         thesis='Develop',  mean_pre=78.4, std_pre=5.6, mean_prev=71.8, mean_prev2=69.4, mean_prev3=74.2, age_vs_peak=-5, prior_olympics=0, first_olympics=1, win_streak=2,  sentiment=0.58, cost=0.9, pro_pipeline=0.0, pipeline_erosion=0.0),
+    dict(sport='Swimming',      discipline='Distance',       thesis='Maintain', mean_pre=93.5, std_pre=4.8, mean_prev=92.1, mean_prev2=94.2, mean_prev3=90.1, age_vs_peak= 2, prior_olympics=3, first_olympics=0, win_streak=6,  sentiment=0.71, cost=0.9, pro_pipeline=0.0, pipeline_erosion=0.0),
+    dict(sport='Swimming',      discipline='Sprint',         thesis='Develop',  mean_pre=89.2, std_pre=4.9, mean_prev=95.8, mean_prev2=88.4, mean_prev3=93.2, age_vs_peak=-3, prior_olympics=0, first_olympics=1, win_streak=4,  sentiment=0.66, cost=0.9, pro_pipeline=0.0, pipeline_erosion=0.0),
+    dict(sport='Soccer',        discipline='Women',          thesis='Maintain', mean_pre=91.5, std_pre=2.8, mean_prev=78.3, mean_prev2=71.5, mean_prev3=91.8, age_vs_peak= 1, prior_olympics=2, first_olympics=0, win_streak=3,  sentiment=0.69, cost=1.0, pro_pipeline=0.4, pipeline_erosion=0.0),
+    dict(sport='Diving',        discipline='Platform',       thesis='Develop',  mean_pre=74.2, std_pre=6.8, mean_prev=72.8, mean_prev2=73.5, mean_prev3=71.8, age_vs_peak=-5, prior_olympics=0, first_olympics=1, win_streak=1,  sentiment=0.55, cost=0.8, pro_pipeline=0.0, pipeline_erosion=0.0),
+    dict(sport='Basketball',    discipline='Men',            thesis='Maintain', mean_pre=92.0, std_pre=2.0, mean_prev=93.5, mean_prev2=94.2, mean_prev3=95.1, age_vs_peak= 1, prior_olympics=2, first_olympics=0, win_streak=5,  sentiment=0.72, cost=1.0, pro_pipeline=0.4, pipeline_erosion=0.0),
+    # Rowing: USOPC is primary funder (pro_pipeline=0.0), but college programs are the
+    # primary talent development pipeline. Schools eliminating rowing programs (Title IX
+    # cost-cutting) erodes the athlete supply. USOPC is actively lobbying; an executive
+    # order could reverse this, but until policy is settled, pipeline_erosion reflects
+    # the real and growing burden USOPC must absorb in athlete development.
+    dict(sport='Rowing',        discipline='Women Eight',    thesis='Maintain', mean_pre=90.2, std_pre=2.4, mean_prev=91.8, mean_prev2=92.4, mean_prev3=93.1, age_vs_peak= 0, prior_olympics=2, first_olympics=0, win_streak=4,  sentiment=0.74, cost=0.9, pro_pipeline=0.0, pipeline_erosion=0.4),
+    dict(sport='Track & Field', discipline='Middle Distance',thesis='Develop',  mean_pre=81.5, std_pre=6.1, mean_prev=79.4, mean_prev2=82.1, mean_prev3=79.5, age_vs_peak=-3, prior_olympics=0, first_olympics=0, win_streak=3,  sentiment=0.60, cost=0.9, pro_pipeline=0.0, pipeline_erosion=0.0),
+    dict(sport='Wrestling',     discipline='Freestyle',      thesis='Develop',  mean_pre=76.8, std_pre=7.4, mean_prev=74.2, mean_prev2=72.8, mean_prev3=71.4, age_vs_peak=-3, prior_olympics=0, first_olympics=1, win_streak=1,  sentiment=0.53, cost=0.8, pro_pipeline=0.0, pipeline_erosion=0.0),
+    dict(sport='Volleyball',    discipline='Beach Women',    thesis='Protect',  mean_pre=93.1, std_pre=3.8, mean_prev=95.2, mean_prev2=87.3, mean_prev3=98.2, age_vs_peak= 0, prior_olympics=2, first_olympics=0, win_streak=5,  sentiment=0.66, cost=1.0, pro_pipeline=0.0, pipeline_erosion=0.0),
+    dict(sport='Volleyball',    discipline='Beach Men',      thesis='Develop',  mean_pre=81.4, std_pre=6.2, mean_prev=79.8, mean_prev2=79.1, mean_prev3=78.4, age_vs_peak= 0, prior_olympics=0, first_olympics=0, win_streak=3,  sentiment=0.61, cost=0.9, pro_pipeline=0.0, pipeline_erosion=0.0),
+    dict(sport='Volleyball',    discipline='Indoor Women',   thesis='Maintain', mean_pre=88.6, std_pre=3.4, mean_prev=87.1, mean_prev2=90.2, mean_prev3=89.7, age_vs_peak= 1, prior_olympics=2, first_olympics=0, win_streak=2,  sentiment=0.67, cost=1.0, pro_pipeline=0.4, pipeline_erosion=0.0),
+    dict(sport='Field Hockey',  discipline='Women',          thesis='Develop',  mean_pre=77.5, std_pre=6.8, mean_prev=74.8, mean_prev2=72.4, mean_prev3=70.8, age_vs_peak= 0, prior_olympics=0, first_olympics=0, win_streak=1,  sentiment=0.57, cost=0.9, pro_pipeline=0.0, pipeline_erosion=0.0),
     # Tennis: WTA/ATP tour fully funds athlete development and coaching.
     # USOPC's marginal investment role is near zero — the highest pipeline discount in the portfolio.
-    dict(sport='Tennis',        discipline='Women Singles',  thesis='Develop',  mean_pre=87.5, std_pre=7.2, mean_prev=79.4, mean_prev2=74.8, mean_prev3=72.1, age_vs_peak=-4, prior_olympics=1, first_olympics=0, win_streak=4,  sentiment=0.68, cost=0.7, pro_pipeline=0.7),
-    dict(sport='Tennis',        discipline='Men Singles',    thesis='Develop',  mean_pre=81.2, std_pre=8.8, mean_prev=76.5, mean_prev2=73.2, mean_prev3=70.8, age_vs_peak=-3, prior_olympics=0, first_olympics=1, win_streak=2,  sentiment=0.61, cost=0.7, pro_pipeline=0.7),
+    dict(sport='Tennis',        discipline='Women Singles',  thesis='Develop',  mean_pre=87.5, std_pre=7.2, mean_prev=79.4, mean_prev2=74.8, mean_prev3=72.1, age_vs_peak=-4, prior_olympics=1, first_olympics=0, win_streak=4,  sentiment=0.68, cost=0.7, pro_pipeline=0.7, pipeline_erosion=0.0),
+    dict(sport='Tennis',        discipline='Men Singles',    thesis='Develop',  mean_pre=81.2, std_pre=8.8, mean_prev=76.5, mean_prev2=73.2, mean_prev3=70.8, age_vs_peak=-3, prior_olympics=0, first_olympics=1, win_streak=2,  sentiment=0.61, cost=0.7, pro_pipeline=0.7, pipeline_erosion=0.0),
 ])
 
 # ── Olympic Winter ────────────────────────────────────────────
 # mean_prev = Beijing 2022 | mean_prev2 = PyeongChang 2018 | mean_prev3 = Sochi 2014
 WINTER = pd.DataFrame([
-    dict(sport='Figure Skating', discipline='Men Singles',   thesis='Protect',  mean_pre=97.2, std_pre=3.4, mean_prev=94.8, mean_prev2=82.4, mean_prev3=79.5, age_vs_peak=-2, prior_olympics=0, first_olympics=1, win_streak=12, sentiment=0.22, cost=1.2, pro_pipeline=0.0),
-    dict(sport='Figure Skating', discipline='Women Singles', thesis='Develop',  mean_pre=80.2, std_pre=4.8, mean_prev=77.5, mean_prev2=76.8, mean_prev3=75.2, age_vs_peak= 0, prior_olympics=0, first_olympics=0, win_streak=2,  sentiment=0.62, cost=0.9, pro_pipeline=0.0),
-    dict(sport='Alpine Skiing',  discipline='Slalom/GS',     thesis='Protect',  mean_pre=86.5, std_pre=9.1, mean_prev=88.2, mean_prev2=88.5, mean_prev3=87.8, age_vs_peak= 3, prior_olympics=3, first_olympics=0, win_streak=0,  sentiment=0.49, cost=0.9, pro_pipeline=0.0),
-    dict(sport='Ice Hockey',     discipline='Women',         thesis='Maintain', mean_pre=92.0, std_pre=2.5, mean_prev=91.5, mean_prev2=92.5, mean_prev3=92.1, age_vs_peak= 2, prior_olympics=3, first_olympics=0, win_streak=2,  sentiment=0.70, cost=1.0, pro_pipeline=0.4),
-    dict(sport='Freestyle',      discipline='Aerials',       thesis='Develop',  mean_pre=88.4, std_pre=3.2, mean_prev=86.9, mean_prev2=84.2, mean_prev3=82.5, age_vs_peak=-1, prior_olympics=1, first_olympics=0, win_streak=1,  sentiment=0.61, cost=1.0, pro_pipeline=0.0),
-    dict(sport='Speed Skating',  discipline='500m',          thesis='Maintain', mean_pre=89.1, std_pre=2.8, mean_prev=88.4, mean_prev2=87.1, mean_prev3=86.4, age_vs_peak=-1, prior_olympics=1, first_olympics=0, win_streak=3,  sentiment=0.68, cost=0.9, pro_pipeline=0.0),
-    dict(sport='Biathlon',       discipline='Women',         thesis='Develop',  mean_pre=72.8, std_pre=7.2, mean_prev=68.5, mean_prev2=65.2, mean_prev3=63.8, age_vs_peak=-5, prior_olympics=0, first_olympics=1, win_streak=0,  sentiment=0.53, cost=0.8, pro_pipeline=0.0),
-    dict(sport='Snowboard',      discipline='Halfpipe',      thesis='Protect',  mean_pre=93.5, std_pre=4.1, mean_prev=94.8, mean_prev2=97.2, mean_prev3=88.4, age_vs_peak= 0, prior_olympics=2, first_olympics=0, win_streak=5,  sentiment=0.65, cost=1.0, pro_pipeline=0.0),
-    dict(sport='Cross-Country',  discipline='Skiathlon',     thesis='Develop',  mean_pre=75.3, std_pre=6.8, mean_prev=72.1, mean_prev2=67.8, mean_prev3=66.4, age_vs_peak=-5, prior_olympics=0, first_olympics=1, win_streak=1,  sentiment=0.50, cost=0.8, pro_pipeline=0.0),
-    dict(sport='Ice Hockey',     discipline='Men',           thesis='Develop',  mean_pre=82.3, std_pre=6.5, mean_prev=79.8, mean_prev2=72.1, mean_prev3=79.4, age_vs_peak= 0, prior_olympics=0, first_olympics=0, win_streak=0,  sentiment=0.55, cost=1.1, pro_pipeline=0.4),
+    dict(sport='Figure Skating', discipline='Men Singles',   thesis='Protect',  mean_pre=97.2, std_pre=3.4, mean_prev=94.8, mean_prev2=82.4, mean_prev3=79.5, age_vs_peak=-2, prior_olympics=0, first_olympics=1, win_streak=12, sentiment=0.22, cost=1.2, pro_pipeline=0.0, pipeline_erosion=0.0),
+    dict(sport='Figure Skating', discipline='Women Singles', thesis='Develop',  mean_pre=80.2, std_pre=4.8, mean_prev=77.5, mean_prev2=76.8, mean_prev3=75.2, age_vs_peak= 0, prior_olympics=0, first_olympics=0, win_streak=2,  sentiment=0.62, cost=0.9, pro_pipeline=0.0, pipeline_erosion=0.0),
+    dict(sport='Alpine Skiing',  discipline='Slalom/GS',     thesis='Protect',  mean_pre=86.5, std_pre=9.1, mean_prev=88.2, mean_prev2=88.5, mean_prev3=87.8, age_vs_peak= 3, prior_olympics=3, first_olympics=0, win_streak=0,  sentiment=0.49, cost=0.9, pro_pipeline=0.0, pipeline_erosion=0.0),
+    dict(sport='Ice Hockey',     discipline='Women',         thesis='Maintain', mean_pre=92.0, std_pre=2.5, mean_prev=91.5, mean_prev2=92.5, mean_prev3=92.1, age_vs_peak= 2, prior_olympics=3, first_olympics=0, win_streak=2,  sentiment=0.70, cost=1.0, pro_pipeline=0.4, pipeline_erosion=0.0),
+    dict(sport='Freestyle',      discipline='Aerials',       thesis='Develop',  mean_pre=88.4, std_pre=3.2, mean_prev=86.9, mean_prev2=84.2, mean_prev3=82.5, age_vs_peak=-1, prior_olympics=1, first_olympics=0, win_streak=1,  sentiment=0.61, cost=1.0, pro_pipeline=0.0, pipeline_erosion=0.0),
+    dict(sport='Speed Skating',  discipline='500m',          thesis='Maintain', mean_pre=89.1, std_pre=2.8, mean_prev=88.4, mean_prev2=87.1, mean_prev3=86.4, age_vs_peak=-1, prior_olympics=1, first_olympics=0, win_streak=3,  sentiment=0.68, cost=0.9, pro_pipeline=0.0, pipeline_erosion=0.0),
+    dict(sport='Biathlon',       discipline='Women',         thesis='Develop',  mean_pre=72.8, std_pre=7.2, mean_prev=68.5, mean_prev2=65.2, mean_prev3=63.8, age_vs_peak=-5, prior_olympics=0, first_olympics=1, win_streak=0,  sentiment=0.53, cost=0.8, pro_pipeline=0.0, pipeline_erosion=0.0),
+    dict(sport='Snowboard',      discipline='Halfpipe',      thesis='Protect',  mean_pre=93.5, std_pre=4.1, mean_prev=94.8, mean_prev2=97.2, mean_prev3=88.4, age_vs_peak= 0, prior_olympics=2, first_olympics=0, win_streak=5,  sentiment=0.65, cost=1.0, pro_pipeline=0.0, pipeline_erosion=0.0),
+    dict(sport='Cross-Country',  discipline='Skiathlon',     thesis='Develop',  mean_pre=75.3, std_pre=6.8, mean_prev=72.1, mean_prev2=67.8, mean_prev3=66.4, age_vs_peak=-5, prior_olympics=0, first_olympics=1, win_streak=1,  sentiment=0.50, cost=0.8, pro_pipeline=0.0, pipeline_erosion=0.0),
+    dict(sport='Ice Hockey',     discipline='Men',           thesis='Develop',  mean_pre=82.3, std_pre=6.5, mean_prev=79.8, mean_prev2=72.1, mean_prev3=79.4, age_vs_peak= 0, prior_olympics=0, first_olympics=0, win_streak=0,  sentiment=0.55, cost=1.1, pro_pipeline=0.4, pipeline_erosion=0.0),
 ])
 
 # ── Paralympic Summer ─────────────────────────────────────────
 # mean_prev = Tokyo 2020 Para | mean_prev2 = Rio 2016 Para | mean_prev3 = London 2012 Para
 PARA_SUMMER = pd.DataFrame([
-    dict(sport='Para Swimming',  discipline='Multi-Class',   thesis='Protect',  mean_pre=94.8, std_pre=2.9, mean_prev=93.1, mean_prev2=91.8, mean_prev3=90.2, age_vs_peak=-2, prior_olympics=0, first_olympics=1, win_streak=8,  sentiment=0.31, cost=1.1, pro_pipeline=0.0),
-    dict(sport='Para Athletics', discipline='Sprint T64',    thesis='Protect',  mean_pre=93.2, std_pre=3.5, mean_prev=91.8, mean_prev2=90.2, mean_prev3=88.5, age_vs_peak= 0, prior_olympics=2, first_olympics=0, win_streak=6,  sentiment=0.58, cost=1.0, pro_pipeline=0.0),
-    dict(sport='Wheelchair BB',  discipline='Men',           thesis='Maintain', mean_pre=90.5, std_pre=2.2, mean_prev=89.4, mean_prev2=88.6, mean_prev3=87.1, age_vs_peak= 1, prior_olympics=2, first_olympics=0, win_streak=3,  sentiment=0.72, cost=1.0, pro_pipeline=0.0),
-    dict(sport='Para Cycling',   discipline='Time Trial',    thesis='Develop',  mean_pre=79.3, std_pre=5.9, mean_prev=76.2, mean_prev2=73.8, mean_prev3=71.5, age_vs_peak=-4, prior_olympics=0, first_olympics=1, win_streak=2,  sentiment=0.55, cost=0.9, pro_pipeline=0.0),
-    dict(sport='Sitting VB',     discipline='Women',         thesis='Maintain', mean_pre=88.4, std_pre=3.1, mean_prev=87.5, mean_prev2=86.2, mean_prev3=84.8, age_vs_peak= 1, prior_olympics=2, first_olympics=0, win_streak=2,  sentiment=0.68, cost=0.9, pro_pipeline=0.0),
-    dict(sport='Para Archery',   discipline='Recurve',       thesis='Develop',  mean_pre=76.1, std_pre=6.4, mean_prev=73.4, mean_prev2=71.5, mean_prev3=69.8, age_vs_peak=-3, prior_olympics=0, first_olympics=1, win_streak=1,  sentiment=0.52, cost=0.8, pro_pipeline=0.0),
-    dict(sport='Para Athletics', discipline='Field F11',     thesis='Develop',  mean_pre=73.5, std_pre=7.1, mean_prev=70.8, mean_prev2=69.4, mean_prev3=67.5, age_vs_peak=-4, prior_olympics=0, first_olympics=1, win_streak=0,  sentiment=0.49, cost=0.8, pro_pipeline=0.0),
-    dict(sport='Para Rowing',    discipline='Mixed Coxed 4', thesis='Develop',  mean_pre=77.8, std_pre=6.2, mean_prev=75.1, mean_prev2=73.2, mean_prev3=71.5, age_vs_peak= 0, prior_olympics=1, first_olympics=0, win_streak=2,  sentiment=0.57, cost=0.8, pro_pipeline=0.0),
+    dict(sport='Para Swimming',  discipline='Multi-Class',   thesis='Protect',  mean_pre=94.8, std_pre=2.9, mean_prev=93.1, mean_prev2=91.8, mean_prev3=90.2, age_vs_peak=-2, prior_olympics=0, first_olympics=1, win_streak=8,  sentiment=0.31, cost=1.1, pro_pipeline=0.0, pipeline_erosion=0.0),
+    dict(sport='Para Athletics', discipline='Sprint T64',    thesis='Protect',  mean_pre=93.2, std_pre=3.5, mean_prev=91.8, mean_prev2=90.2, mean_prev3=88.5, age_vs_peak= 0, prior_olympics=2, first_olympics=0, win_streak=6,  sentiment=0.58, cost=1.0, pro_pipeline=0.0, pipeline_erosion=0.0),
+    dict(sport='Wheelchair BB',  discipline='Men',           thesis='Maintain', mean_pre=90.5, std_pre=2.2, mean_prev=89.4, mean_prev2=88.6, mean_prev3=87.1, age_vs_peak= 1, prior_olympics=2, first_olympics=0, win_streak=3,  sentiment=0.72, cost=1.0, pro_pipeline=0.0, pipeline_erosion=0.0),
+    dict(sport='Para Cycling',   discipline='Time Trial',    thesis='Develop',  mean_pre=79.3, std_pre=5.9, mean_prev=76.2, mean_prev2=73.8, mean_prev3=71.5, age_vs_peak=-4, prior_olympics=0, first_olympics=1, win_streak=2,  sentiment=0.55, cost=0.9, pro_pipeline=0.0, pipeline_erosion=0.0),
+    dict(sport='Sitting VB',     discipline='Women',         thesis='Maintain', mean_pre=88.4, std_pre=3.1, mean_prev=87.5, mean_prev2=86.2, mean_prev3=84.8, age_vs_peak= 1, prior_olympics=2, first_olympics=0, win_streak=2,  sentiment=0.68, cost=0.9, pro_pipeline=0.0, pipeline_erosion=0.0),
+    dict(sport='Para Archery',   discipline='Recurve',       thesis='Develop',  mean_pre=76.1, std_pre=6.4, mean_prev=73.4, mean_prev2=71.5, mean_prev3=69.8, age_vs_peak=-3, prior_olympics=0, first_olympics=1, win_streak=1,  sentiment=0.52, cost=0.8, pro_pipeline=0.0, pipeline_erosion=0.0),
+    dict(sport='Para Athletics', discipline='Field F11',     thesis='Develop',  mean_pre=73.5, std_pre=7.1, mean_prev=70.8, mean_prev2=69.4, mean_prev3=67.5, age_vs_peak=-4, prior_olympics=0, first_olympics=1, win_streak=0,  sentiment=0.49, cost=0.8, pro_pipeline=0.0, pipeline_erosion=0.0),
+    # Para Rowing shares the same college pipeline erosion risk as Olympic Rowing.
+    dict(sport='Para Rowing',    discipline='Mixed Coxed 4', thesis='Develop',  mean_pre=77.8, std_pre=6.2, mean_prev=75.1, mean_prev2=73.2, mean_prev3=71.5, age_vs_peak= 0, prior_olympics=1, first_olympics=0, win_streak=2,  sentiment=0.57, cost=0.8, pro_pipeline=0.0, pipeline_erosion=0.4),
 ])
 
 # ── Paralympic Winter ─────────────────────────────────────────
 # mean_prev = Beijing 2022 Para | mean_prev2 = PyeongChang 2018 Para | mean_prev3 = Sochi 2014 Para
 PARA_WINTER = pd.DataFrame([
-    dict(sport='Para Alpine',    discipline='Downhill',       thesis='Protect',  mean_pre=92.4, std_pre=4.2, mean_prev=90.8, mean_prev2=89.4, mean_prev3=88.1, age_vs_peak= 0, prior_olympics=2, first_olympics=0, win_streak=5,  sentiment=0.44, cost=1.1, pro_pipeline=0.0),
-    dict(sport='Para Biathlon',  discipline='Sitting',        thesis='Develop',  mean_pre=76.5, std_pre=7.8, mean_prev=73.4, mean_prev2=71.2, mean_prev3=69.5, age_vs_peak=-4, prior_olympics=0, first_olympics=1, win_streak=1,  sentiment=0.51, cost=0.9, pro_pipeline=0.0),
-    dict(sport='Para XC Ski',    discipline='Vision Impaired',thesis='Develop',  mean_pre=74.2, std_pre=6.9, mean_prev=71.5, mean_prev2=69.8, mean_prev3=68.2, age_vs_peak=-3, prior_olympics=0, first_olympics=1, win_streak=0,  sentiment=0.48, cost=0.8, pro_pipeline=0.0),
-    dict(sport='Sled Hockey',    discipline='Men',            thesis='Maintain', mean_pre=91.8, std_pre=2.4, mean_prev=91.2, mean_prev2=90.5, mean_prev3=89.2, age_vs_peak= 0, prior_olympics=3, first_olympics=0, win_streak=4,  sentiment=0.74, cost=1.0, pro_pipeline=0.0),
-    dict(sport='Wheelchair Curl',discipline='Mixed',          thesis='Develop',  mean_pre=78.9, std_pre=5.5, mean_prev=76.8, mean_prev2=74.8, mean_prev3=73.1, age_vs_peak= 1, prior_olympics=1, first_olympics=0, win_streak=2,  sentiment=0.59, cost=0.8, pro_pipeline=0.0),
+    dict(sport='Para Alpine',    discipline='Downhill',       thesis='Protect',  mean_pre=92.4, std_pre=4.2, mean_prev=90.8, mean_prev2=89.4, mean_prev3=88.1, age_vs_peak= 0, prior_olympics=2, first_olympics=0, win_streak=5,  sentiment=0.44, cost=1.1, pro_pipeline=0.0, pipeline_erosion=0.0),
+    dict(sport='Para Biathlon',  discipline='Sitting',        thesis='Develop',  mean_pre=76.5, std_pre=7.8, mean_prev=73.4, mean_prev2=71.2, mean_prev3=69.5, age_vs_peak=-4, prior_olympics=0, first_olympics=1, win_streak=1,  sentiment=0.51, cost=0.9, pro_pipeline=0.0, pipeline_erosion=0.0),
+    dict(sport='Para XC Ski',    discipline='Vision Impaired',thesis='Develop',  mean_pre=74.2, std_pre=6.9, mean_prev=71.5, mean_prev2=69.8, mean_prev3=68.2, age_vs_peak=-3, prior_olympics=0, first_olympics=1, win_streak=0,  sentiment=0.48, cost=0.8, pro_pipeline=0.0, pipeline_erosion=0.0),
+    dict(sport='Sled Hockey',    discipline='Men',            thesis='Maintain', mean_pre=91.8, std_pre=2.4, mean_prev=91.2, mean_prev2=90.5, mean_prev3=89.2, age_vs_peak= 0, prior_olympics=3, first_olympics=0, win_streak=4,  sentiment=0.74, cost=1.0, pro_pipeline=0.0, pipeline_erosion=0.0),
+    dict(sport='Wheelchair Curl',discipline='Mixed',          thesis='Develop',  mean_pre=78.9, std_pre=5.5, mean_prev=76.8, mean_prev2=74.8, mean_prev3=73.1, age_vs_peak= 1, prior_olympics=1, first_olympics=0, win_streak=2,  sentiment=0.59, cost=0.8, pro_pipeline=0.0, pipeline_erosion=0.0),
 ])
 
 THESIS_META = {
@@ -172,6 +178,14 @@ def run_monte_carlo(df, home_games=False):
         if avp > 0:
             eff_std *= (1 + avp * 0.04)
 
+        # ── College pipeline erosion widens outcome uncertainty ───────
+        # When feeder programs (college rowing) are being eliminated, the
+        # talent supply thins and depth below the top athletes shrinks.
+        # This increases performance variance even if the current squad is intact.
+        pe = row.get('pipeline_erosion', 0) or 0
+        if pe > 0:
+            eff_std *= (1 + pe * 0.25)
+
         # ── Home Games lift ──────────────────────────────────────────
         if home_games:
             eff_mean += HOME_BOOST
@@ -205,13 +219,21 @@ def run_lp(df, budget):
             4)
          for i in df.index}
 
+    # pipeline_erosion [0.0–1.0]: fraction of college/feeder program infrastructure
+    # at risk of elimination. When schools cut rowing programs, USOPC must absorb
+    # athlete development costs that were previously externally subsidized.
+    # Effective cost = stated cost × (1 + pipeline_erosion × 0.3).
+    # At erosion=0.4 (Rowing), cost rises from 0.9 → ~1.07 units.
+    effective_cost = {i: df.loc[i,'cost'] * (1 + df.loc[i,'pipeline_erosion'] * 0.3)
+                      for i in df.index}
+
     # --- MILP: binary fund/no-fund + continuous enhancement above baseline ---
     prob = pulp.LpProblem('USOPC', pulp.LpMaximize)
     x = {i: pulp.LpVariable(f'x{i}', cat='Binary') for i in df.index}
     e = {i: pulp.LpVariable(f'e{i}', lowBound=0, upBound=E_MAX) for i in df.index}
 
     prob += pulp.lpSum(df.loc[i,'p_gold'] * x[i] + r[i] * e[i] for i in df.index)
-    prob += pulp.lpSum(df.loc[i,'cost'] * x[i] + e[i] for i in df.index) <= budget, 'budget'
+    prob += pulp.lpSum(effective_cost[i] * x[i] + e[i] for i in df.index) <= budget, 'budget'
     for i in df.index:
         prob += e[i] <= E_MAX * x[i]  # can only enhance funded programs
 
@@ -234,7 +256,7 @@ def run_lp(df, budget):
         df.loc[i,'p_gold'] * df.loc[i,'selected'] + r[i] * e2[i] for i in df.index
     )
     prob2 += pulp.lpSum(
-        df.loc[i,'cost'] * df.loc[i,'selected'] + e2[i] for i in df.index
+        effective_cost[i] * df.loc[i,'selected'] + e2[i] for i in df.index
     ) <= budget, 'budget'
     prob2.solve(pulp.PULP_CBC_CMD(msg=0))
 
@@ -416,6 +438,26 @@ def render_tab(raw_df, context, key, home_games=False):
 
     st.markdown('<hr>', unsafe_allow_html=True)
 
+    # ── Pipeline erosion flag ─────────────────────────────────────
+    eroding = df[df['pipeline_erosion'] > 0]
+    if not eroding.empty:
+        for _, row in eroding.iterrows():
+            eroded_cost = round(row['cost'] * (1 + row['pipeline_erosion'] * 0.3), 2)
+            st.markdown(f"""
+            <div class="harris-quote">
+            <strong>College pipeline erosion — {row['sport']} · {row['discipline']}</strong><br>
+            University programs are the primary athlete development pathway for this sport.
+            Schools eliminating rowing to manage costs have reduced the depth of the US talent pool.
+            USOPC is actively lobbying to reverse these cuts; federal executive action remains possible
+            but unresolved.<br><br>
+            Effective cost raised from <strong>{row['cost']:.1f} → {eroded_cost:.2f} units</strong>
+            (pipeline erosion {int(row['pipeline_erosion']*100)}%). Outcome variance widened by
+            {int(row['pipeline_erosion']*25)}%. These adjustments reflect USOPC absorbing development
+            costs previously subsidized by college programs. If policy resolves favorably,
+            revert <code>pipeline_erosion</code> to 0.0.
+            </div>
+            """, unsafe_allow_html=True)
+
     protect_first = df[(df['thesis']=='Protect') & (df['first_olympics']==1)]
     if not protect_first.empty:
         row = protect_first.iloc[0]
@@ -467,6 +509,7 @@ st.markdown("""
 <tr><td>Expected golds</td><td>Sum of P(gold) across funded programs. If two programs have P(gold) = 0.7 and 0.6, expected golds = 1.3 — the average number of golds you'd win across many simulated Games, not a guaranteed count.</td></tr>
 <tr><td>P(any medal)</td><td>1 − ∏(1 − P(medal)) across funded programs, assuming independence.</td></tr>
 <tr><td>Which programs to fund</td><td>Binary LP: maximize ΣP(gold)·x subject to Σcost·x ≤ budget, x ∈ {0,1}.</td></tr>
+<tr><td>Pipeline erosion</td><td>College and feeder programs are the primary athlete development pathway for sports like Rowing. When universities eliminate these programs, USOPC must absorb the development cost previously subsidized externally. pipeline_erosion [0.0–1.0] inflates effective cost in the LP by up to 30% and widens outcome std by up to 25%. At 0.4 (current Rowing estimate), cost rises from 0.9 → ~1.07 units and variance is 10% wider. Set to 0.0 if federal policy (executive order or legislative fix) reverses program cuts.</td></tr>
 <tr><td>Marginal medal value</td><td>Shadow price on the budget constraint — expected golds gained per one additional unit of capital at the current level. Each program has a baseline cost (fund/no-fund) plus a continuous enhancement tier (up to +0.3 units). Enhancement return r = (1 − P(gold)) × 0.5 × (1 − pipeline) per unit: programs further from the medal ceiling benefit most, discounted by how much of their improvement is driven by external infrastructure rather than USOPC investment. Pipeline factor is a continuous [0.0–1.0] scale: 0.0 = USOPC is the primary development funder; 0.4 = major pro/college pipeline (NBA → Basketball Men, NHL/NCAA → Ice Hockey, NWSL/USSF → Soccer Women, NCAA → Volleyball Indoor Women); 0.7 = WTA/ATP Tennis, where players are entirely self-funded through tour prize money and sponsorships — USOPC's marginal development role is near zero and the model correctly assigns minimal enhancement return to those programs. Marginal value declines with scale but stays positive until all preparation investment is exhausted.</td></tr>
 <tr><td>Efficient frontier</td><td>MILP solved at 35 budget levels from 0.5 → max capital (baseline + full enhancement). Traces the maximum achievable expected golds at each funding level, including returns from enhancement investment above each program's baseline cost.</td></tr>
 </table>
