@@ -293,15 +293,15 @@ def render_tab(raw_df, context, key):
         </div>
         """, unsafe_allow_html=True)
 
-    with st.expander("Full portfolio data"):
-        show = df[['sport','discipline','thesis','p_gold','p_medal','cost','win_streak','sentiment','selected']].copy()
-        show.columns = ['Sport','Discipline','Thesis','P(gold)','P(medal)','Cost','Streak','Readiness','Funded']
-        show = show.sort_values('P(gold)', ascending=False)
-        def hl(row):
-            return ['background-color:#f0f0ec;font-weight:500']*len(row) if row['Funded'] else ['']*len(row)
-        st.dataframe(show.style.apply(hl,axis=1)
-            .format({'P(gold)':'{:.0%}','P(medal)':'{:.0%}','Cost':'{:.1f}','Readiness':'{:.2f}'})
-            .hide(axis='index'), use_container_width=True, height=320)
+    st.markdown("## Full portfolio data")
+    show = df[['sport','discipline','thesis','p_gold','p_medal','cost','win_streak','sentiment','selected']].copy()
+    show.columns = ['Sport','Discipline','Thesis','P(gold)','P(medal)','Cost','Streak','Readiness','Funded']
+    show = show.sort_values('P(gold)', ascending=False)
+    def hl(row):
+        return ['background-color:#f0f0ec;font-weight:500']*len(row) if row['Funded'] else ['']*len(row)
+    st.dataframe(show.style.apply(hl,axis=1)
+        .format({'P(gold)':'{:.0%}','P(medal)':'{:.0%}','Cost':'{:.1f}','Readiness':'{:.2f}'})
+        .hide(axis='index'), use_container_width=True, height=320)
 
 
 # ── App header ────────────────────────────────────────────────
@@ -318,8 +318,7 @@ investment stops buying returns. Marginal medal value tells you what one more un
 at any funding level.</p>""", unsafe_allow_html=True)
 
 # ── Harris Framework Summary ──────────────────────────────────
-with st.expander("▸  The Harris Framework — how USOPC thinks about NGB investment"):
-    st.markdown("""
+st.markdown("""
 <div class="harris-framework">
 <h4>Rocky Harris · USOPC Chief of Sport &amp; Athlete Services · 2024 Allocation Overhaul</h4>
 
