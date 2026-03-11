@@ -69,11 +69,36 @@ rcParams.update({
 # age_vs_peak = years relative to peak age (positive = past peak → wider std)
 # prior_olympics = Games attended before this cycle (scales preparation gap)
 SUMMER = pd.DataFrame([
-    dict(sport='Gymnastics',    discipline='All-Around',     thesis='Protect',  mean_pre=96.5, std_pre=3.1, mean_prev=91.2, mean_prev2=97.5, mean_prev3=95.4, age_vs_peak=-3, prior_olympics=0, first_olympics=1, win_streak=11, sentiment=0.24, cost=1.2, pro_pipeline=0.0, pipeline_erosion=0.0),
-    dict(sport='Gymnastics',    discipline='Floor Exercise', thesis='Protect',  mean_pre=96.0, std_pre=1.6, mean_prev=94.5, mean_prev2=96.1, mean_prev3=95.8, age_vs_peak= 5, prior_olympics=2, first_olympics=0, win_streak=4,  sentiment=0.67, cost=1.1, pro_pipeline=0.0, pipeline_erosion=0.0),
-    dict(sport='Track & Field', discipline='Sprint',         thesis='Develop',  mean_pre=78.4, std_pre=5.6, mean_prev=71.8, mean_prev2=69.4, mean_prev3=74.2, age_vs_peak=-5, prior_olympics=0, first_olympics=1, win_streak=2,  sentiment=0.58, cost=0.9, pro_pipeline=0.0, pipeline_erosion=0.0),
-    dict(sport='Swimming',      discipline='Distance',       thesis='Maintain', mean_pre=93.5, std_pre=4.8, mean_prev=92.1, mean_prev2=94.2, mean_prev3=90.1, age_vs_peak= 2, prior_olympics=3, first_olympics=0, win_streak=6,  sentiment=0.71, cost=0.9, pro_pipeline=0.0, pipeline_erosion=0.0),
-    dict(sport='Swimming',      discipline='Sprint',         thesis='Develop',  mean_pre=89.2, std_pre=4.9, mean_prev=95.8, mean_prev2=88.4, mean_prev3=93.2, age_vs_peak=-3, prior_olympics=0, first_olympics=1, win_streak=4,  sentiment=0.66, cost=0.9, pro_pipeline=0.0, pipeline_erosion=0.0),
+    # ── Gymnastics ── split by gender; Women's program is the dominant Protect thesis,
+    # Men's program is an ascending Develop thesis after Paris 2024 team bronze.
+    dict(sport='Gymnastics',    discipline='Women All-Around', thesis='Protect',  mean_pre=96.5, std_pre=3.1, mean_prev=91.2, mean_prev2=97.5, mean_prev3=95.4, age_vs_peak=-3, prior_olympics=0, first_olympics=1, win_streak=11, sentiment=0.24, cost=1.2, pro_pipeline=0.0, pipeline_erosion=0.0),
+    dict(sport='Gymnastics',    discipline='Women Floor',      thesis='Protect',  mean_pre=96.0, std_pre=1.6, mean_prev=94.5, mean_prev2=96.1, mean_prev3=95.8, age_vs_peak= 5, prior_olympics=2, first_olympics=0, win_streak=4,  sentiment=0.67, cost=1.1, pro_pipeline=0.0, pipeline_erosion=0.0),
+    # Men's gymnastics: USA won team bronze at Paris 2024 — first team medal in 16 years.
+    # Brody Malone archetype. Ascending program; individual gold remains aspirational.
+    dict(sport='Gymnastics',    discipline='Men All-Around',   thesis='Develop',  mean_pre=85.2, std_pre=5.8, mean_prev=81.4, mean_prev2=78.8, mean_prev3=76.2, age_vs_peak=-2, prior_olympics=1, first_olympics=0, win_streak=0,  sentiment=0.58, cost=1.0, pro_pipeline=0.0, pipeline_erosion=0.0),
+    # ── Track & Field ── split by gender and event cluster.
+    # Women's 400m/Hurdles is the single most dominant US track program (McLaughlin-Levrone).
+    # Sprint (100m/200m) and Middle Distance (800m/1500m) are Develop for both genders.
+    # Women Sprint 100m/200m — Sha'Carri Richardson generation, ascending post-WC 2023.
+    dict(sport='Track & Field', discipline='Women Sprint',        thesis='Develop',  mean_pre=80.2, std_pre=5.4, mean_prev=71.8, mean_prev2=69.4, mean_prev3=74.2, age_vs_peak=-4, prior_olympics=0, first_olympics=1, win_streak=2,  sentiment=0.60, cost=0.8, pro_pipeline=0.0, pipeline_erosion=0.0),
+    # Women 400m/Hurdles — Sydney McLaughlin-Levrone. Multiple world records. Perennially dominant.
+    # Three Olympics by LA 2028 (Tokyo, Paris, LA). age_vs_peak=2: ~28yo, slightly past peak but consistent.
+    dict(sport='Track & Field', discipline='Women 400m/Hurdles',  thesis='Maintain', mean_pre=97.1, std_pre=2.4, mean_prev=95.4, mean_prev2=92.1, mean_prev3=89.5, age_vs_peak= 2, prior_olympics=3, first_olympics=0, win_streak=8,  sentiment=0.70, cost=0.9, pro_pipeline=0.0, pipeline_erosion=0.0),
+    # Men Sprint/400m — Noah Lyles (100m Paris gold), Michael Norman (400m). Competitive but not dominant.
+    dict(sport='Track & Field', discipline='Men Sprint/400m',     thesis='Develop',  mean_pre=82.4, std_pre=6.1, mean_prev=79.5, mean_prev2=74.8, mean_prev3=72.5, age_vs_peak=-3, prior_olympics=1, first_olympics=0, win_streak=1,  sentiment=0.62, cost=0.9, pro_pipeline=0.0, pipeline_erosion=0.0),
+    # Women Middle Distance 800m — Athing Mu (Tokyo gold, Paris DNF). High upside, injury risk.
+    dict(sport='Track & Field', discipline='Women Middle Distance',thesis='Develop',  mean_pre=83.5, std_pre=6.2, mean_prev=85.4, mean_prev2=82.1, mean_prev3=79.5, age_vs_peak=-2, prior_olympics=1, first_olympics=0, win_streak=2,  sentiment=0.61, cost=0.8, pro_pipeline=0.0, pipeline_erosion=0.0),
+    # Men Middle Distance 1500m/800m — Cole Hocker (Paris 2024 1500m gold), Yared Nuguse. Rapidly ascending.
+    dict(sport='Track & Field', discipline='Men Middle Distance',  thesis='Develop',  mean_pre=85.8, std_pre=6.8, mean_prev=83.2, mean_prev2=79.8, mean_prev3=78.2, age_vs_peak=-5, prior_olympics=1, first_olympics=0, win_streak=1,  sentiment=0.63, cost=0.8, pro_pipeline=0.0, pipeline_erosion=0.0),
+    # ── Swimming ── split by gender. Women's Distance (Ledecky era) is the flagship Maintain program.
+    # Women Distance — Katie Ledecky archetype. 4th Olympics by LA 2028. Slight age risk but unmatched.
+    dict(sport='Swimming',      discipline='Women Distance',   thesis='Maintain', mean_pre=95.2, std_pre=3.8, mean_prev=94.1, mean_prev2=95.8, mean_prev3=92.4, age_vs_peak= 3, prior_olympics=4, first_olympics=0, win_streak=8,  sentiment=0.72, cost=0.9, pro_pipeline=0.0, pipeline_erosion=0.0),
+    # Men Distance — Bobby Finke (1500m gold Tokyo + Paris). Ascending, not yet dominant depth.
+    dict(sport='Swimming',      discipline='Men Distance',     thesis='Develop',  mean_pre=88.4, std_pre=5.8, mean_prev=86.2, mean_prev2=84.5, mean_prev3=82.8, age_vs_peak=-3, prior_olympics=2, first_olympics=0, win_streak=2,  sentiment=0.62, cost=0.9, pro_pipeline=0.0, pipeline_erosion=0.0),
+    # Women Sprint — Kate Douglass, Torri Huske (multiple Paris medals). Strong and ascending.
+    dict(sport='Swimming',      discipline='Women Sprint',     thesis='Develop',  mean_pre=91.5, std_pre=4.2, mean_prev=95.8, mean_prev2=88.4, mean_prev3=93.2, age_vs_peak=-3, prior_olympics=1, first_olympics=0, win_streak=4,  sentiment=0.67, cost=0.9, pro_pipeline=0.0, pipeline_erosion=0.0),
+    # Men Sprint — post-Dressel generation. Caeleb Dressel era closed; next wave developing.
+    dict(sport='Swimming',      discipline='Men Sprint',       thesis='Develop',  mean_pre=87.8, std_pre=5.5, mean_prev=91.2, mean_prev2=87.5, mean_prev3=90.8, age_vs_peak=-4, prior_olympics=0, first_olympics=1, win_streak=3,  sentiment=0.64, cost=0.9, pro_pipeline=0.0, pipeline_erosion=0.0),
     dict(sport='Soccer',        discipline='Women',          thesis='Maintain', mean_pre=91.5, std_pre=2.8, mean_prev=78.3, mean_prev2=71.5, mean_prev3=91.8, age_vs_peak= 1, prior_olympics=2, first_olympics=0, win_streak=3,  sentiment=0.69, cost=1.0, pro_pipeline=0.4, pipeline_erosion=0.0),
     dict(sport='Diving',        discipline='Platform',       thesis='Develop',  mean_pre=74.2, std_pre=6.8, mean_prev=72.8, mean_prev2=73.5, mean_prev3=71.8, age_vs_peak=-5, prior_olympics=0, first_olympics=1, win_streak=1,  sentiment=0.55, cost=0.8, pro_pipeline=0.0, pipeline_erosion=0.0),
     dict(sport='Basketball',    discipline='Men',            thesis='Maintain', mean_pre=92.0, std_pre=2.0, mean_prev=93.5, mean_prev2=94.2, mean_prev3=95.1, age_vs_peak= 1, prior_olympics=2, first_olympics=0, win_streak=5,  sentiment=0.72, cost=1.0, pro_pipeline=0.4, pipeline_erosion=0.0),
@@ -526,10 +551,14 @@ tab1, tab2, tab3, tab4 = st.tabs([
 
 with tab1:
     render_tab(SUMMER, context=(
-        'Home soil. Maximum commercial and competitive stakes. Programs with Paris 2024 '
-        'breakout results are the primary development thesis. Perennially dominant programs '
-        '(Soccer Women, Basketball Men) require maintenance capital — low marginal return above the floor. '
-        'Swimming split into Sprint and Distance; both cycles (Tokyo 2021 + Paris 2024) inform the simulation.'
+        'Home soil. Maximum commercial and competitive stakes. '
+        'Gymnastics now modeled separately by gender: Women\'s is a Protect program (dominant, preparation-gap risk); '
+        'Men\'s is a Develop program (Paris 2024 team bronze signals ascending trajectory). '
+        'Track & Field split by gender and event cluster — Women 400m/Hurdles (McLaughlin-Levrone) is the '
+        'single most dominant US track program, classified Maintain. Swimming split by gender: '
+        'Women\'s Distance (Ledecky era, Maintain) anchors the portfolio; Men\'s Distance and both Sprint '
+        'programs are Develop. Perennially dominant programs (Soccer Women, Basketball Men) '
+        'require maintenance capital — low marginal return above the floor.'
     ), key='budget_summer', home_games=True)
 
 with tab2:
