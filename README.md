@@ -48,7 +48,7 @@ Rocky Harris described USOPC's 2024 allocation overhaul as portfolio investment 
 
 83% of quad resources flow directly to athlete programs.
 
-**What the model adds:** Harris's framework is qualitative. This model makes it computational — running Monte Carlo simulations on medal probability, applying LP optimization across the full program portfolio, and generating an efficient frontier that shows exactly where the marginal value of additional capital turns negative. The preparation gap analysis adds a fourth input: the systematic underperformance risk that [Kiss and Cry](https://medium.com) identified across generational favorites at the Games.
+**What the model adds:** Harris's framework is qualitative. This model makes it computational — running Monte Carlo simulations on medal probability, applying LP optimization across the full program portfolio, and generating an efficient frontier that shows exactly where the marginal value of additional capital diminishes to zero. The preparation gap analysis adds a fourth input: the systematic underperformance risk that [Kiss and Cry](https://medium.com) identified across generational favorites at the Games.
 
 ---
 

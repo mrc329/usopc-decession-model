@@ -113,7 +113,8 @@ The LP optimization selects a portfolio of archetypes — not individuals — to
 
 The shadow price on the budget constraint answers: at the current funding level, what is one additional dollar worth in expected medals?
 
-When shadow price is high: budget is binding, the case for increased NGB investment is strong.
-When shadow price approaches zero: the portfolio is near-complete, additional funding has diminishing returns.
+- **High shadow price:** Budget is the binding constraint. There are fundable programs still waiting. Additional capital buys real medal probability.
+- **Low shadow price:** The frontier is nearly flat. Only marginal programs remain unfunded. Additional capital has diminishing returns.
+- **Shadow price of zero:** Every program worth funding is funded. Additional capital has no effect on expected medals.
 
-Reading the shadow price column down the efficient frontier shows exactly where the inflection point is — the budget level above which marginal returns diminish. That is the analytically defensible funding floor.
+Reading the shadow price column down the efficient frontier identifies the inflection point — the budget level above which marginal returns flatten. That is the analytically defensible funding floor.
