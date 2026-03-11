@@ -122,6 +122,7 @@ THESIS_META = {
 
 N_SIMS = 8000
 
+@st.cache_data
 def run_monte_carlo(df):
     rows = []
     for _, row in df.iterrows():
@@ -152,6 +153,7 @@ def run_lp(df, budget):
             shadow = round(abs(c.pi), 4)
     return df, exp, shadow
 
+@st.cache_data
 def build_frontier(df, steps=35):
     max_b = df['cost'].sum()
     rows, prev_g, prev_b = [], 0.0, 0.0
@@ -226,10 +228,10 @@ def chart_shadow(frontier, budget):
     return fig
 
 def render_tab(raw_df, context, key):
-    df = run_monte_carlo(raw_df)
+    mc_df = run_monte_carlo(raw_df)
     max_b = float(raw_df['cost'].sum())
     budget = st.slider('Capital deployed', 0.5, max_b, min(5.0, max_b), step=0.1, key=key)
-    df, exp_golds, shadow = run_lp(df, budget)
+    df, exp_golds, shadow = run_lp(mc_df, budget)
     selected = df[df['selected'] == 1]
     n_funded = len(selected)
     budget_used = round(selected['cost'].sum(), 1) if not selected.empty else 0.0
@@ -268,7 +270,7 @@ def render_tab(raw_df, context, key):
         plt.close()
 
     with cr:
-        frontier = build_frontier(df)
+        frontier = build_frontier(mc_df)
         st.markdown("## Efficient frontier")
         st.markdown("### Expected golds across capital levels")
         st.pyplot(chart_frontier(frontier, budget, exp_golds), use_container_width=True)
