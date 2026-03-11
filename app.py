@@ -21,44 +21,151 @@ st.set_page_config(
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Mono:wght@300;400&display=swap');
-    html, body, [class*="css"] { font-family: 'EB Garamond', Georgia, serif; background-color: #FAFAF7; color: #1a1a1a; }
+
+    /* ── Design tokens ────────────────────────────────────────── */
+    :root {
+        --bg:             #FAFAF7;
+        --fg:             #1a1a1a;
+        --fg-muted:       #888;
+        --fg-dim:         #aaa;
+        --fg-faint:       #666;
+        --border-strong:  #1a1a1a;
+        --border-light:   #e0e0d8;
+        --card-bg:        #f0f0ec;
+        --framework-bg:   #f6f6f2;
+        --tab-inactive:   #999;
+        --tab-active:     #1a1a1a;
+        --td-color:       #333;
+        --caption-color:  #666;
+        --hr-color:       #e0e0d8;
+        --badge-bg:       #1a1a1a;
+        --badge-fg:       #fff;
+    }
+    @media (prefers-color-scheme: dark) {
+        :root {
+            --bg:             #141412;
+            --fg:             #e0dfd8;
+            --fg-muted:       #6b6b65;
+            --fg-dim:         #4e4e4a;
+            --fg-faint:       #5a5a55;
+            --border-strong:  #e0dfd8;
+            --border-light:   #262623;
+            --card-bg:        #1c1c1a;
+            --framework-bg:   #191917;
+            --tab-inactive:   #5a5a55;
+            --tab-active:     #e0dfd8;
+            --td-color:       #b5b4ae;
+            --caption-color:  #6b6b65;
+            --hr-color:       #262623;
+            --badge-bg:       #e0dfd8;
+            --badge-fg:       #141412;
+        }
+    }
+
+    /* ── Base ─────────────────────────────────────────────────── */
+    html, body, [class*="css"] {
+        font-family: 'EB Garamond', Georgia, serif;
+        background-color: var(--bg);
+        color: var(--fg);
+    }
     .main .block-container { padding: 2rem 3rem 3rem 3rem; max-width: 1100px; }
-    h1 { font-family: 'EB Garamond', serif; font-size: 1.9rem; font-weight: 500; letter-spacing: -0.02em; border-bottom: 1px solid #1a1a1a; padding-bottom: 0.4rem; margin-bottom: 0.2rem; }
-    h2 { font-family: 'EB Garamond', serif; font-size: 1.2rem; font-weight: 500; margin-top: 1.8rem; margin-bottom: 0.3rem; }
-    h3 { font-family: 'DM Mono', monospace; font-size: 0.68rem; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: #888; margin-bottom: 0.6rem; }
-    .stTabs [data-baseweb="tab-list"] { gap: 0; border-bottom: 1px solid #ccc; background: transparent; }
-    .stTabs [data-baseweb="tab"] { font-family: 'DM Mono', monospace; font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: #999; padding: 0.5rem 1.5rem; border: none; border-bottom: 2px solid transparent; background: transparent; }
-    .stTabs [aria-selected="true"] { color: #1a1a1a; border-bottom: 2px solid #1a1a1a; background: transparent; }
-    .kpi-row { display: flex; gap: 2.5rem; margin: 1.2rem 0 1.8rem 0; flex-wrap: wrap; }
-    .kpi { border-left: 2px solid #1a1a1a; padding-left: 0.8rem; }
-    .kpi-value { font-family: 'DM Mono', monospace; font-size: 1.8rem; font-weight: 300; line-height: 1; color: #1a1a1a; }
-    .kpi-label { font-family: 'DM Mono', monospace; font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: #888; margin-top: 0.2rem; }
-    .kpi-sub { font-family: 'EB Garamond', serif; font-size: 0.82rem; font-style: italic; color: #aaa; margin-top: 0.1rem; }
-    .thesis-card { background: #f0f0ec; border-left: 3px solid #1a1a1a; padding: 0.7rem 1rem; margin: 0.4rem 0; }
-    .thesis-label { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: #555; }
-    .thesis-name { font-family: 'EB Garamond', serif; font-size: 1.05rem; font-weight: 500; margin: 0.15rem 0 0.1rem 0; }
-    .thesis-desc { font-family: 'EB Garamond', serif; font-size: 0.88rem; font-style: italic; color: #555; line-height: 1.4; }
-    .harris-quote { border-left: 3px solid #1a1a1a; padding: 0.5rem 1rem; margin: 0.8rem 0 1.2rem 0; font-style: italic; font-size: 0.95rem; color: #444; background: #f0f0ec; line-height: 1.5; }
-    .harris-framework { background: #f6f6f2; border: 1px solid #e0e0d8; padding: 1.2rem 1.5rem; margin: 1rem 0; line-height: 1.7; }
-    .harris-framework h4 { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; color: #888; margin: 0 0 0.6rem 0; }
+
+    /* ── Headings ─────────────────────────────────────────────── */
+    h1 { font-family: 'EB Garamond', serif; font-size: 1.9rem; font-weight: 500;
+         letter-spacing: -0.02em; border-bottom: 1px solid var(--border-strong);
+         padding-bottom: 0.4rem; margin-bottom: 0.2rem; color: var(--fg); }
+    h2 { font-family: 'EB Garamond', serif; font-size: 1.2rem; font-weight: 500;
+         margin-top: 1.8rem; margin-bottom: 0.3rem; color: var(--fg); }
+    h3 { font-family: 'DM Mono', monospace; font-size: 0.68rem; font-weight: 400;
+         letter-spacing: 0.12em; text-transform: uppercase;
+         color: var(--fg-muted); margin-bottom: 0.6rem; }
+
+    /* ── Tabs ─────────────────────────────────────────────────── */
+    .stTabs [data-baseweb="tab-list"] { gap: 0; border-bottom: 1px solid var(--border-light); background: transparent; }
+    .stTabs [data-baseweb="tab"] { font-family: 'DM Mono', monospace; font-size: 0.7rem;
+         letter-spacing: 0.1em; text-transform: uppercase; color: var(--tab-inactive);
+         padding: 0.5rem 1.5rem; border: none; border-bottom: 2px solid transparent; background: transparent; }
+    .stTabs [aria-selected="true"] { color: var(--tab-active); border-bottom: 2px solid var(--tab-active); background: transparent; }
+
+    /* ── KPI strip ────────────────────────────────────────────── */
+    .kpi-row   { display: flex; gap: 2.5rem; margin: 1.2rem 0 1.8rem 0; flex-wrap: wrap; }
+    .kpi       { border-left: 2px solid var(--border-strong); padding-left: 0.8rem; }
+    .kpi-value { font-family: 'DM Mono', monospace; font-size: 1.8rem; font-weight: 300;
+                 line-height: 1; color: var(--fg); }
+    .kpi-label { font-family: 'DM Mono', monospace; font-size: 0.62rem; letter-spacing: 0.1em;
+                 text-transform: uppercase; color: var(--fg-muted); margin-top: 0.2rem; }
+    .kpi-sub   { font-family: 'EB Garamond', serif; font-size: 0.82rem; font-style: italic;
+                 color: var(--fg-dim); margin-top: 0.1rem; }
+
+    /* ── Thesis cards ─────────────────────────────────────────── */
+    .thesis-card  { background: var(--card-bg); border-left: 3px solid var(--border-strong);
+                    padding: 0.7rem 1rem; margin: 0.4rem 0; }
+    .thesis-label { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.1em;
+                    text-transform: uppercase; color: var(--fg-muted); }
+    .thesis-name  { font-family: 'EB Garamond', serif; font-size: 1.05rem; font-weight: 500;
+                    margin: 0.15rem 0 0.1rem 0; color: var(--fg); }
+    .thesis-desc  { font-family: 'EB Garamond', serif; font-size: 0.88rem; font-style: italic;
+                    color: var(--fg-muted); line-height: 1.4; }
+
+    /* ── Callout / framework ──────────────────────────────────── */
+    .harris-quote { border-left: 3px solid var(--border-strong); padding: 0.5rem 1rem;
+                    margin: 0.8rem 0 1.2rem 0; font-style: italic; font-size: 0.95rem;
+                    color: var(--td-color); background: var(--card-bg); line-height: 1.5; }
+    .harris-framework { background: var(--framework-bg); border: 1px solid var(--border-light);
+                        padding: 1.2rem 1.5rem; margin: 1rem 0; line-height: 1.7; }
+    .harris-framework h4 { font-family: 'DM Mono', monospace; font-size: 0.65rem;
+                           letter-spacing: 0.12em; text-transform: uppercase;
+                           color: var(--fg-muted); margin: 0 0 0.6rem 0; }
     .harris-framework table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
-    .harris-framework td { padding: 0.3rem 0.8rem 0.3rem 0; vertical-align: top; color: #333; }
-    .harris-framework td:first-child { font-family: 'DM Mono', monospace; font-size: 0.72rem; color: #888; white-space: nowrap; padding-right: 1rem; }
-    .para-badge { display: inline-block; font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; background: #1a1a1a; color: #fff; padding: 0.1rem 0.4rem; margin-left: 0.4rem; vertical-align: middle; }
-    .caption { font-family: 'EB Garamond', serif; font-size: 0.88rem; font-style: italic; color: #666; margin-top: 0.3rem; line-height: 1.5; }
-    hr { border: none; border-top: 1px solid #e0e0d8; margin: 1.5rem 0; }
+    .harris-framework td { padding: 0.3rem 0.8rem 0.3rem 0; vertical-align: top; color: var(--td-color); }
+    .harris-framework td:first-child { font-family: 'DM Mono', monospace; font-size: 0.72rem;
+                                       color: var(--fg-muted); white-space: nowrap; padding-right: 1rem; }
+
+    /* ── Misc ─────────────────────────────────────────────────── */
+    .para-badge { display: inline-block; font-family: 'DM Mono', monospace; font-size: 0.6rem;
+                  letter-spacing: 0.1em; text-transform: uppercase;
+                  background: var(--badge-bg); color: var(--badge-fg);
+                  padding: 0.1rem 0.4rem; margin-left: 0.4rem; vertical-align: middle; }
+    .caption { font-family: 'EB Garamond', serif; font-size: 0.88rem; font-style: italic;
+               color: var(--caption-color); margin-top: 0.3rem; line-height: 1.5; }
+    hr { border: none; border-top: 1px solid var(--hr-color); margin: 1.5rem 0; }
     #MainMenu { visibility: hidden; } footer { visibility: hidden; } header { visibility: hidden; }
 </style>
 """, unsafe_allow_html=True)
 
+# ── Theme detection ────────────────────────────────────────────
+def _is_dark() -> bool:
+    """Return True when Streamlit is running with a dark base theme."""
+    try:
+        return (st.get_option("theme.base") or "").lower() == "dark"
+    except Exception:
+        return False
+
+def _tc() -> dict:
+    """Theme-aware color tokens for matplotlib."""
+    if _is_dark():
+        return dict(
+            bg='#141412', fg='#e0dfd8', muted='#6b6b65', dim='#4e4e4a',
+            spine='#262623', zero='#2e2e2b', card_bg='#1c1c1a',
+            bar_funded='#e0dfd8', bar_unfunded='#2a2a27',
+            label_funded='#b5b4ae', label_unfunded='#3a3a37',
+            thesis=dict(Protect='#e0dfd8', Develop='#8a8a82', Maintain='#4a4a46'),
+        )
+    return dict(
+        bg='#FAFAF7', fg='#1a1a1a', muted='#888', dim='#bbb',
+        spine='#ccc', zero='#ddd', card_bg='#f0f0ec',
+        bar_funded='#1a1a1a', bar_unfunded='#e0e0d8',
+        label_funded='#333', label_unfunded='#bbb',
+        thesis=dict(Protect='#1a1a1a', Develop='#555', Maintain='#999'),
+    )
+
+# Stable base rcParams (non-color settings only); colors applied per-chart via _tc()
 rcParams.update({
     'font.family': 'serif', 'font.serif': ['Georgia'], 'font.size': 9,
     'axes.spines.top': False, 'axes.spines.right': False,
     'axes.spines.left': False, 'axes.spines.bottom': True,
-    'axes.grid': False, 'axes.facecolor': '#FAFAF7', 'figure.facecolor': '#FAFAF7',
+    'axes.grid': False,
     'xtick.major.size': 0, 'ytick.major.size': 0,
-    'xtick.color': '#888', 'ytick.color': '#888',
-    'text.color': '#1a1a1a', 'axes.labelcolor': '#888', 'axes.edgecolor': '#ccc',
 })
 
 # ── Olympic Summer ────────────────────────────────────────────
@@ -115,9 +222,9 @@ PARA_WINTER = pd.DataFrame([
 ])
 
 THESIS_META = {
-    'Protect':  dict(color='#1a1a1a', desc='Dominant program, first Olympics. Close the preparation gap before the Games.'),
-    'Develop':  dict(color='#555',    desc='Ascending program. Invest ahead of the curve. Higher variance, higher ceiling.'),
-    'Maintain': dict(color='#999',    desc='Perennially dominant. Protect the floor. Low marginal return on additional capital.'),
+    'Protect':  dict(desc='Dominant program, first Olympics. Close the preparation gap before the Games.'),
+    'Develop':  dict(desc='Ascending program. Invest ahead of the curve. Higher variance, higher ceiling.'),
+    'Maintain': dict(desc='Perennially dominant. Protect the floor. Low marginal return on additional capital.'),
 }
 
 N_SIMS = 8000
@@ -200,80 +307,90 @@ def build_frontier(df, steps=35):
         prev_g, prev_b = exp, b
     return pd.DataFrame(rows)
 
+def _apply_axes_theme(ax, tc):
+    """Apply Tufte-minimal theme tokens to a single Axes."""
+    ax.set_facecolor(tc['bg'])
+    ax.figure.set_facecolor(tc['bg'])
+    ax.spines['bottom'].set_color(tc['spine'])
+    ax.spines['bottom'].set_linewidth(0.8)
+    ax.spines['left'].set_visible(False)
+    ax.tick_params(colors=tc['muted'])
+
 def chart_portfolio(df):
+    tc = _tc()
+    thesis_colors = tc['thesis']
     df_s = df.sort_values('p_gold', ascending=True)
     fig, ax = plt.subplots(figsize=(6.5, max(2.8, len(df)*0.48)))
     for i, (_, row) in enumerate(df_s.iterrows()):
-        color = THESIS_META[row['thesis']]['color']
-        alpha = 1.0 if row['selected'] else 0.25
-        ax.barh(i, row['p_medal'], color=color, alpha=alpha*0.25, height=0.55, zorder=2)
-        ax.barh(i, row['p_gold'],  color=color, alpha=alpha, height=0.55, zorder=3)
+        color = thesis_colors[row['thesis']]
+        alpha = 1.0 if row['selected'] else 0.22
+        ax.barh(i, row['p_medal'], color=color, alpha=alpha * 0.28, height=0.55, zorder=2)
+        ax.barh(i, row['p_gold'],  color=color, alpha=alpha,         height=0.55, zorder=3)
         ax.text(-0.01, i, f"{row['sport']} · {row['discipline']}",
                 ha='right', va='center', fontsize=7.5, fontfamily='monospace',
-                color='#333' if row['selected'] else '#bbb')
-        ax.text(row['p_gold']+0.012, i, f"{row['p_gold']:.0%}",
+                color=tc['label_funded'] if row['selected'] else tc['label_unfunded'])
+        ax.text(row['p_gold'] + 0.012, i, f"{row['p_gold']:.0%}",
                 ha='left', va='center', fontsize=7, fontfamily='monospace',
-                color='#555' if row['selected'] else '#ddd')
-    # "funded" / "not selected" label on first occurrence of each
+                color=tc['muted'] if row['selected'] else tc['dim'])
     labeled = set()
     for i, (_, row) in enumerate(df_s.iterrows()):
         tag = 'funded' if row['selected'] else 'not selected'
         if tag not in labeled:
             ax.text(-0.565, i, tag, ha='left', va='center', fontsize=6,
                     fontfamily='monospace',
-                    color='#555' if row['selected'] else '#ccc',
+                    color=tc['muted'] if row['selected'] else tc['dim'],
                     style='italic')
             labeled.add(tag)
     ax.set_xlim(-0.58, 1.2)
     ax.set_yticks([])
-    ax.set_xlabel('P(gold)', fontsize=8, color='#888', labelpad=5)
+    ax.set_xlabel('P(gold)', fontsize=8, color=tc['muted'], labelpad=5)
     ax.text(0.98, -0.06, 'light extension = P(medal)', transform=ax.transAxes,
-            ha='right', va='top', fontsize=6.5, fontfamily='monospace', color='#bbb')
-    ax.tick_params(axis='x', labelsize=7.5, colors='#888')
-    ax.spines['bottom'].set_color('#ccc')
-    ax.spines['bottom'].set_linewidth(0.8)
-    ax.spines['left'].set_visible(False)
-    for thesis, meta in THESIS_META.items():
-        ax.barh([], [], color=meta['color'], label=thesis, height=0.55)
-    ax.legend(fontsize=7, frameon=False, loc='lower right', labelcolor='#555')
+            ha='right', va='top', fontsize=6.5, fontfamily='monospace', color=tc['dim'])
+    ax.tick_params(axis='x', labelsize=7.5, colors=tc['muted'])
+    for thesis, color in thesis_colors.items():
+        ax.barh([], [], color=color, label=thesis, height=0.55)
+    ax.legend(fontsize=7, frameon=False, loc='lower right', labelcolor=tc['muted'])
+    _apply_axes_theme(ax, tc)
     plt.tight_layout(pad=0.4)
     return fig
 
 def chart_frontier(frontier, budget, exp_golds):
+    tc = _tc()
     fig, ax = plt.subplots(figsize=(6.5, 2.8))
-    ax.plot(frontier['budget'], frontier['exp_golds'], color='#1a1a1a', lw=1.3, zorder=3)
-    ax.axvline(budget, color='#ccc', lw=0.8, ls='--', zorder=1)
-    ax.scatter([budget], [exp_golds], color='#1a1a1a', s=30, zorder=5)
+    ax.plot(frontier['budget'], frontier['exp_golds'], color=tc['fg'], lw=1.3, zorder=3)
+    ax.axvline(budget, color=tc['spine'], lw=0.8, ls='--', zorder=1)
+    ax.scatter([budget], [exp_golds], color=tc['fg'], s=30, zorder=5)
     ax.annotate(f"{exp_golds:.2f}",
                 xy=(budget, exp_golds),
                 xytext=(budget + 0.3, exp_golds + 0.04),
-                fontsize=7, color='#1a1a1a', fontfamily='monospace',
-                arrowprops=dict(arrowstyle='-', color='#ccc', lw=0.6))
+                fontsize=7, color=tc['fg'], fontfamily='monospace',
+                arrowprops=dict(arrowstyle='-', color=tc['spine'], lw=0.6))
     peak = frontier.loc[frontier['shadow_price'].idxmax()]
     ax.annotate(f"peak return\nat {peak['budget']:.1f} units",
                 xy=(peak['budget'], peak['exp_golds']),
-                xytext=(peak['budget']+0.4, peak['exp_golds']-0.06),
-                fontsize=7, color='#888', fontfamily='monospace',
-                arrowprops=dict(arrowstyle='-', color='#ddd', lw=0.7))
-    ax.set_xlabel('Capital deployed (units)', fontsize=8, color='#888', labelpad=5)
-    ax.set_ylabel('Expected gold medals', fontsize=8, color='#888', labelpad=5)
-    ax.tick_params(labelsize=7.5, colors='#888')
-    ax.spines['bottom'].set_color('#ccc')
-    ax.spines['bottom'].set_linewidth(0.8)
+                xytext=(peak['budget'] + 0.4, peak['exp_golds'] - 0.06),
+                fontsize=7, color=tc['muted'], fontfamily='monospace',
+                arrowprops=dict(arrowstyle='-', color=tc['dim'], lw=0.7))
+    ax.set_xlabel('Capital deployed (units)', fontsize=8, color=tc['muted'], labelpad=5)
+    ax.set_ylabel('Expected gold medals', fontsize=8, color=tc['muted'], labelpad=5)
+    ax.tick_params(labelsize=7.5, colors=tc['muted'])
+    _apply_axes_theme(ax, tc)
     plt.tight_layout(pad=0.4)
     return fig
 
 def chart_shadow(frontier, budget):
+    tc = _tc()
     fig, ax = plt.subplots(figsize=(6.5, 2.2))
-    ax.fill_between(frontier['budget'], frontier['shadow_price'], color='#1a1a1a', alpha=0.08, zorder=1)
-    ax.plot(frontier['budget'], frontier['shadow_price'], color='#1a1a1a', lw=1.1, zorder=3)
-    ax.axvline(budget, color='#ccc', lw=0.8, ls='--', zorder=2)
-    ax.axhline(0, color='#ddd', lw=0.6, zorder=1)
-    ax.set_xlabel('Capital deployed (units)', fontsize=8, color='#888', labelpad=5)
-    ax.set_ylabel('Marginal medal value', fontsize=8, color='#888', labelpad=5)
-    ax.tick_params(labelsize=7.5, colors='#888')
-    ax.spines['bottom'].set_color('#ccc')
-    ax.spines['bottom'].set_linewidth(0.8)
+    ax.fill_between(frontier['budget'], frontier['shadow_price'],
+                    color=tc['fg'], alpha=0.07, zorder=1)
+    ax.plot(frontier['budget'], frontier['shadow_price'],
+            color=tc['fg'], lw=1.1, zorder=3)
+    ax.axvline(budget, color=tc['spine'], lw=0.8, ls='--', zorder=2)
+    ax.axhline(0, color=tc['zero'], lw=0.6, zorder=1)
+    ax.set_xlabel('Capital deployed (units)', fontsize=8, color=tc['muted'], labelpad=5)
+    ax.set_ylabel('Marginal medal value', fontsize=8, color=tc['muted'], labelpad=5)
+    ax.tick_params(labelsize=7.5, colors=tc['muted'])
+    _apply_axes_theme(ax, tc)
     plt.tight_layout(pad=0.4)
     return fig
 
@@ -303,6 +420,7 @@ def render_tab(raw_df, context, key):
 
     st.markdown("## Investment theses")
     c1, c2, c3 = st.columns(3)
+    thesis_colors = _tc()['thesis']
     for col, (thesis, meta) in zip([c1,c2,c3], THESIS_META.items()):
         t_df = df[df['thesis']==thesis]
         t_sel = t_df[t_df['selected']==1]
@@ -310,10 +428,10 @@ def render_tab(raw_df, context, key):
         avg_pg = t_sel['p_gold'].mean() if not t_sel.empty else 0.0
         total_cost = t_sel['cost'].sum() if not t_sel.empty else 0.0
         with col:
-            st.markdown(f"""<div class="thesis-card" style="border-left-color:{meta['color']};">
+            st.markdown(f"""<div class="thesis-card" style="border-left-color:{thesis_colors[thesis]};">
             <div class="thesis-label">{thesis}</div>
             <div class="thesis-name">{ns} of {n} funded</div>
-            <div style="font-family:'DM Mono',monospace;font-size:0.68rem;color:#888;margin:0.25rem 0 0.15rem 0;">
+            <div style="font-family:'DM Mono',monospace;font-size:0.68rem;color:var(--fg-muted);margin:0.25rem 0 0.15rem 0;">
               avg P(gold) {avg_pg:.0%} &nbsp;·&nbsp; cost {total_cost:.1f} units
             </div>
             <div class="thesis-desc">{meta['desc']}</div></div>""", unsafe_allow_html=True)
@@ -324,13 +442,15 @@ def render_tab(raw_df, context, key):
     if not selected.empty:
         pills = ''.join(
             f'<span style="display:inline-block;font-family:\'DM Mono\',monospace;font-size:0.65rem;'
-            f'letter-spacing:0.06em;border:1px solid #1a1a1a;padding:0.15rem 0.55rem;margin:0.2rem 0.3rem 0.2rem 0;'
-            f'color:#1a1a1a;">{r["sport"]} · {r["discipline"]} <span style="color:#888;">{r["p_gold"]:.0%}</span></span>'
+            f'letter-spacing:0.06em;border:1px solid var(--border-strong);padding:0.15rem 0.55rem;'
+            f'margin:0.2rem 0.3rem 0.2rem 0;color:var(--fg);">'
+            f'{r["sport"]} · {r["discipline"]} '
+            f'<span style="color:var(--fg-muted);">{r["p_gold"]:.0%}</span></span>'
             for _, r in selected.sort_values('p_gold', ascending=False).iterrows()
         )
         st.markdown(
             f'<div style="margin-bottom:1.4rem;"><div style="font-family:\'DM Mono\',monospace;font-size:0.62rem;'
-            f'letter-spacing:0.1em;text-transform:uppercase;color:#888;margin-bottom:0.4rem;">Funded programs</div>'
+            f'letter-spacing:0.1em;text-transform:uppercase;color:var(--fg-muted);margin-bottom:0.4rem;">Funded programs</div>'
             f'{pills}</div>',
             unsafe_allow_html=True
         )
@@ -374,13 +494,15 @@ def render_tab(raw_df, context, key):
     show.columns = ['Sport','Discipline','Thesis','P(gold)','P(medal)','Cost','Streak','Readiness','Funded']
     show = show.sort_values('P(gold)', ascending=False)
     show['Funded'] = show['Funded'].map({1: '✓', 0: '—'})
+    tc = _tc()
+    hl_bg = tc['card_bg'] if _is_dark() else '#f0f0ec'
     def hl(row):
-        return ['background-color:#f0f0ec;font-weight:500']*len(row) if row['Funded'] == '✓' else ['']*len(row)
+        return [f'background-color:{hl_bg};font-weight:500']*len(row) if row['Funded'] == '✓' else ['']*len(row)
     st.dataframe(
         show.style
             .apply(hl, axis=1)
-            .bar(subset=['P(gold)'], color='#1a1a1a', vmin=0, vmax=1)
-            .bar(subset=['P(medal)'], color='#aaa', vmin=0, vmax=1)
+            .bar(subset=['P(gold)'], color=tc['fg'], vmin=0, vmax=1)
+            .bar(subset=['P(medal)'], color=tc['muted'], vmin=0, vmax=1)
             .format({'P(gold)':'{:.0%}','P(medal)':'{:.0%}','Cost':'{:.1f}','Readiness':'{:.2f}'})
             .hide(axis='index'),
         use_container_width=True
@@ -389,7 +511,7 @@ def render_tab(raw_df, context, key):
 
 # ── App header ────────────────────────────────────────────────
 st.markdown("# USOPC Portfolio Investment Analytics")
-st.markdown("""<div style="font-family:'DM Mono',monospace;font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:#888;margin:-0.2rem 0 1.2rem 0;">LA 2028 &nbsp;·&nbsp; French Alps 2030 &nbsp;·&nbsp; Rocky Harris allocation framework</div>""", unsafe_allow_html=True)
+st.markdown("""<div style="font-family:'DM Mono',monospace;font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--fg-muted);margin:-0.2rem 0 1.2rem 0;">LA 2028 &nbsp;·&nbsp; French Alps 2030 &nbsp;·&nbsp; Rocky Harris allocation framework</div>""", unsafe_allow_html=True)
 
 st.markdown("""
 <div class="harris-framework">
