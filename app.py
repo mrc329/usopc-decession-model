@@ -161,7 +161,8 @@ def build_frontier(df, steps=35):
         df2, exp, shadow = run_lp(df, b)
         dg = exp - prev_g
         db = b - prev_b
-        rows.append(dict(budget=round(b,2), exp_golds=exp, shadow_price=shadow,
+        shadow_num = round(dg/db, 4) if db > 0.001 and dg > 0 else 0.0
+        rows.append(dict(budget=round(b,2), exp_golds=exp, shadow_price=shadow_num,
                          marginal_cost=round(db/dg,2) if dg > 0.005 else None,
                          n_funded=int(df2['selected'].sum())))
         prev_g, prev_b = exp, b
@@ -236,6 +237,14 @@ def chart_shadow(frontier, budget):
     ax.plot(frontier['budget'], frontier['shadow_price'], color='#1a1a1a', lw=1.1, zorder=3)
     ax.axvline(budget, color='#ccc', lw=0.8, ls='--', zorder=2)
     ax.axhline(0, color='#ddd', lw=0.6, zorder=1)
+    idx = (frontier['budget'] - budget).abs().idxmin()
+    sv = frontier.loc[idx, 'shadow_price']
+    ax.scatter([frontier.loc[idx, 'budget']], [sv], color='#1a1a1a', s=30, zorder=5)
+    ax.annotate(f"{sv:.3f}",
+                xy=(frontier.loc[idx, 'budget'], sv),
+                xytext=(frontier.loc[idx, 'budget'] + 0.3, sv + max(frontier['shadow_price'].max() * 0.06, 0.002)),
+                fontsize=7, color='#1a1a1a', fontfamily='monospace',
+                arrowprops=dict(arrowstyle='-', color='#ccc', lw=0.6))
     ax.set_xlabel('Capital deployed (units)', fontsize=8, color='#888', labelpad=5)
     ax.set_ylabel('Marginal medal value', fontsize=8, color='#888', labelpad=5)
     ax.tick_params(labelsize=7.5, colors='#888')
@@ -249,7 +258,10 @@ def render_tab(raw_df, context, key):
     max_b = float(raw_df['cost'].sum())
     budget = st.slider('Capital budget (units)', 0.5, max_b, min(5.0, max_b), step=0.1, key=key,
                        help='One unit ≈ annual program funding allocation. Programs cost 0.8–1.2 units each.')
-    df, exp_golds, shadow = run_lp(mc_df, budget)
+    df, exp_golds, _ = run_lp(mc_df, budget)
+    delta = 0.1
+    _, exp_plus, _ = run_lp(mc_df, min(budget + delta, max_b))
+    shadow = round((exp_plus - exp_golds) / delta, 4) if budget + delta <= max_b else 0.0
     selected = df[df['selected'] == 1]
     n_funded = len(selected)
     budget_used = round(selected['cost'].sum(), 1) if not selected.empty else 0.0
