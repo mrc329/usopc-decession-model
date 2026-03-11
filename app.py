@@ -122,6 +122,9 @@ THESIS_META = {
 
 N_SIMS = 8000
 
+# Maximum additional investment per program above baseline (enhancement tier)
+E_MAX = 0.3
+
 @st.cache_data
 def run_monte_carlo(df):
     rows = []
@@ -139,23 +142,53 @@ def run_monte_carlo(df):
     return pd.DataFrame(rows)
 
 def run_lp(df, budget):
+    # Enhancement return per unit: programs far from medal ceiling benefit most
+    r = {i: round((1 - df.loc[i, 'p_gold']) * 0.5, 4) for i in df.index}
+
+    # --- MILP: binary fund/no-fund + continuous enhancement above baseline ---
     prob = pulp.LpProblem('USOPC', pulp.LpMaximize)
     x = {i: pulp.LpVariable(f'x{i}', cat='Binary') for i in df.index}
-    prob += pulp.lpSum(df.loc[i,'p_gold'] * x[i] for i in df.index)
-    prob += pulp.lpSum(df.loc[i,'cost'] * x[i] for i in df.index) <= budget, 'budget'
+    e = {i: pulp.LpVariable(f'e{i}', lowBound=0, upBound=E_MAX) for i in df.index}
+
+    prob += pulp.lpSum(df.loc[i,'p_gold'] * x[i] + r[i] * e[i] for i in df.index)
+    prob += pulp.lpSum(df.loc[i,'cost'] * x[i] + e[i] for i in df.index) <= budget, 'budget'
+    for i in df.index:
+        prob += e[i] <= E_MAX * x[i]  # can only enhance funded programs
+
     prob.solve(pulp.PULP_CBC_CMD(msg=0))
+
     df = df.copy()
     df['selected'] = [1 if pulp.value(x[i]) and pulp.value(x[i]) > 0.5 else 0 for i in df.index]
-    exp = round(sum(df.loc[i,'p_gold'] for i in df.index if df.loc[i,'selected']), 3)
+    df['enhancement'] = [round(float(pulp.value(e[i]) or 0.0), 3) for i in df.index]
+    exp = round(sum(
+        df.loc[i,'p_gold'] + r[i] * df.loc[i,'enhancement']
+        for i in df.index if df.loc[i,'selected']
+    ), 3)
+
+    # --- LP relaxation with fixed selection to recover a valid shadow price ---
+    # MILP duals are unreliable; fix the binary selection and re-solve as pure LP
+    prob2 = pulp.LpProblem('USOPC_LP', pulp.LpMaximize)
+    e2 = {i: pulp.LpVariable(f'e2_{i}', lowBound=0,
+                              upBound=E_MAX * float(df.loc[i,'selected'])) for i in df.index}
+    prob2 += pulp.lpSum(
+        df.loc[i,'p_gold'] * df.loc[i,'selected'] + r[i] * e2[i] for i in df.index
+    )
+    prob2 += pulp.lpSum(
+        df.loc[i,'cost'] * df.loc[i,'selected'] + e2[i] for i in df.index
+    ) <= budget, 'budget'
+    prob2.solve(pulp.PULP_CBC_CMD(msg=0))
+
     shadow = 0.0
-    for name, c in prob.constraints.items():
+    for name, c in prob2.constraints.items():
         if name == 'budget' and c.pi is not None:
             shadow = round(abs(c.pi), 4)
+
     return df, exp, shadow
 
 @st.cache_data
 def build_frontier(df, steps=35):
-    max_b = df['cost'].sum()
+    # Extend budget range to include full enhancement of all programs
+    max_b = df['cost'].sum() + len(df) * E_MAX * 0.9
     rows, prev_g, prev_b = [], 0.0, 0.0
     for b in np.linspace(0.5, max_b, steps):
         df2, exp, shadow = run_lp(df, b)
@@ -260,7 +293,7 @@ def render_tab(raw_df, context, key):
         <div class="kpi"><div class="kpi-value">{exp_golds:.2f}</div><div class="kpi-label">Expected golds</div><div class="kpi-sub">avg medals across simulations</div></div>
         <div class="kpi"><div class="kpi-value">{n_funded}</div><div class="kpi-label">Programs funded</div><div class="kpi-sub">of {len(df)} evaluated</div></div>
         <div class="kpi"><div class="kpi-value">{budget_used}</div><div class="kpi-label">Capital deployed</div><div class="kpi-sub">of {budget:.1f} available</div></div>
-        <div class="kpi"><div class="kpi-value">{"—" if shadow == 0.0 else f"{shadow:.3f}"}</div><div class="kpi-label">Marginal medal value</div><div class="kpi-sub">{"frontier has flattened" if shadow == 0.0 else "expected golds per unit added"}</div></div>
+        <div class="kpi"><div class="kpi-value">{"—" if shadow == 0.0 else f"{shadow:.3f}"}</div><div class="kpi-label">Marginal medal value</div><div class="kpi-sub">{"all investment exhausted" if shadow == 0.0 else "expected golds per unit added"}</div></div>
         <div class="kpi"><div class="kpi-value">{p_any:.0%}</div><div class="kpi-label">P(any medal)</div><div class="kpi-sub">across portfolio</div></div>
     </div>
     """, unsafe_allow_html=True)
@@ -317,7 +350,7 @@ def render_tab(raw_df, context, key):
         st.pyplot(chart_frontier(frontier, budget, exp_golds), use_container_width=True)
         plt.close()
         st.markdown("## Marginal medal value")
-        st.markdown("### Where additional capital stops buying medals")
+        st.markdown("### Diminishing returns on additional capital")
         st.pyplot(chart_shadow(frontier, budget), use_container_width=True)
         plt.close()
 
@@ -373,8 +406,8 @@ st.markdown("""
 <tr><td>Expected golds</td><td>Sum of P(gold) across funded programs. If two programs have P(gold) = 0.7 and 0.6, expected golds = 1.3 — the average number of golds you'd win across many simulated Games, not a guaranteed count.</td></tr>
 <tr><td>P(any medal)</td><td>1 − ∏(1 − P(medal)) across funded programs, assuming independence.</td></tr>
 <tr><td>Which programs to fund</td><td>Binary LP: maximize ΣP(gold)·x subject to Σcost·x ≤ budget, x ∈ {0,1}.</td></tr>
-<tr><td>Marginal medal value</td><td>LP shadow price on the budget constraint — expected golds gained per one additional unit of capital at the current level. Drops to zero when the frontier flattens.</td></tr>
-<tr><td>Efficient frontier</td><td>LP solved at 35 budget levels from 0.5 → max capital. Traces the maximum achievable expected golds at each funding level.</td></tr>
+<tr><td>Marginal medal value</td><td>Shadow price on the budget constraint — expected golds gained per one additional unit of capital at the current level. Each program has a baseline cost (fund/no-fund) plus a continuous enhancement tier (up to +0.3 units). Enhancement return r = (1 − P(gold)) × 0.5 per unit: programs further from the medal ceiling benefit most from additional investment. Marginal value declines with scale but stays positive until all preparation investment is exhausted.</td></tr>
+<tr><td>Efficient frontier</td><td>MILP solved at 35 budget levels from 0.5 → max capital (baseline + full enhancement). Traces the maximum achievable expected golds at each funding level, including returns from enhancement investment above each program's baseline cost.</td></tr>
 </table>
 </div>
 """, unsafe_allow_html=True)
