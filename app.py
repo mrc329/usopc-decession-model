@@ -301,7 +301,7 @@ def render_tab(raw_df, context, key):
         return ['background-color:#f0f0ec;font-weight:500']*len(row) if row['Funded'] else ['']*len(row)
     st.dataframe(show.style.apply(hl,axis=1)
         .format({'P(gold)':'{:.0%}','P(medal)':'{:.0%}','Cost':'{:.1f}','Readiness':'{:.2f}'})
-        .hide(axis='index'), use_container_width=True, height=320)
+        .hide(axis='index'), use_container_width=True)
 
 
 # ── App header ────────────────────────────────────────────────
