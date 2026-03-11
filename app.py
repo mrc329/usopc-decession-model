@@ -211,6 +211,11 @@ def chart_frontier(frontier, budget, exp_golds):
     ax.plot(frontier['budget'], frontier['exp_golds'], color='#1a1a1a', lw=1.3, zorder=3)
     ax.axvline(budget, color='#ccc', lw=0.8, ls='--', zorder=1)
     ax.scatter([budget], [exp_golds], color='#1a1a1a', s=30, zorder=5)
+    ax.annotate(f"{exp_golds:.2f}",
+                xy=(budget, exp_golds),
+                xytext=(budget + 0.3, exp_golds + 0.04),
+                fontsize=7, color='#1a1a1a', fontfamily='monospace',
+                arrowprops=dict(arrowstyle='-', color='#ccc', lw=0.6))
     peak = frontier.loc[frontier['shadow_price'].idxmax()]
     ax.annotate(f"peak return\nat {peak['budget']:.1f} units",
                 xy=(peak['budget'], peak['exp_golds']),
@@ -242,7 +247,8 @@ def chart_shadow(frontier, budget):
 def render_tab(raw_df, context, key):
     mc_df = run_monte_carlo(raw_df)
     max_b = float(raw_df['cost'].sum())
-    budget = st.slider('Capital deployed', 0.5, max_b, min(5.0, max_b), step=0.1, key=key)
+    budget = st.slider('Capital budget (units)', 0.5, max_b, min(5.0, max_b), step=0.1, key=key,
+                       help='One unit ≈ annual program funding allocation. Programs cost 0.8–1.2 units each.')
     df, exp_golds, shadow = run_lp(mc_df, budget)
     selected = df[df['selected'] == 1]
     n_funded = len(selected)
@@ -271,7 +277,7 @@ def render_tab(raw_df, context, key):
         avg_pg = t_sel['p_gold'].mean() if not t_sel.empty else 0.0
         total_cost = t_sel['cost'].sum() if not t_sel.empty else 0.0
         with col:
-            st.markdown(f"""<div class="thesis-card">
+            st.markdown(f"""<div class="thesis-card" style="border-left-color:{meta['color']};">
             <div class="thesis-label">{thesis}</div>
             <div class="thesis-name">{ns} of {n} funded</div>
             <div style="font-family:'DM Mono',monospace;font-size:0.68rem;color:#888;margin:0.25rem 0 0.15rem 0;">
@@ -300,7 +306,7 @@ def render_tab(raw_df, context, key):
 
     with cl:
         st.markdown("## Portfolio")
-        st.markdown("### P(gold) by program · dark = funded · ghost = not selected")
+        st.markdown("### P(gold) by program")
         st.pyplot(chart_portfolio(df), use_container_width=True)
         plt.close()
 
@@ -334,8 +340,9 @@ def render_tab(raw_df, context, key):
     show = df[['sport','discipline','thesis','p_gold','p_medal','cost','win_streak','sentiment','selected']].copy()
     show.columns = ['Sport','Discipline','Thesis','P(gold)','P(medal)','Cost','Streak','Readiness','Funded']
     show = show.sort_values('P(gold)', ascending=False)
+    show['Funded'] = show['Funded'].map({1: '✓', 0: '—'})
     def hl(row):
-        return ['background-color:#f0f0ec;font-weight:500']*len(row) if row['Funded'] else ['']*len(row)
+        return ['background-color:#f0f0ec;font-weight:500']*len(row) if row['Funded'] == '✓' else ['']*len(row)
     st.dataframe(
         show.style
             .apply(hl, axis=1)
