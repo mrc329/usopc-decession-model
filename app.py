@@ -71,97 +71,132 @@ rcParams.update({
 SUMMER = pd.DataFrame([
     # ── Gymnastics ── All-Around only per gender. Floor and apparatus are funded through
     # the All-Around program — same athletes, same NGB investment.
-    dict(sport='Gymnastics',    discipline='Women All-Around', thesis='Protect',  mean_pre=96.5, std_pre=3.1, mean_prev=91.2, mean_prev2=97.5, mean_prev3=95.4, age_vs_peak=-3, prior_olympics=0, first_olympics=1, win_streak=11, sentiment=0.24, cost=1.2, pro_pipeline=0.0, pipeline_erosion=0.0, nbc_prime=1.00),
+    dict(sport='Gymnastics',    discipline='Women All-Around', thesis='Protect',  mean_pre=96.5, std_pre=3.1, mean_prev=91.2, mean_prev2=97.5, mean_prev3=95.4, age_vs_peak=-3, prior_olympics=0, first_olympics=1, win_streak=11, sentiment=0.24, cost=1.2, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=1.00),
     # Men's gymnastics: USA won team bronze at Paris 2024 — first team medal in 16 years.
-    dict(sport='Gymnastics',    discipline='Men All-Around',   thesis='Develop',  mean_pre=85.2, std_pre=5.8, mean_prev=81.4, mean_prev2=78.8, mean_prev3=76.2, age_vs_peak=-2, prior_olympics=1, first_olympics=0, win_streak=0,  sentiment=0.58, cost=1.0, pro_pipeline=0.0, pipeline_erosion=0.0, nbc_prime=0.65),
-    # ── Track & Field ── split by gender and event cluster.
-    # Women Sprint 100m/200m — Sha'Carri Richardson generation, ascending post-WC 2023.
-    dict(sport='Track & Field', discipline='Women Sprint',         thesis='Develop',  mean_pre=80.2, std_pre=5.4, mean_prev=71.8, mean_prev2=69.4, mean_prev3=74.2, age_vs_peak=-4, prior_olympics=0, first_olympics=1, win_streak=2,  sentiment=0.60, cost=0.8, pro_pipeline=0.0, pipeline_erosion=0.0, nbc_prime=0.85),
-    # Women 400m/Hurdles — Sydney McLaughlin-Levrone. Multiple world records. Perennially dominant.
-    dict(sport='Track & Field', discipline='Women 400m/Hurdles',   thesis='Maintain', mean_pre=97.1, std_pre=2.4, mean_prev=95.4, mean_prev2=92.1, mean_prev3=89.5, age_vs_peak= 2, prior_olympics=3, first_olympics=0, win_streak=8,  sentiment=0.70, cost=0.9, pro_pipeline=0.0, pipeline_erosion=0.0, nbc_prime=0.90),
-    # Men Sprint/400m — Noah Lyles (100m Paris gold), Michael Norman (400m).
-    dict(sport='Track & Field', discipline='Men Sprint/400m',      thesis='Develop',  mean_pre=82.4, std_pre=6.1, mean_prev=79.5, mean_prev2=74.8, mean_prev3=72.5, age_vs_peak=-3, prior_olympics=1, first_olympics=0, win_streak=1,  sentiment=0.62, cost=0.9, pro_pipeline=0.0, pipeline_erosion=0.0, nbc_prime=0.85),
-    # Women Middle Distance 800m — Athing Mu (Tokyo gold, Paris DNF). High upside, injury risk.
-    dict(sport='Track & Field', discipline='Women Middle Distance', thesis='Develop',  mean_pre=83.5, std_pre=6.2, mean_prev=85.4, mean_prev2=82.1, mean_prev3=79.5, age_vs_peak=-2, prior_olympics=1, first_olympics=0, win_streak=2,  sentiment=0.61, cost=0.8, pro_pipeline=0.0, pipeline_erosion=0.0, nbc_prime=0.55),
-    # Men Middle Distance 1500m/800m — Cole Hocker (Paris 2024 1500m gold), Yared Nuguse.
-    dict(sport='Track & Field', discipline='Men Middle Distance',   thesis='Develop',  mean_pre=85.8, std_pre=6.8, mean_prev=83.2, mean_prev2=79.8, mean_prev3=78.2, age_vs_peak=-5, prior_olympics=1, first_olympics=0, win_streak=1,  sentiment=0.63, cost=0.8, pro_pipeline=0.0, pipeline_erosion=0.0, nbc_prime=0.55),
+    dict(sport='Gymnastics',    discipline='Men All-Around',   thesis='Develop',  mean_pre=85.2, std_pre=5.8, mean_prev=81.4, mean_prev2=78.8, mean_prev3=76.2, age_vs_peak=-2, prior_olympics=1, first_olympics=0, win_streak=0,  sentiment=0.58, cost=1.0, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.65),
+    # ── Track & Field ── split by gender and event cluster: Sprint / Hurdles / 400m /
+    # Middle Distance / Long Distance / Relays. Each cluster represents a distinct athlete
+    # pool with separate NGB funding lines.
+    #
+    # ── Women Sprint 100m/200m — Sha'Carri Richardson generation.
+    dict(sport='Track & Field', discipline='Women Sprint',          thesis='Develop',  mean_pre=80.2, std_pre=5.4, mean_prev=71.8, mean_prev2=69.4, mean_prev3=74.2, age_vs_peak=-4, prior_olympics=0, first_olympics=1, win_streak=2,  sentiment=0.60, cost=0.8, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.85),
+    # Women Hurdles 100mH/400mH — Masai Russell (Paris 100mH gold) + McLaughlin-Levrone (400mH).
+    # Two world-class programs across both hurdle distances. Maintain thesis on combined depth.
+    dict(sport='Track & Field', discipline='Women Hurdles',         thesis='Maintain', mean_pre=96.2, std_pre=2.8, mean_prev=95.4, mean_prev2=92.1, mean_prev3=89.5, age_vs_peak= 1, prior_olympics=3, first_olympics=0, win_streak=7,  sentiment=0.70, cost=0.9, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.90),
+    # Women 400m — Alexis Holmes, Quanera Hayes. Separate athlete pool from hurdles.
+    dict(sport='Track & Field', discipline='Women 400m',            thesis='Develop',  mean_pre=83.5, std_pre=5.8, mean_prev=81.2, mean_prev2=79.5, mean_prev3=78.2, age_vs_peak=-3, prior_olympics=0, first_olympics=1, win_streak=1,  sentiment=0.61, cost=0.8, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.65),
+    # Women Middle Distance 800m/1500m — Athing Mu (Tokyo gold), Elle Purrier St. Pierre.
+    dict(sport='Track & Field', discipline='Women Middle Distance',  thesis='Develop',  mean_pre=83.5, std_pre=6.2, mean_prev=85.4, mean_prev2=82.1, mean_prev3=79.5, age_vs_peak=-2, prior_olympics=1, first_olympics=0, win_streak=2,  sentiment=0.61, cost=0.8, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.55),
+    # Women Long Distance 5000m/10000m — Elle Purrier, Natosha Rogers. Ascending US program.
+    dict(sport='Track & Field', discipline='Women Long Distance',    thesis='Develop',  mean_pre=76.4, std_pre=7.1, mean_prev=74.2, mean_prev2=71.8, mean_prev3=69.5, age_vs_peak=-4, prior_olympics=0, first_olympics=1, win_streak=1,  sentiment=0.55, cost=0.8, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.45),
+    #
+    # ── Men Sprint 100m/200m — Noah Lyles (Paris 2024 100m gold).
+    dict(sport='Track & Field', discipline='Men Sprint',            thesis='Develop',  mean_pre=84.8, std_pre=5.9, mean_prev=79.5, mean_prev2=74.8, mean_prev3=72.5, age_vs_peak=-3, prior_olympics=1, first_olympics=0, win_streak=2,  sentiment=0.65, cost=0.8, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.85),
+    # Men Hurdles 110mH/400mH — Grant Holloway (world record, multi-WC gold) + Rai Benjamin.
+    dict(sport='Track & Field', discipline='Men Hurdles',           thesis='Develop',  mean_pre=88.5, std_pre=4.2, mean_prev=86.8, mean_prev2=84.5, mean_prev3=82.1, age_vs_peak=-2, prior_olympics=2, first_olympics=0, win_streak=4,  sentiment=0.64, cost=0.8, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.70),
+    # Men 400m — Quincy Hall (Paris 2024 gold), Michael Norman. Ascending program.
+    dict(sport='Track & Field', discipline='Men 400m',              thesis='Develop',  mean_pre=87.2, std_pre=5.5, mean_prev=84.2, mean_prev2=78.5, mean_prev3=76.8, age_vs_peak=-3, prior_olympics=1, first_olympics=0, win_streak=2,  sentiment=0.63, cost=0.8, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.70),
+    # Men Middle Distance 800m/1500m — Cole Hocker (Paris 1500m gold), Yared Nuguse.
+    dict(sport='Track & Field', discipline='Men Middle Distance',    thesis='Develop',  mean_pre=85.8, std_pre=6.8, mean_prev=83.2, mean_prev2=79.8, mean_prev3=78.2, age_vs_peak=-5, prior_olympics=1, first_olympics=0, win_streak=1,  sentiment=0.63, cost=0.8, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.55),
+    # Men Long Distance 5000m/10000m — Grant Fisher (Paris 5th), Parker Stinson.
+    dict(sport='Track & Field', discipline='Men Long Distance',      thesis='Develop',  mean_pre=78.8, std_pre=7.4, mean_prev=76.5, mean_prev2=74.2, mean_prev3=72.1, age_vs_peak=-4, prior_olympics=1, first_olympics=0, win_streak=0,  sentiment=0.56, cost=0.8, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.45),
+    #
+    # ── Relays ── separate funding from individual event pools. USA historically dominant
+    # in distance relays; sprint relays carry DQ/baton exchange risk.
+    # Women 4x100m Relay — competitive but not dominant; exchange consistency is the risk.
+    dict(sport='Track & Field', discipline='Women 4x100 Relay',     thesis='Develop',  mean_pre=87.5, std_pre=5.2, mean_prev=85.8, mean_prev2=83.4, mean_prev3=81.2, age_vs_peak= 0, prior_olympics=1, first_olympics=0, win_streak=2,  sentiment=0.63, cost=0.7, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.75),
+    # Women 4x400m Relay — perennially dominant, deepest women's relay program globally.
+    dict(sport='Track & Field', discipline='Women 4x400 Relay',     thesis='Maintain', mean_pre=96.5, std_pre=2.1, mean_prev=95.8, mean_prev2=96.2, mean_prev3=94.8, age_vs_peak= 1, prior_olympics=3, first_olympics=0, win_streak=5,  sentiment=0.74, cost=0.7, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.80),
+    # Men 4x100m Relay — strong when clean; disqualifications at prior Games elevate risk.
+    dict(sport='Track & Field', discipline='Men 4x100 Relay',       thesis='Develop',  mean_pre=85.2, std_pre=6.8, mean_prev=83.5, mean_prev2=79.8, mean_prev3=84.2, age_vs_peak= 0, prior_olympics=1, first_olympics=0, win_streak=1,  sentiment=0.60, cost=0.7, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.75),
+    # Men 4x400m Relay — dominant alongside women's program. USA rarely loses this event.
+    dict(sport='Track & Field', discipline='Men 4x400 Relay',       thesis='Maintain', mean_pre=94.8, std_pre=2.4, mean_prev=94.2, mean_prev2=95.1, mean_prev3=93.8, age_vs_peak= 0, prior_olympics=3, first_olympics=0, win_streak=4,  sentiment=0.72, cost=0.7, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.80),
+    # Mixed 4x400m Relay — USA won Paris 2024. Combines best of both 400m programs.
+    dict(sport='Track & Field', discipline='Mixed 4x400 Relay',     thesis='Maintain', mean_pre=93.8, std_pre=2.8, mean_prev=93.5, mean_prev2=94.1, mean_prev3=0,    age_vs_peak= 0, prior_olympics=2, first_olympics=0, win_streak=3,  sentiment=0.71, cost=0.6, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.70),
     # ── Swimming ── split by gender. Women's Distance (Ledecky era) is the flagship Maintain program.
-    dict(sport='Swimming',      discipline='Women Distance',   thesis='Maintain', mean_pre=95.2, std_pre=3.8, mean_prev=94.1, mean_prev2=95.8, mean_prev3=92.4, age_vs_peak= 3, prior_olympics=4, first_olympics=0, win_streak=8,  sentiment=0.72, cost=0.9, pro_pipeline=0.0, pipeline_erosion=0.0, nbc_prime=0.90),
+    dict(sport='Swimming',      discipline='Women Distance',   thesis='Maintain', mean_pre=95.2, std_pre=3.8, mean_prev=94.1, mean_prev2=95.8, mean_prev3=92.4, age_vs_peak= 3, prior_olympics=4, first_olympics=0, win_streak=8,  sentiment=0.72, cost=0.9, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.90),
     # Men Distance — Bobby Finke (1500m gold Tokyo + Paris). Ascending, not yet dominant depth.
-    dict(sport='Swimming',      discipline='Men Distance',     thesis='Develop',  mean_pre=88.4, std_pre=5.8, mean_prev=86.2, mean_prev2=84.5, mean_prev3=82.8, age_vs_peak=-3, prior_olympics=2, first_olympics=0, win_streak=2,  sentiment=0.62, cost=0.9, pro_pipeline=0.0, pipeline_erosion=0.0, nbc_prime=0.55),
+    dict(sport='Swimming',      discipline='Men Distance',     thesis='Develop',  mean_pre=88.4, std_pre=5.8, mean_prev=86.2, mean_prev2=84.5, mean_prev3=82.8, age_vs_peak=-3, prior_olympics=2, first_olympics=0, win_streak=2,  sentiment=0.62, cost=0.9, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.55),
     # Women Sprint — Kate Douglass, Torri Huske (multiple Paris medals). Strong and ascending.
-    dict(sport='Swimming',      discipline='Women Sprint',     thesis='Develop',  mean_pre=91.5, std_pre=4.2, mean_prev=95.8, mean_prev2=88.4, mean_prev3=93.2, age_vs_peak=-3, prior_olympics=1, first_olympics=0, win_streak=4,  sentiment=0.67, cost=0.9, pro_pipeline=0.0, pipeline_erosion=0.0, nbc_prime=0.80),
+    dict(sport='Swimming',      discipline='Women Sprint',     thesis='Develop',  mean_pre=91.5, std_pre=4.2, mean_prev=95.8, mean_prev2=88.4, mean_prev3=93.2, age_vs_peak=-3, prior_olympics=1, first_olympics=0, win_streak=4,  sentiment=0.67, cost=0.9, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.80),
     # Men Sprint — post-Dressel generation. Caeleb Dressel era closed; next wave developing.
-    dict(sport='Swimming',      discipline='Men Sprint',       thesis='Develop',  mean_pre=87.8, std_pre=5.5, mean_prev=91.2, mean_prev2=87.5, mean_prev3=90.8, age_vs_peak=-4, prior_olympics=0, first_olympics=1, win_streak=3,  sentiment=0.64, cost=0.9, pro_pipeline=0.0, pipeline_erosion=0.0, nbc_prime=0.80),
-    dict(sport='Soccer',        discipline='Women',            thesis='Maintain', mean_pre=91.5, std_pre=2.8, mean_prev=78.3, mean_prev2=71.5, mean_prev3=91.8, age_vs_peak= 1, prior_olympics=2, first_olympics=0, win_streak=3,  sentiment=0.69, cost=1.0, pro_pipeline=0.4, pipeline_erosion=0.0, nbc_prime=0.80),
-    dict(sport='Diving',        discipline='Platform',         thesis='Develop',  mean_pre=74.2, std_pre=6.8, mean_prev=72.8, mean_prev2=73.5, mean_prev3=71.8, age_vs_peak=-5, prior_olympics=0, first_olympics=1, win_streak=1,  sentiment=0.55, cost=0.8, pro_pipeline=0.0, pipeline_erosion=0.0, nbc_prime=0.70),
-    dict(sport='Basketball',    discipline='Men',              thesis='Maintain', mean_pre=92.0, std_pre=2.0, mean_prev=93.5, mean_prev2=94.2, mean_prev3=95.1, age_vs_peak= 1, prior_olympics=2, first_olympics=0, win_streak=5,  sentiment=0.72, cost=1.0, pro_pipeline=0.4, pipeline_erosion=0.0, nbc_prime=0.90),
+    dict(sport='Swimming',      discipline='Men Sprint',       thesis='Develop',  mean_pre=87.8, std_pre=5.5, mean_prev=91.2, mean_prev2=87.5, mean_prev3=90.8, age_vs_peak=-4, prior_olympics=0, first_olympics=1, win_streak=3,  sentiment=0.64, cost=0.9, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.80),
+    dict(sport='Soccer',        discipline='Women',            thesis='Maintain', mean_pre=91.5, std_pre=2.8, mean_prev=78.3, mean_prev2=71.5, mean_prev3=91.8, age_vs_peak= 1, prior_olympics=2, first_olympics=0, win_streak=3,  sentiment=0.69, cost=1.0, pro_pipeline=0.4, pipeline_erosion=0.0, fan_favorite=0.80),
+    dict(sport='Diving',        discipline='Platform',         thesis='Develop',  mean_pre=74.2, std_pre=6.8, mean_prev=72.8, mean_prev2=73.5, mean_prev3=71.8, age_vs_peak=-5, prior_olympics=0, first_olympics=1, win_streak=1,  sentiment=0.55, cost=0.8, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.70),
+    dict(sport='Basketball',    discipline='Men',              thesis='Maintain', mean_pre=92.0, std_pre=2.0, mean_prev=93.5, mean_prev2=94.2, mean_prev3=95.1, age_vs_peak= 1, prior_olympics=2, first_olympics=0, win_streak=5,  sentiment=0.72, cost=1.0, pro_pipeline=0.4, pipeline_erosion=0.0, fan_favorite=0.90),
     # Rowing: pipeline_erosion=0.4 reflects college programs being eliminated (Title IX cost-cutting).
-    dict(sport='Rowing',        discipline='Women Eight',      thesis='Maintain', mean_pre=90.2, std_pre=2.4, mean_prev=91.8, mean_prev2=92.4, mean_prev3=93.1, age_vs_peak= 0, prior_olympics=2, first_olympics=0, win_streak=4,  sentiment=0.74, cost=0.9, pro_pipeline=0.0, pipeline_erosion=0.4, nbc_prime=0.35),
-    dict(sport='Wrestling',     discipline='Freestyle',        thesis='Develop',  mean_pre=76.8, std_pre=7.4, mean_prev=74.2, mean_prev2=72.8, mean_prev3=71.4, age_vs_peak=-3, prior_olympics=0, first_olympics=1, win_streak=1,  sentiment=0.53, cost=0.8, pro_pipeline=0.0, pipeline_erosion=0.0, nbc_prime=0.35),
-    dict(sport='Volleyball',    discipline='Beach Women',      thesis='Protect',  mean_pre=93.1, std_pre=3.8, mean_prev=95.2, mean_prev2=87.3, mean_prev3=98.2, age_vs_peak= 0, prior_olympics=2, first_olympics=0, win_streak=5,  sentiment=0.66, cost=1.0, pro_pipeline=0.0, pipeline_erosion=0.0, nbc_prime=0.80),
-    dict(sport='Volleyball',    discipline='Beach Men',        thesis='Develop',  mean_pre=81.4, std_pre=6.2, mean_prev=79.8, mean_prev2=79.1, mean_prev3=78.4, age_vs_peak= 0, prior_olympics=0, first_olympics=0, win_streak=3,  sentiment=0.61, cost=0.9, pro_pipeline=0.0, pipeline_erosion=0.0, nbc_prime=0.60),
-    dict(sport='Volleyball',    discipline='Indoor Women',     thesis='Maintain', mean_pre=88.6, std_pre=3.4, mean_prev=87.1, mean_prev2=90.2, mean_prev3=89.7, age_vs_peak= 1, prior_olympics=2, first_olympics=0, win_streak=2,  sentiment=0.67, cost=1.0, pro_pipeline=0.4, pipeline_erosion=0.0, nbc_prime=0.60),
-    dict(sport='Field Hockey',  discipline='Women',            thesis='Develop',  mean_pre=77.5, std_pre=6.8, mean_prev=74.8, mean_prev2=72.4, mean_prev3=70.8, age_vs_peak= 0, prior_olympics=0, first_olympics=0, win_streak=1,  sentiment=0.57, cost=0.9, pro_pipeline=0.0, pipeline_erosion=0.0, nbc_prime=0.25),
+    dict(sport='Rowing',        discipline='Women Eight',      thesis='Maintain', mean_pre=90.2, std_pre=2.4, mean_prev=91.8, mean_prev2=92.4, mean_prev3=93.1, age_vs_peak= 0, prior_olympics=2, first_olympics=0, win_streak=4,  sentiment=0.74, cost=0.9, pro_pipeline=0.0, pipeline_erosion=0.4, fan_favorite=0.35),
+    dict(sport='Wrestling',     discipline='Freestyle',        thesis='Develop',  mean_pre=76.8, std_pre=7.4, mean_prev=74.2, mean_prev2=72.8, mean_prev3=71.4, age_vs_peak=-3, prior_olympics=0, first_olympics=1, win_streak=1,  sentiment=0.53, cost=0.8, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.35),
+    dict(sport='Volleyball',    discipline='Beach Women',      thesis='Protect',  mean_pre=93.1, std_pre=3.8, mean_prev=95.2, mean_prev2=87.3, mean_prev3=98.2, age_vs_peak= 0, prior_olympics=2, first_olympics=0, win_streak=5,  sentiment=0.66, cost=1.0, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.80),
+    dict(sport='Volleyball',    discipline='Beach Men',        thesis='Develop',  mean_pre=81.4, std_pre=6.2, mean_prev=79.8, mean_prev2=79.1, mean_prev3=78.4, age_vs_peak= 0, prior_olympics=0, first_olympics=0, win_streak=3,  sentiment=0.61, cost=0.9, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.60),
+    dict(sport='Volleyball',    discipline='Indoor Women',     thesis='Maintain', mean_pre=88.6, std_pre=3.4, mean_prev=87.1, mean_prev2=90.2, mean_prev3=89.7, age_vs_peak= 1, prior_olympics=2, first_olympics=0, win_streak=2,  sentiment=0.67, cost=1.0, pro_pipeline=0.4, pipeline_erosion=0.0, fan_favorite=0.60),
+    dict(sport='Field Hockey',  discipline='Women',            thesis='Develop',  mean_pre=77.5, std_pre=6.8, mean_prev=74.8, mean_prev2=72.4, mean_prev3=70.8, age_vs_peak= 0, prior_olympics=0, first_olympics=0, win_streak=1,  sentiment=0.57, cost=0.9, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.25),
     # Tennis: WTA/ATP tour fully funds development; USOPC marginal role near zero.
-    dict(sport='Tennis',        discipline='Women Singles',    thesis='Develop',  mean_pre=87.5, std_pre=7.2, mean_prev=79.4, mean_prev2=74.8, mean_prev3=72.1, age_vs_peak=-4, prior_olympics=1, first_olympics=0, win_streak=4,  sentiment=0.68, cost=0.7, pro_pipeline=0.7, pipeline_erosion=0.0, nbc_prime=0.65),
-    dict(sport='Tennis',        discipline='Men Singles',      thesis='Develop',  mean_pre=81.2, std_pre=8.8, mean_prev=76.5, mean_prev2=73.2, mean_prev3=70.8, age_vs_peak=-3, prior_olympics=0, first_olympics=1, win_streak=2,  sentiment=0.61, cost=0.7, pro_pipeline=0.7, pipeline_erosion=0.0, nbc_prime=0.65),
+    dict(sport='Tennis',        discipline='Women Singles',    thesis='Develop',  mean_pre=87.5, std_pre=7.2, mean_prev=79.4, mean_prev2=74.8, mean_prev3=72.1, age_vs_peak=-4, prior_olympics=1, first_olympics=0, win_streak=4,  sentiment=0.68, cost=0.7, pro_pipeline=0.7, pipeline_erosion=0.0, fan_favorite=0.65),
+    dict(sport='Tennis',        discipline='Men Singles',      thesis='Develop',  mean_pre=81.2, std_pre=8.8, mean_prev=76.5, mean_prev2=73.2, mean_prev3=70.8, age_vs_peak=-3, prior_olympics=0, first_olympics=1, win_streak=2,  sentiment=0.61, cost=0.7, pro_pipeline=0.7, pipeline_erosion=0.0, fan_favorite=0.65),
 ])
 
 # ── Olympic Winter ────────────────────────────────────────────
 # mean_prev = Milan 2026 | mean_prev2 = Beijing 2022 | mean_prev3 = PyeongChang 2018
 # (Milan 2026 is the prior Games for French Alps 2030 cycle)
 WINTER = pd.DataFrame([
-    # Figure Skating already split by gender.
-    dict(sport='Figure Skating', discipline='Men Singles',    thesis='Protect',  mean_pre=97.2, std_pre=3.4, mean_prev=94.8, mean_prev2=82.4, mean_prev3=79.5, age_vs_peak=-2, prior_olympics=0, first_olympics=1, win_streak=12, sentiment=0.22, cost=1.2, pro_pipeline=0.0, pipeline_erosion=0.0, nbc_prime=0.90),
-    dict(sport='Figure Skating', discipline='Women Singles',  thesis='Develop',  mean_pre=80.2, std_pre=4.8, mean_prev=77.5, mean_prev2=76.8, mean_prev3=75.2, age_vs_peak= 0, prior_olympics=0, first_olympics=0, win_streak=2,  sentiment=0.62, cost=0.9, pro_pipeline=0.0, pipeline_erosion=0.0, nbc_prime=0.90),
+    # ── Figure Skating ── four disciplines; each is a separate athlete pool and medal.
+    dict(sport='Figure Skating', discipline='Men Singles',    thesis='Protect',  mean_pre=97.2, std_pre=3.4, mean_prev=94.8, mean_prev2=82.4, mean_prev3=79.5, age_vs_peak=-2, prior_olympics=0, first_olympics=1, win_streak=12, sentiment=0.22, cost=1.2, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.85),
+    dict(sport='Figure Skating', discipline='Women Singles',  thesis='Develop',  mean_pre=80.2, std_pre=4.8, mean_prev=77.5, mean_prev2=76.8, mean_prev3=75.2, age_vs_peak= 0, prior_olympics=0, first_olympics=0, win_streak=2,  sentiment=0.62, cost=0.9, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.85),
+    # Ice Dance — Madison Chock/Evan Bates archetype (multiple WC medals, Paris team gold).
+    # USA has had one of the world's deepest ice dance pipelines for a decade. Next generation
+    # emerging behind Chock/Bates by 2030. Maintain thesis on program depth, not single pair.
+    dict(sport='Figure Skating', discipline='Ice Dance',      thesis='Maintain', mean_pre=91.5, std_pre=3.2, mean_prev=90.8, mean_prev2=89.4, mean_prev3=87.2, age_vs_peak= 1, prior_olympics=3, first_olympics=0, win_streak=4,  sentiment=0.67, cost=1.0, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.80),
+    # Pairs — USA has not had a dominant pairs program since the Kyoko Ina era.
+    # Alexa Knierim/Brandon Frazier (Beijing bronze) represents an ascending, not yet dominant, program.
+    dict(sport='Figure Skating', discipline='Pairs',          thesis='Develop',  mean_pre=78.5, std_pre=6.8, mean_prev=76.2, mean_prev2=73.5, mean_prev3=70.8, age_vs_peak=-2, prior_olympics=1, first_olympics=0, win_streak=1,  sentiment=0.57, cost=0.9, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.70),
     # ── Alpine Skiing ── split by gender.
     # Women: Mikaela Shiffrin archetype — most decorated alpine skier ever. 5th Games by 2030.
     # Maintain thesis: perennial dominance across multiple Games, age_vs_peak=5 reflects ~35yo.
-    dict(sport='Alpine Skiing',  discipline='Women Slalom/GS', thesis='Maintain', mean_pre=88.2, std_pre=7.4, mean_prev=88.2, mean_prev2=88.5, mean_prev3=87.8, age_vs_peak= 5, prior_olympics=4, first_olympics=0, win_streak=3,  sentiment=0.55, cost=0.9, pro_pipeline=0.0, pipeline_erosion=0.0, nbc_prime=0.85),
+    dict(sport='Alpine Skiing',  discipline='Women Slalom/GS', thesis='Maintain', mean_pre=88.2, std_pre=7.4, mean_prev=88.2, mean_prev2=88.5, mean_prev3=87.8, age_vs_peak= 5, prior_olympics=4, first_olympics=0, win_streak=3,  sentiment=0.55, cost=0.9, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.85),
     # Men: ascending generation post-Ted Ligety era. Competitive but not dominant.
-    dict(sport='Alpine Skiing',  discipline='Men Slalom/GS',   thesis='Develop',  mean_pre=79.5, std_pre=8.8, mean_prev=77.4, mean_prev2=76.2, mean_prev3=75.1, age_vs_peak=-3, prior_olympics=0, first_olympics=1, win_streak=0,  sentiment=0.52, cost=0.8, pro_pipeline=0.0, pipeline_erosion=0.0, nbc_prime=0.65),
-    dict(sport='Ice Hockey',     discipline='Women',           thesis='Maintain', mean_pre=92.0, std_pre=2.5, mean_prev=91.5, mean_prev2=92.5, mean_prev3=92.1, age_vs_peak= 2, prior_olympics=3, first_olympics=0, win_streak=2,  sentiment=0.70, cost=1.0, pro_pipeline=0.4, pipeline_erosion=0.0, nbc_prime=0.80),
+    dict(sport='Alpine Skiing',  discipline='Men Slalom/GS',   thesis='Develop',  mean_pre=79.5, std_pre=8.8, mean_prev=77.4, mean_prev2=76.2, mean_prev3=75.1, age_vs_peak=-3, prior_olympics=0, first_olympics=1, win_streak=0,  sentiment=0.52, cost=0.8, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.65),
+    dict(sport='Ice Hockey',     discipline='Women',           thesis='Maintain', mean_pre=92.0, std_pre=2.5, mean_prev=91.5, mean_prev2=92.5, mean_prev3=92.1, age_vs_peak= 2, prior_olympics=3, first_olympics=0, win_streak=2,  sentiment=0.70, cost=1.0, pro_pipeline=0.4, pipeline_erosion=0.0, fan_favorite=0.80),
     # ── Freestyle Aerials ── split by gender. Women's program historically stronger for USA.
-    dict(sport='Freestyle',      discipline='Women Aerials',   thesis='Develop',  mean_pre=89.8, std_pre=3.0, mean_prev=87.5, mean_prev2=85.1, mean_prev3=83.4, age_vs_peak=-1, prior_olympics=1, first_olympics=0, win_streak=2,  sentiment=0.62, cost=0.9, pro_pipeline=0.0, pipeline_erosion=0.0, nbc_prime=0.55),
-    dict(sport='Freestyle',      discipline='Men Aerials',     thesis='Develop',  mean_pre=85.2, std_pre=4.1, mean_prev=83.8, mean_prev2=81.2, mean_prev3=79.5, age_vs_peak=-2, prior_olympics=1, first_olympics=0, win_streak=1,  sentiment=0.58, cost=0.8, pro_pipeline=0.0, pipeline_erosion=0.0, nbc_prime=0.50),
+    dict(sport='Freestyle',      discipline='Women Aerials',   thesis='Develop',  mean_pre=89.8, std_pre=3.0, mean_prev=87.5, mean_prev2=85.1, mean_prev3=83.4, age_vs_peak=-1, prior_olympics=1, first_olympics=0, win_streak=2,  sentiment=0.62, cost=0.9, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.55),
+    dict(sport='Freestyle',      discipline='Men Aerials',     thesis='Develop',  mean_pre=85.2, std_pre=4.1, mean_prev=83.8, mean_prev2=81.2, mean_prev3=79.5, age_vs_peak=-2, prior_olympics=1, first_olympics=0, win_streak=1,  sentiment=0.58, cost=0.8, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.50),
     # ── Speed Skating 500m ── split by gender.
-    dict(sport='Speed Skating',  discipline='Women 500m',      thesis='Maintain', mean_pre=89.1, std_pre=2.8, mean_prev=88.4, mean_prev2=87.1, mean_prev3=86.4, age_vs_peak=-1, prior_olympics=1, first_olympics=0, win_streak=3,  sentiment=0.68, cost=0.9, pro_pipeline=0.0, pipeline_erosion=0.0, nbc_prime=0.55),
-    dict(sport='Speed Skating',  discipline='Men 500m',        thesis='Develop',  mean_pre=83.4, std_pre=5.2, mean_prev=81.2, mean_prev2=79.8, mean_prev3=78.5, age_vs_peak=-3, prior_olympics=0, first_olympics=1, win_streak=1,  sentiment=0.57, cost=0.8, pro_pipeline=0.0, pipeline_erosion=0.0, nbc_prime=0.55),
+    dict(sport='Speed Skating',  discipline='Women 500m',      thesis='Maintain', mean_pre=89.1, std_pre=2.8, mean_prev=88.4, mean_prev2=87.1, mean_prev3=86.4, age_vs_peak=-1, prior_olympics=1, first_olympics=0, win_streak=3,  sentiment=0.68, cost=0.9, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.55),
+    dict(sport='Speed Skating',  discipline='Men 500m',        thesis='Develop',  mean_pre=83.4, std_pre=5.2, mean_prev=81.2, mean_prev2=79.8, mean_prev3=78.5, age_vs_peak=-3, prior_olympics=0, first_olympics=1, win_streak=1,  sentiment=0.57, cost=0.8, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.55),
     # ── Biathlon ── Women exists; Men added (USA early-stage development program).
-    dict(sport='Biathlon',       discipline='Women',           thesis='Develop',  mean_pre=72.8, std_pre=7.2, mean_prev=68.5, mean_prev2=65.2, mean_prev3=63.8, age_vs_peak=-5, prior_olympics=0, first_olympics=1, win_streak=0,  sentiment=0.53, cost=0.8, pro_pipeline=0.0, pipeline_erosion=0.0, nbc_prime=0.25),
-    dict(sport='Biathlon',       discipline='Men',             thesis='Develop',  mean_pre=70.2, std_pre=7.8, mean_prev=66.8, mean_prev2=63.5, mean_prev3=61.2, age_vs_peak=-5, prior_olympics=0, first_olympics=1, win_streak=0,  sentiment=0.50, cost=0.7, pro_pipeline=0.0, pipeline_erosion=0.0, nbc_prime=0.20),
+    dict(sport='Biathlon',       discipline='Women',           thesis='Develop',  mean_pre=72.8, std_pre=7.2, mean_prev=68.5, mean_prev2=65.2, mean_prev3=63.8, age_vs_peak=-5, prior_olympics=0, first_olympics=1, win_streak=0,  sentiment=0.53, cost=0.8, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.25),
+    dict(sport='Biathlon',       discipline='Men',             thesis='Develop',  mean_pre=70.2, std_pre=7.8, mean_prev=66.8, mean_prev2=63.5, mean_prev3=61.2, age_vs_peak=-5, prior_olympics=0, first_olympics=1, win_streak=0,  sentiment=0.50, cost=0.7, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.20),
     # ── Snowboard Halfpipe ── split by gender. Women's is a Protect thesis (Chloe Kim).
     # Chloe Kim at French Alps 2030: 4th Games (~30yo). Dominant across three prior Games.
-    dict(sport='Snowboard',      discipline='Women Halfpipe',  thesis='Protect',  mean_pre=95.2, std_pre=3.8, mean_prev=94.8, mean_prev2=97.2, mean_prev3=88.4, age_vs_peak= 2, prior_olympics=3, first_olympics=0, win_streak=6,  sentiment=0.62, cost=1.0, pro_pipeline=0.0, pipeline_erosion=0.0, nbc_prime=0.85),
+    dict(sport='Snowboard',      discipline='Women Halfpipe',  thesis='Protect',  mean_pre=95.2, std_pre=3.8, mean_prev=94.8, mean_prev2=97.2, mean_prev3=88.4, age_vs_peak= 2, prior_olympics=3, first_olympics=0, win_streak=6,  sentiment=0.62, cost=1.0, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.85),
     # Men Halfpipe: ascending generation post-Shaun White. Competitive but not dominant.
-    dict(sport='Snowboard',      discipline='Men Halfpipe',    thesis='Develop',  mean_pre=86.4, std_pre=5.8, mean_prev=84.2, mean_prev2=82.5, mean_prev3=79.8, age_vs_peak=-2, prior_olympics=1, first_olympics=0, win_streak=2,  sentiment=0.60, cost=0.9, pro_pipeline=0.0, pipeline_erosion=0.0, nbc_prime=0.70),
-    dict(sport='Cross-Country',  discipline='Skiathlon',       thesis='Develop',  mean_pre=75.3, std_pre=6.8, mean_prev=72.1, mean_prev2=67.8, mean_prev3=66.4, age_vs_peak=-5, prior_olympics=0, first_olympics=1, win_streak=1,  sentiment=0.50, cost=0.8, pro_pipeline=0.0, pipeline_erosion=0.0, nbc_prime=0.20),
-    dict(sport='Ice Hockey',     discipline='Men',             thesis='Develop',  mean_pre=82.3, std_pre=6.5, mean_prev=79.8, mean_prev2=72.1, mean_prev3=79.4, age_vs_peak= 0, prior_olympics=0, first_olympics=0, win_streak=0,  sentiment=0.55, cost=1.1, pro_pipeline=0.4, pipeline_erosion=0.0, nbc_prime=0.80),
+    dict(sport='Snowboard',      discipline='Men Halfpipe',    thesis='Develop',  mean_pre=86.4, std_pre=5.8, mean_prev=84.2, mean_prev2=82.5, mean_prev3=79.8, age_vs_peak=-2, prior_olympics=1, first_olympics=0, win_streak=2,  sentiment=0.60, cost=0.9, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.70),
+    dict(sport='Cross-Country',  discipline='Skiathlon',       thesis='Develop',  mean_pre=75.3, std_pre=6.8, mean_prev=72.1, mean_prev2=67.8, mean_prev3=66.4, age_vs_peak=-5, prior_olympics=0, first_olympics=1, win_streak=1,  sentiment=0.50, cost=0.8, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.20),
+    dict(sport='Ice Hockey',     discipline='Men',             thesis='Develop',  mean_pre=82.3, std_pre=6.5, mean_prev=79.8, mean_prev2=72.1, mean_prev3=79.4, age_vs_peak= 0, prior_olympics=0, first_olympics=0, win_streak=0,  sentiment=0.55, cost=1.1, pro_pipeline=0.4, pipeline_erosion=0.0, fan_favorite=0.80),
 ])
 
 # ── Paralympic Summer ─────────────────────────────────────────
 # mean_prev = Tokyo 2020 Para | mean_prev2 = Rio 2016 Para | mean_prev3 = London 2012 Para
 PARA_SUMMER = pd.DataFrame([
-    dict(sport='Para Swimming',  discipline='Multi-Class',   thesis='Protect',  mean_pre=94.8, std_pre=2.9, mean_prev=93.1, mean_prev2=91.8, mean_prev3=90.2, age_vs_peak=-2, prior_olympics=0, first_olympics=1, win_streak=8,  sentiment=0.31, cost=1.1, pro_pipeline=0.0, pipeline_erosion=0.0, nbc_prime=0.45),
-    dict(sport='Para Athletics', discipline='Sprint T64',    thesis='Protect',  mean_pre=93.2, std_pre=3.5, mean_prev=91.8, mean_prev2=90.2, mean_prev3=88.5, age_vs_peak= 0, prior_olympics=2, first_olympics=0, win_streak=6,  sentiment=0.58, cost=1.0, pro_pipeline=0.0, pipeline_erosion=0.0, nbc_prime=0.50),
-    dict(sport='Wheelchair BB',  discipline='Men',           thesis='Maintain', mean_pre=90.5, std_pre=2.2, mean_prev=89.4, mean_prev2=88.6, mean_prev3=87.1, age_vs_peak= 1, prior_olympics=2, first_olympics=0, win_streak=3,  sentiment=0.72, cost=1.0, pro_pipeline=0.0, pipeline_erosion=0.0, nbc_prime=0.45),
-    dict(sport='Para Cycling',   discipline='Time Trial',    thesis='Develop',  mean_pre=79.3, std_pre=5.9, mean_prev=76.2, mean_prev2=73.8, mean_prev3=71.5, age_vs_peak=-4, prior_olympics=0, first_olympics=1, win_streak=2,  sentiment=0.55, cost=0.9, pro_pipeline=0.0, pipeline_erosion=0.0, nbc_prime=0.30),
-    dict(sport='Sitting VB',     discipline='Women',         thesis='Maintain', mean_pre=88.4, std_pre=3.1, mean_prev=87.5, mean_prev2=86.2, mean_prev3=84.8, age_vs_peak= 1, prior_olympics=2, first_olympics=0, win_streak=2,  sentiment=0.68, cost=0.9, pro_pipeline=0.0, pipeline_erosion=0.0, nbc_prime=0.35),
-    dict(sport='Para Archery',   discipline='Recurve',       thesis='Develop',  mean_pre=76.1, std_pre=6.4, mean_prev=73.4, mean_prev2=71.5, mean_prev3=69.8, age_vs_peak=-3, prior_olympics=0, first_olympics=1, win_streak=1,  sentiment=0.52, cost=0.8, pro_pipeline=0.0, pipeline_erosion=0.0, nbc_prime=0.25),
-    dict(sport='Para Athletics', discipline='Field F11',     thesis='Develop',  mean_pre=73.5, std_pre=7.1, mean_prev=70.8, mean_prev2=69.4, mean_prev3=67.5, age_vs_peak=-4, prior_olympics=0, first_olympics=1, win_streak=0,  sentiment=0.49, cost=0.8, pro_pipeline=0.0, pipeline_erosion=0.0, nbc_prime=0.25),
+    dict(sport='Para Swimming',  discipline='Multi-Class',   thesis='Protect',  mean_pre=94.8, std_pre=2.9, mean_prev=93.1, mean_prev2=91.8, mean_prev3=90.2, age_vs_peak=-2, prior_olympics=0, first_olympics=1, win_streak=8,  sentiment=0.31, cost=1.1, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.45),
+    dict(sport='Para Athletics', discipline='Sprint T64',    thesis='Protect',  mean_pre=93.2, std_pre=3.5, mean_prev=91.8, mean_prev2=90.2, mean_prev3=88.5, age_vs_peak= 0, prior_olympics=2, first_olympics=0, win_streak=6,  sentiment=0.58, cost=1.0, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.50),
+    dict(sport='Wheelchair BB',  discipline='Men',           thesis='Maintain', mean_pre=90.5, std_pre=2.2, mean_prev=89.4, mean_prev2=88.6, mean_prev3=87.1, age_vs_peak= 1, prior_olympics=2, first_olympics=0, win_streak=3,  sentiment=0.72, cost=1.0, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.45),
+    dict(sport='Para Cycling',   discipline='Time Trial',    thesis='Develop',  mean_pre=79.3, std_pre=5.9, mean_prev=76.2, mean_prev2=73.8, mean_prev3=71.5, age_vs_peak=-4, prior_olympics=0, first_olympics=1, win_streak=2,  sentiment=0.55, cost=0.9, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.30),
+    dict(sport='Sitting VB',     discipline='Women',         thesis='Maintain', mean_pre=88.4, std_pre=3.1, mean_prev=87.5, mean_prev2=86.2, mean_prev3=84.8, age_vs_peak= 1, prior_olympics=2, first_olympics=0, win_streak=2,  sentiment=0.68, cost=0.9, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.35),
+    dict(sport='Para Archery',   discipline='Recurve',       thesis='Develop',  mean_pre=76.1, std_pre=6.4, mean_prev=73.4, mean_prev2=71.5, mean_prev3=69.8, age_vs_peak=-3, prior_olympics=0, first_olympics=1, win_streak=1,  sentiment=0.52, cost=0.8, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.25),
+    dict(sport='Para Athletics', discipline='Field F11',     thesis='Develop',  mean_pre=73.5, std_pre=7.1, mean_prev=70.8, mean_prev2=69.4, mean_prev3=67.5, age_vs_peak=-4, prior_olympics=0, first_olympics=1, win_streak=0,  sentiment=0.49, cost=0.8, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.25),
     # Para Rowing shares the same college pipeline erosion risk as Olympic Rowing.
-    dict(sport='Para Rowing',    discipline='Mixed Coxed 4', thesis='Develop',  mean_pre=77.8, std_pre=6.2, mean_prev=75.1, mean_prev2=73.2, mean_prev3=71.5, age_vs_peak= 0, prior_olympics=1, first_olympics=0, win_streak=2,  sentiment=0.57, cost=0.8, pro_pipeline=0.0, pipeline_erosion=0.4, nbc_prime=0.25),
+    dict(sport='Para Rowing',    discipline='Mixed Coxed 4', thesis='Develop',  mean_pre=77.8, std_pre=6.2, mean_prev=75.1, mean_prev2=73.2, mean_prev3=71.5, age_vs_peak= 0, prior_olympics=1, first_olympics=0, win_streak=2,  sentiment=0.57, cost=0.8, pro_pipeline=0.0, pipeline_erosion=0.4, fan_favorite=0.25),
 ])
 
 # ── Paralympic Winter ─────────────────────────────────────────
 # mean_prev = Beijing 2022 Para | mean_prev2 = PyeongChang 2018 Para | mean_prev3 = Sochi 2014 Para
 PARA_WINTER = pd.DataFrame([
-    dict(sport='Para Alpine',    discipline='Downhill',       thesis='Protect',  mean_pre=92.4, std_pre=4.2, mean_prev=90.8, mean_prev2=89.4, mean_prev3=88.1, age_vs_peak= 0, prior_olympics=2, first_olympics=0, win_streak=5,  sentiment=0.44, cost=1.1, pro_pipeline=0.0, pipeline_erosion=0.0, nbc_prime=0.40),
-    dict(sport='Para Biathlon',  discipline='Sitting',        thesis='Develop',  mean_pre=76.5, std_pre=7.8, mean_prev=73.4, mean_prev2=71.2, mean_prev3=69.5, age_vs_peak=-4, prior_olympics=0, first_olympics=1, win_streak=1,  sentiment=0.51, cost=0.9, pro_pipeline=0.0, pipeline_erosion=0.0, nbc_prime=0.25),
-    dict(sport='Para XC Ski',    discipline='Vision Impaired',thesis='Develop',  mean_pre=74.2, std_pre=6.9, mean_prev=71.5, mean_prev2=69.8, mean_prev3=68.2, age_vs_peak=-3, prior_olympics=0, first_olympics=1, win_streak=0,  sentiment=0.48, cost=0.8, pro_pipeline=0.0, pipeline_erosion=0.0, nbc_prime=0.20),
-    dict(sport='Sled Hockey',    discipline='Men',            thesis='Maintain', mean_pre=91.8, std_pre=2.4, mean_prev=91.2, mean_prev2=90.5, mean_prev3=89.2, age_vs_peak= 0, prior_olympics=3, first_olympics=0, win_streak=4,  sentiment=0.74, cost=1.0, pro_pipeline=0.0, pipeline_erosion=0.0, nbc_prime=0.55),
-    dict(sport='Wheelchair Curl',discipline='Mixed',          thesis='Develop',  mean_pre=78.9, std_pre=5.5, mean_prev=76.8, mean_prev2=74.8, mean_prev3=73.1, age_vs_peak= 1, prior_olympics=1, first_olympics=0, win_streak=2,  sentiment=0.59, cost=0.8, pro_pipeline=0.0, pipeline_erosion=0.0, nbc_prime=0.30),
+    dict(sport='Para Alpine',    discipline='Downhill',       thesis='Protect',  mean_pre=92.4, std_pre=4.2, mean_prev=90.8, mean_prev2=89.4, mean_prev3=88.1, age_vs_peak= 0, prior_olympics=2, first_olympics=0, win_streak=5,  sentiment=0.44, cost=1.1, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.40),
+    dict(sport='Para Biathlon',  discipline='Sitting',        thesis='Develop',  mean_pre=76.5, std_pre=7.8, mean_prev=73.4, mean_prev2=71.2, mean_prev3=69.5, age_vs_peak=-4, prior_olympics=0, first_olympics=1, win_streak=1,  sentiment=0.51, cost=0.9, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.25),
+    dict(sport='Para XC Ski',    discipline='Vision Impaired',thesis='Develop',  mean_pre=74.2, std_pre=6.9, mean_prev=71.5, mean_prev2=69.8, mean_prev3=68.2, age_vs_peak=-3, prior_olympics=0, first_olympics=1, win_streak=0,  sentiment=0.48, cost=0.8, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.20),
+    dict(sport='Sled Hockey',    discipline='Men',            thesis='Maintain', mean_pre=91.8, std_pre=2.4, mean_prev=91.2, mean_prev2=90.5, mean_prev3=89.2, age_vs_peak= 0, prior_olympics=3, first_olympics=0, win_streak=4,  sentiment=0.74, cost=1.0, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.55),
+    dict(sport='Wheelchair Curl',discipline='Mixed',          thesis='Develop',  mean_pre=78.9, std_pre=5.5, mean_prev=76.8, mean_prev2=74.8, mean_prev3=73.1, age_vs_peak= 1, prior_olympics=1, first_olympics=0, win_streak=2,  sentiment=0.59, cost=0.8, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.30),
 ])
 
 THESIS_META = {
@@ -502,8 +537,8 @@ def render_tab(raw_df, context, key, home_games=False):
         """, unsafe_allow_html=True)
 
     st.markdown("## Full portfolio data")
-    show = df[['sport','discipline','thesis','p_gold','p_medal','cost','win_streak','sentiment','mean_prev','pro_pipeline','nbc_prime','selected']].copy()
-    show.columns = ['Sport','Discipline','Thesis','P(gold)','P(medal)','Cost','Streak','Readiness','Prev Games','Pipeline','NBC Prime','Funded']
+    show = df[['sport','discipline','thesis','p_gold','p_medal','cost','win_streak','sentiment','mean_prev','pro_pipeline','fan_favorite','selected']].copy()
+    show.columns = ['Sport','Discipline','Thesis','P(gold)','P(medal)','Cost','Streak','Readiness','Prev Games','Pipeline','Fan Favorite','Funded']
     show = show.sort_values('P(gold)', ascending=False)
     show['Funded'] = show['Funded'].map({1: '✓', 0: '—'})
     show['Pipeline'] = show['Pipeline'].apply(lambda v: f'{int(v*100)}%' if v > 0 else '—')
@@ -514,8 +549,8 @@ def render_tab(raw_df, context, key, home_games=False):
             .apply(hl, axis=1)
             .bar(subset=['P(gold)'],   color='#8a8a86', vmin=0, vmax=1)
             .bar(subset=['P(medal)'],  color='#484844', vmin=0, vmax=1)
-            .bar(subset=['NBC Prime'], color='#646460', vmin=0, vmax=1)
-            .format({'P(gold)':'{:.0%}','P(medal)':'{:.0%}','Cost':'{:.1f}','Readiness':'{:.2f}','Prev Games':'{:.1f}','NBC Prime':'{:.0%}'})
+            .bar(subset=['Fan Favorite'], color='#646460', vmin=0, vmax=1)
+            .format({'P(gold)':'{:.0%}','P(medal)':'{:.0%}','Cost':'{:.1f}','Readiness':'{:.2f}','Prev Games':'{:.1f}','Fan Favorite':'{:.0%}'})
             .hide(axis='index'),
         use_container_width=True
     )
@@ -531,7 +566,7 @@ st.markdown("""
 <table>
 <tr><td>Medal probability</td><td>Estimated likelihood of podium performance across the quad. Primary return metric for allocation decisions.</td></tr>
 <tr><td>Revenue across quad</td><td>Commercial value generated by the NGB. High-revenue programs justify maintenance capital even at lower medal probability.</td></tr>
-<tr><td>NBC Prime</td><td>Estimated US audience interest and NBC primetime coverage likelihood (0–100%). Proxy for the revenue dimension of the Harris framework. 100% = marquee primetime anchor (Women's Gymnastics All-Around). 80–90% = strong primetime (Basketball Men, Swimming Distance, Figure Skating, McLaughlin-Levrone). 50–70% = regular/late-night coverage. Below 50% = tape-delayed or limited US coverage. Para events systematically lower; home Games (LA 2028) will lift all Summer Para values. Not yet wired into the LP — displayed for context.</td></tr>
+<tr><td>Fan Favorite</td><td>Estimated level of US public enthusiasm for the sport and program (0–100%). Proxy for the cultural resonance and sponsorship‐appeal dimension of the Harris framework — sports that deeply engage American fans generate broader USOPC commercial partnerships, NGB membership growth, and grassroots participation. 100% = transcendent national moment (Women's Gymnastics All-Around). 80–90% = marquee fan enthusiasm (Basketball, Swimming Distance, Figure Skating, Track Hurdles). 50–70% = broad casual interest. Below 50% = passionate niche community. Para values are systematically lower today; LA 2028 home Games expected to materially lift Para fan engagement. Not wired into LP optimization — displayed for context.</td></tr>
 <tr><td>Cost to field team</td><td>Full loaded cost to send athletes to competition. High probability + low cost = optimal investment.</td></tr>
 </table>
 
