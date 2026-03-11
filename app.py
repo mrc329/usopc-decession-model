@@ -71,16 +71,14 @@ rcParams.update({
 SUMMER = pd.DataFrame([
     # ── Gymnastics ── split by gender; Women's program is the dominant Protect thesis,
     # Men's program is an ascending Develop thesis after Paris 2024 team bronze.
+    # ── Gymnastics ── All-Around only. Floor (and all apparatus) is funded through the
+    # All-Around program — same athletes, same NGB investment. Unlike swimming (where
+    # distance and sprint are separate athlete pools), gymnastics floor medal opportunities
+    # are captured within All-Around funding. No separate floor entry needed.
     dict(sport='Gymnastics',    discipline='Women All-Around', thesis='Protect',  mean_pre=96.5, std_pre=3.1, mean_prev=91.2, mean_prev2=97.5, mean_prev3=95.4, age_vs_peak=-3, prior_olympics=0, first_olympics=1, win_streak=11, sentiment=0.24, cost=1.2, pro_pipeline=0.0, pipeline_erosion=0.0),
-    dict(sport='Gymnastics',    discipline='Women Floor',      thesis='Protect',  mean_pre=96.0, std_pre=1.6, mean_prev=94.5, mean_prev2=96.1, mean_prev3=95.8, age_vs_peak= 5, prior_olympics=2, first_olympics=0, win_streak=4,  sentiment=0.67, cost=1.1, pro_pipeline=0.0, pipeline_erosion=0.0),
     # Men's gymnastics: USA won team bronze at Paris 2024 — first team medal in 16 years.
     # Brody Malone archetype. Ascending program; individual gold remains aspirational.
     dict(sport='Gymnastics',    discipline='Men All-Around',   thesis='Develop',  mean_pre=85.2, std_pre=5.8, mean_prev=81.4, mean_prev2=78.8, mean_prev3=76.2, age_vs_peak=-2, prior_olympics=1, first_olympics=0, win_streak=0,  sentiment=0.58, cost=1.0, pro_pipeline=0.0, pipeline_erosion=0.0),
-    # Men's Floor: separate apparatus medal opportunity. USA competitive but not dominant;
-    # higher variance than All-Around. cost=0.8 — shares Men's gymnastics training infrastructure,
-    # marginal cost above the All-Around program. Four cycles: London 2012 → Paris 2024 trajectory flat,
-    # slight uptick recently. Specialist archetype (not the same athlete as All-Around).
-    dict(sport='Gymnastics',    discipline='Men Floor',        thesis='Develop',  mean_pre=78.5, std_pre=7.2, mean_prev=76.8, mean_prev2=74.5, mean_prev3=72.1, age_vs_peak=-3, prior_olympics=1, first_olympics=0, win_streak=0,  sentiment=0.55, cost=0.8, pro_pipeline=0.0, pipeline_erosion=0.0),
     # ── Track & Field ── split by gender and event cluster.
     # Women's 400m/Hurdles is the single most dominant US track program (McLaughlin-Levrone).
     # Sprint (100m/200m) and Middle Distance (800m/1500m) are Develop for both genders.
