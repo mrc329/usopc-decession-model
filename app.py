@@ -181,9 +181,21 @@ def chart_portfolio(df):
         ax.text(row['p_gold']+0.012, i, f"{row['p_gold']:.0%}",
                 ha='left', va='center', fontsize=7, fontfamily='monospace',
                 color='#555' if row['selected'] else '#ddd')
+    # "funded" / "not selected" label on first occurrence of each
+    labeled = set()
+    for i, (_, row) in enumerate(df_s.iterrows()):
+        tag = 'funded' if row['selected'] else 'not selected'
+        if tag not in labeled:
+            ax.text(-0.565, i, tag, ha='left', va='center', fontsize=6,
+                    fontfamily='monospace',
+                    color='#555' if row['selected'] else '#ccc',
+                    style='italic')
+            labeled.add(tag)
     ax.set_xlim(-0.58, 1.2)
     ax.set_yticks([])
-    ax.set_xlabel('P(gold)  ·  ghost bar = P(medal)', fontsize=8, color='#888', labelpad=5)
+    ax.set_xlabel('P(gold)', fontsize=8, color='#888', labelpad=5)
+    ax.text(0.98, -0.06, 'light extension = P(medal)', transform=ax.transAxes,
+            ha='right', va='top', fontsize=6.5, fontfamily='monospace', color='#bbb')
     ax.tick_params(axis='x', labelsize=7.5, colors='#888')
     ax.spines['bottom'].set_color('#ccc')
     ax.spines['bottom'].set_linewidth(0.8)
@@ -242,7 +254,7 @@ def render_tab(raw_df, context, key):
         <div class="kpi"><div class="kpi-value">{exp_golds:.2f}</div><div class="kpi-label">Expected golds</div><div class="kpi-sub">avg medals across simulations</div></div>
         <div class="kpi"><div class="kpi-value">{n_funded}</div><div class="kpi-label">Programs funded</div><div class="kpi-sub">of {len(df)} evaluated</div></div>
         <div class="kpi"><div class="kpi-value">{budget_used}</div><div class="kpi-label">Capital deployed</div><div class="kpi-sub">of {budget:.1f} available</div></div>
-        <div class="kpi"><div class="kpi-value">{shadow:.3f}</div><div class="kpi-label">Marginal medal value</div><div class="kpi-sub">per unit at this level</div></div>
+        <div class="kpi"><div class="kpi-value">{"—" if shadow == 0.0 else f"{shadow:.3f}"}</div><div class="kpi-label">Marginal medal value</div><div class="kpi-sub">{"frontier has flattened" if shadow == 0.0 else "expected golds per unit added"}</div></div>
         <div class="kpi"><div class="kpi-value">{p_any:.0%}</div><div class="kpi-label">P(any medal)</div><div class="kpi-sub">across portfolio</div></div>
     </div>
     """, unsafe_allow_html=True)
@@ -253,14 +265,37 @@ def render_tab(raw_df, context, key):
     st.markdown("## Investment theses")
     c1, c2, c3 = st.columns(3)
     for col, (thesis, meta) in zip([c1,c2,c3], THESIS_META.items()):
-        n = len(df[df['thesis']==thesis])
-        ns = len(df[(df['thesis']==thesis)&(df['selected']==1)])
+        t_df = df[df['thesis']==thesis]
+        t_sel = t_df[t_df['selected']==1]
+        n, ns = len(t_df), len(t_sel)
+        avg_pg = t_sel['p_gold'].mean() if not t_sel.empty else 0.0
+        total_cost = t_sel['cost'].sum() if not t_sel.empty else 0.0
         with col:
-            st.markdown(f"""<div class="thesis-card"><div class="thesis-label">{thesis}</div>
+            st.markdown(f"""<div class="thesis-card">
+            <div class="thesis-label">{thesis}</div>
             <div class="thesis-name">{ns} of {n} funded</div>
+            <div style="font-family:'DM Mono',monospace;font-size:0.68rem;color:#888;margin:0.25rem 0 0.15rem 0;">
+              avg P(gold) {avg_pg:.0%} &nbsp;·&nbsp; cost {total_cost:.1f} units
+            </div>
             <div class="thesis-desc">{meta['desc']}</div></div>""", unsafe_allow_html=True)
 
     st.markdown('<hr>', unsafe_allow_html=True)
+
+    # Funded programs quick-scan
+    if not selected.empty:
+        pills = ''.join(
+            f'<span style="display:inline-block;font-family:\'DM Mono\',monospace;font-size:0.65rem;'
+            f'letter-spacing:0.06em;border:1px solid #1a1a1a;padding:0.15rem 0.55rem;margin:0.2rem 0.3rem 0.2rem 0;'
+            f'color:#1a1a1a;">{r["sport"]} · {r["discipline"]} <span style="color:#888;">{r["p_gold"]:.0%}</span></span>'
+            for _, r in selected.sort_values('p_gold', ascending=False).iterrows()
+        )
+        st.markdown(
+            f'<div style="margin-bottom:1.4rem;"><div style="font-family:\'DM Mono\',monospace;font-size:0.62rem;'
+            f'letter-spacing:0.1em;text-transform:uppercase;color:#888;margin-bottom:0.4rem;">Funded programs</div>'
+            f'{pills}</div>',
+            unsafe_allow_html=True
+        )
+
     cl, cr = st.columns([1.1, 1])
 
     with cl:
@@ -301,13 +336,20 @@ def render_tab(raw_df, context, key):
     show = show.sort_values('P(gold)', ascending=False)
     def hl(row):
         return ['background-color:#f0f0ec;font-weight:500']*len(row) if row['Funded'] else ['']*len(row)
-    st.dataframe(show.style.apply(hl,axis=1)
-        .format({'P(gold)':'{:.0%}','P(medal)':'{:.0%}','Cost':'{:.1f}','Readiness':'{:.2f}'})
-        .hide(axis='index'), use_container_width=True)
+    st.dataframe(
+        show.style
+            .apply(hl, axis=1)
+            .bar(subset=['P(gold)'], color='#1a1a1a', vmin=0, vmax=1)
+            .bar(subset=['P(medal)'], color='#aaa', vmin=0, vmax=1)
+            .format({'P(gold)':'{:.0%}','P(medal)':'{:.0%}','Cost':'{:.1f}','Readiness':'{:.2f}'})
+            .hide(axis='index'),
+        use_container_width=True
+    )
 
 
 # ── App header ────────────────────────────────────────────────
 st.markdown("# USOPC Portfolio Investment Analytics")
+st.markdown("""<div style="font-family:'DM Mono',monospace;font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:#888;margin:-0.2rem 0 1.2rem 0;">LA 2028 &nbsp;·&nbsp; French Alps 2030 &nbsp;·&nbsp; Rocky Harris allocation framework</div>""", unsafe_allow_html=True)
 
 st.markdown("""
 <div class="harris-framework">
