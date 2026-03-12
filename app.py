@@ -118,7 +118,9 @@ SUMMER = pd.DataFrame([
     # Men Sprint: AUS/UK at ~92 — STRONGER than USA's 87.8. Most honest field in the portfolio.
     dict(sport='Swimming',      discipline='Men Sprint',       thesis='Develop',  mean_pre=87.8, std_pre=5.5, mean_prev=91.2, mean_prev2=87.5, mean_prev3=90.8, age_vs_peak=-4, prior_olympics=0, first_olympics=1, win_streak=3,  sentiment=0.64, cost=0.9, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.80, depth=2, field_size=10, home_boost=1.3, rival_mean=92),
     # Soccer Women: Spain/Germany/Netherlands ~88. USA had a poor Paris 2024 (quarter-final exit).
-    dict(sport='Soccer',        discipline='Women',            thesis='Maintain', mean_pre=91.5, std_pre=2.8, mean_prev=78.3, mean_prev2=71.5, mean_prev3=91.8, age_vs_peak= 1, prior_olympics=2, first_olympics=0, win_streak=3,  sentiment=0.69, cost=1.0, pro_pipeline=0.4, pipeline_erosion=0.0, fan_favorite=0.80, depth=5, field_size=5,  home_boost=1.5, rival_mean=88, late_roster=1),
+    # USSF is independently wealthy: women's national team generates ~$50M+/yr; NWSL provides pro pipeline.
+    # USOPC's role is Games logistics and NGB admin — not athlete development. pro_pipeline raised to 0.72.
+    dict(sport='Soccer',        discipline='Women',            thesis='Maintain', mean_pre=91.5, std_pre=2.8, mean_prev=78.3, mean_prev2=71.5, mean_prev3=91.8, age_vs_peak= 1, prior_olympics=2, first_olympics=0, win_streak=3,  sentiment=0.69, cost=1.0, pro_pipeline=0.72, pipeline_erosion=0.0, fan_favorite=0.80, depth=5, field_size=5,  home_boost=1.5, rival_mean=88, late_roster=1),
     # Diving Platform: China is the dominant program globally at ~97. USA is a distant contender.
     # This is the starkest rival_mean correction — old model had field at 67.5 (74.2*0.91).
     dict(sport='Diving',        discipline='Platform',         thesis='Develop',  mean_pre=74.2, std_pre=6.8, mean_prev=72.8, mean_prev2=73.5, mean_prev3=71.8, age_vs_peak=-5, prior_olympics=0, first_olympics=1, win_streak=1,  sentiment=0.55, cost=0.8, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.70, depth=1, field_size=8,  home_boost=1.5, rival_mean=97),
@@ -141,7 +143,9 @@ SUMMER = pd.DataFrame([
     dict(sport='Volleyball',    discipline='Beach Men',        thesis='Develop',  mean_pre=81.4, std_pre=6.2, mean_prev=79.8, mean_prev2=79.1, mean_prev3=78.4, age_vs_peak= 0, prior_olympics=0, first_olympics=0, win_streak=3,  sentiment=0.61, cost=0.9, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.60, depth=2, field_size=6,  home_boost=1.5, rival_mean=85),
     # Volleyball Indoor Women: Serbia/Brazil ~87. USA is competitive at this level.
     # russia_rival=90: Russia was a perennial finalist in women's volleyball.
-    dict(sport='Volleyball',    discipline='Indoor Women',     thesis='Maintain', mean_pre=88.6, std_pre=3.4, mean_prev=87.1, mean_prev2=90.2, mean_prev3=89.7, age_vs_peak= 1, prior_olympics=2, first_olympics=0, win_streak=2,  sentiment=0.67, cost=1.0, pro_pipeline=0.4, pipeline_erosion=0.0, fan_favorite=0.60, depth=4, field_size=5,  home_boost=1.5, rival_mean=87, russia_rival=90, late_roster=1),
+    # USAV federation funds most NGB operations; international pro leagues (Italy/Turkey) develop top players.
+    # pro_pipeline raised to 0.55: meaningful USAV/federation coverage; USOPC covers gaps and Games ops.
+    dict(sport='Volleyball',    discipline='Indoor Women',     thesis='Maintain', mean_pre=88.6, std_pre=3.4, mean_prev=87.1, mean_prev2=90.2, mean_prev3=89.7, age_vs_peak= 1, prior_olympics=2, first_olympics=0, win_streak=2,  sentiment=0.67, cost=1.0, pro_pipeline=0.55, pipeline_erosion=0.0, fan_favorite=0.60, depth=4, field_size=5,  home_boost=1.5, rival_mean=87, russia_rival=90, late_roster=1),
     # Field Hockey Women: Netherlands ~93 is the dominant global program. USA is a developing challenger.
     # Old model had field at 70.5 (77.5*0.91) — Netherlands actually scores ~93. Major correction.
     dict(sport='Field Hockey',  discipline='Women',            thesis='Develop',  mean_pre=77.5, std_pre=6.8, mean_prev=74.8, mean_prev2=72.4, mean_prev3=70.8, age_vs_peak= 0, prior_olympics=0, first_olympics=0, win_streak=1,  sentiment=0.57, cost=0.9, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.25, depth=3, field_size=8,  home_boost=1.2, rival_mean=93),
@@ -704,12 +708,12 @@ P(gold) = share of trials where the US athlete beats the best of N opponents. Pr
 <tr><td>Expected golds</td><td>ΣP(gold) across funded programs — the average gold count across many simulated Games.</td></tr>
 <tr><td>P(any medal)</td><td>1 − ∏(1 − P(medal)) across funded programs, assuming independence.</td></tr>
 <tr><td>Which programs to fund</td><td>Binary LP: maximize ΣP(gold)·x subject to Σcost·x ≤ budget, x ∈ {0,1}.</td></tr>
-<tr><td>Pipeline erosion</td><td>[0.0–1.0] — inflates LP cost by up to 30% and widens std by up to 25% when college/feeder programs disappear. At 0.4 (current Rowing estimate): cost 0.9 → ~1.07, variance +10%.</td></tr>
+<tr><td>Pipeline erosion</td><td>[0.0–1.0] — inflates LP cost by up to 30% and widens std by up to 25% when college/feeder programs disappear. Women's Rowing (0.6): cost 0.9 → ~1.07, variance +15%. Para Rowing (0.5): cost 0.8 → ~0.92, variance +12.5%.</td></tr>
 <tr><td>Depth</td><td>Medal-capable athletes [1–5]. Each level above 1: std −6% (injury diversification), LP cost −5% (shared infrastructure). Deep programs are less risky and cheaper per medal chance.</td></tr>
 <tr><td>Field size</td><td>Genuine medal-contending nations [1–15]. P(gold) = P(US beats best of N opponents). Shallow fields (Women 4x400 ≈ 3) yield materially higher P(gold) than deep fields (Biathlon ≈ 15).</td></tr>
 <tr><td>Rival mean</td><td>Top competitor's absolute score — replaces the default eff_mean × 0.91 where real rivals diverge. Key examples: Norway ~95 (Cross-Country, USA ~75); China ~97 (Diving Platform, USA ~74); AUS/UK ~92 (Swimming Men Sprint, USA ~88). Defaults to eff_mean × 0.91 if not set. russia_rival activates with the Russia/Belarus toggle — largest shifts: Figure Skating Women (82→93), Wrestling Freestyle (80→88), Ice Hockey Men (85→89), Biathlon W/M (94→96, 96→97).</td></tr>
 <tr><td>Home boost</td><td>Multiplier on the base +1.5 score-point LA 2028 lift. Gymnastics 2.2×, T&F Hurdles/Sprint 1.8–2.0×, Volleyball Beach 1.8×, Swimming 1.3×, Basketball 1.2×, Tennis 1.0×, Rowing 0.8×.</td></tr>
-<tr><td>Marginal medal value</td><td>Expected golds per additional unit of capital. r = (1 − P(gold)) × 0.5 × (1 − pipeline). Pipeline scale: 0.0 = USOPC is primary funder; 0.4 = NHL/NWSL/NCAA pipeline; 0.7 = WTA/ATP Tennis (self-funded); 0.85 = NBA Men's Basketball (near-fully self-funded — USOPC role is logistics only). High pipeline → low marginal return.</td></tr>
+<tr><td>Marginal medal value</td><td>Expected golds per additional unit of capital. r = (1 − P(gold)) × 0.5 × (1 − pipeline). Pipeline scale: 0.0 = USOPC is primary funder (Gymnastics, Rowing, Wrestling); 0.55 = USAV/federation funded (Volleyball); 0.72 = USSF/NWSL self-funded (Soccer Women — federation revenue covers development, USOPC handles Games ops); 0.7 = WTA/ATP Tennis; 0.85 = NBA Men's Basketball (near-fully self-funded). High pipeline → low marginal USOPC ROI → LP naturally deprioritizes these programs at constrained budgets. Swimming, Track &amp; Field, and Gymnastics dominate LP selection because USOPC is the primary or sole development funder.</td></tr>
 <tr><td>Efficient frontier</td><td>MILP solved at 35 budget levels (0.5 → max capital). Traces maximum expected golds at each funding level.</td></tr>
 </table>
 </div>
@@ -742,17 +746,13 @@ tab1, tab2, tab3, tab4 = st.tabs([
 with tab1:
     render_tab(SUMMER, context=(
         'Home soil. Maximum commercial and competitive stakes. '
-        'Gymnastics now modeled separately by gender: Women\'s is a Protect program (dominant, preparation-gap risk); '
-        'Men\'s is a Develop program (Paris 2024 team bronze signals ascending trajectory). '
-        'Track & Field split by gender and event cluster — Women 400m/Hurdles (McLaughlin-Levrone) is the '
-        'single most dominant US track program, classified Maintain. Relay programs consolidated by gender '
-        '(Women Relays, Men Relays, Mixed Relay) to represent the full relay program rather than individual '
-        'distances — baton-exchange and DQ risk absorbed in wider std. Swimming split by gender: '
-        'Women\'s Distance (Ledecky era, Maintain) anchors the portfolio; Men\'s Distance and both Sprint '
-        'programs are Develop. Basketball Men (pro_pipeline=0.85): NBA absorbs nearly all athlete development '
-        'cost — USOPC role is logistics and admin; marginal USOPC investment ROI is near zero. '
-        'Soccer Women and Volleyball Indoor Women require maintenance capital for NGB operations despite '
-        'strong pro pipelines.'
+        'LP naturally concentrates on Swimming, Track & Field, and Gymnastics — the three sports where '
+        'USOPC is the primary or sole development funder (pro_pipeline=0.0) and P(gold) is highest. '
+        'Federation-funded team sports (Soccer Women 0.72, Basketball Men 0.85, Volleyball Indoor Women 0.55) '
+        'remain in the model for Games-ops and NGB accountability, but their marginal USOPC development ROI '
+        'is low — USSF/NWSL, NBA, and USAV cover most athlete development costs independently. '
+        'Relay programs consolidated by gender (Women Relays, Men Relays, Mixed Relay). '
+        'Rowing Women Eight carries the highest effective cost in the portfolio due to college pipeline erosion (0.6).'
     ), key='budget_summer', home_games=True, russia_return=russia_return)
 
 with tab2:
