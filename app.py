@@ -502,6 +502,9 @@ def chart_shadow(frontier, budget):
 def render_tab(raw_df, context, key, home_games=False, russia_return=False):
     mc_df = run_monte_carlo(raw_df, home_games=home_games, russia_return=russia_return)
     max_b = float(raw_df['cost'].sum())
+
+    kpi_placeholder = st.empty()
+
     budget = st.slider('Capital budget (units)', 0.5, max_b, min(5.0, max_b), step=0.1, key=key,
                        help='One unit ≈ annual program funding allocation. Programs cost 0.8–1.2 units each.')
     df, exp_golds, shadow = run_lp(mc_df, budget)
@@ -510,13 +513,13 @@ def render_tab(raw_df, context, key, home_games=False, russia_return=False):
     budget_used = round(selected['cost'].sum(), 1) if not selected.empty else 0.0
     p_any = round(1 - np.prod([1 - r['p_medal'] for _, r in selected.iterrows()]), 3) if not selected.empty else 0.0
 
-    st.markdown(f"""
+    kpi_placeholder.markdown(f"""
     <div class="kpi-row">
-        <div class="kpi"><div class="kpi-value">{exp_golds:.2f}</div><div class="kpi-label">Expected golds</div><div class="kpi-sub">avg medals across simulations</div></div>
-        <div class="kpi"><div class="kpi-value">{n_funded}</div><div class="kpi-label">Programs funded</div><div class="kpi-sub">of {len(df)} evaluated</div></div>
-        <div class="kpi"><div class="kpi-value">{budget_used}</div><div class="kpi-label">Capital deployed</div><div class="kpi-sub">of {budget:.1f} available</div></div>
-        <div class="kpi"><div class="kpi-value">{"—" if shadow == 0.0 else f"{shadow:.3f}"}</div><div class="kpi-label">Marginal medal value</div><div class="kpi-sub">{"all investment exhausted" if shadow == 0.0 else "expected golds per unit added"}</div></div>
-        <div class="kpi"><div class="kpi-value">{p_any:.0%}</div><div class="kpi-label">P(any medal)</div><div class="kpi-sub">across portfolio</div></div>
+        <div class="kpi" title="Sum of P(gold) across funded programs — the average number of golds across many simulated Games."><div class="kpi-value">{exp_golds:.2f}</div><div class="kpi-label">Expected golds</div><div class="kpi-sub">avg medals across simulations</div></div>
+        <div class="kpi" title="Number of programs selected by the LP optimizer within the capital budget."><div class="kpi-value">{n_funded}</div><div class="kpi-label">Programs funded</div><div class="kpi-sub">of {len(df)} evaluated</div></div>
+        <div class="kpi" title="Total cost of funded programs. One unit ≈ annual program funding allocation."><div class="kpi-value">{budget_used}</div><div class="kpi-label">Capital deployed</div><div class="kpi-sub">of {budget:.1f} available</div></div>
+        <div class="kpi" title="Expected golds gained per one additional unit of capital at the current budget level. Zero means all investment is fully deployed."><div class="kpi-value">{"—" if shadow == 0.0 else f"{shadow:.3f}"}</div><div class="kpi-label">Marginal medal value</div><div class="kpi-sub">{"all investment exhausted" if shadow == 0.0 else "expected golds per unit added"}</div></div>
+        <div class="kpi" title="1 − ∏(1 − P(medal)) across funded programs. Probability that the portfolio wins at least one medal, assuming independence."><div class="kpi-value">{p_any:.0%}</div><div class="kpi-label">P(any medal)</div><div class="kpi-sub">across portfolio</div></div>
     </div>
     """, unsafe_allow_html=True)
 
