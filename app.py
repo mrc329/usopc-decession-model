@@ -644,8 +644,12 @@ st.markdown("""
 <tr><td>Fan Favorite</td><td>US public enthusiasm (0–100%). High fan engagement drives USOPC commercial revenue — sponsorships, partnerships, and NGB membership. 100% = Women's Gymnastics All-Around. 80–90% = Basketball, Swimming, Figure Skating. Below 50% = niche community. Displayed for context — not used in LP optimization.</td></tr>
 <tr><td>Cost to field team</td><td>Full loaded cost to send athletes to competition. High probability + low cost = optimal investment.</td></tr>
 </table>
+</div>
+""", unsafe_allow_html=True)
 
-<h4 style="margin-top:1rem;">How the numbers are calculated</h4>
+with st.expander("How the numbers are calculated"):
+    st.markdown("""
+<div class="harris-framework">
 <table>
 <tr><td>P(gold), P(medal)</td><td>8,000 Monte Carlo simulations per program. Six pre-sampling adjustments:
 <ol style="margin:0.4rem 0 0.4rem 1.2rem;padding:0;line-height:1.8;">
