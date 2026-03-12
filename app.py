@@ -138,9 +138,12 @@ SUMMER = pd.DataFrame([
     # largest single rival uplift in the Summer portfolio — from 80 to 88.
     dict(sport='Wrestling',     discipline='Freestyle',        thesis='Develop',  mean_pre=76.8, std_pre=7.4, mean_prev=74.2, mean_prev2=72.8, mean_prev3=71.4, age_vs_peak=-3, prior_olympics=0, first_olympics=1, win_streak=1,  sentiment=0.53, cost=0.8, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.35, depth=1, field_size=8,  home_boost=1.2, rival_mean=80, russia_rival=88),
     # Volleyball Beach Women: Brazil/AUS ~90. Very competitive global field.
-    dict(sport='Volleyball',    discipline='Beach Women',      thesis='Protect',  mean_pre=93.1, std_pre=3.8, mean_prev=95.2, mean_prev2=87.3, mean_prev3=98.2, age_vs_peak= 0, prior_olympics=2, first_olympics=0, win_streak=5,  sentiment=0.66, cost=1.0, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.80, depth=2, field_size=4,  home_boost=1.8, rival_mean=90),
+    # AVP Pro Tour + FIVB World Beach Pro Tour fund and develop players — top US pairs earn
+    # full income from the circuit. USOPC's development role is logistics and Games ops.
+    dict(sport='Volleyball',    discipline='Beach Women',      thesis='Protect',  mean_pre=93.1, std_pre=3.8, mean_prev=95.2, mean_prev2=87.3, mean_prev3=98.2, age_vs_peak= 0, prior_olympics=2, first_olympics=0, win_streak=5,  sentiment=0.66, cost=1.0, pro_pipeline=0.40, pipeline_erosion=0.0, fan_favorite=0.80, depth=2, field_size=4,  home_boost=1.8, rival_mean=90),
     # Volleyball Beach Men: Brazil/Poland ~85. USA competitive but not dominant.
-    dict(sport='Volleyball',    discipline='Beach Men',        thesis='Develop',  mean_pre=81.4, std_pre=6.2, mean_prev=79.8, mean_prev2=79.1, mean_prev3=78.4, age_vs_peak= 0, prior_olympics=0, first_olympics=0, win_streak=3,  sentiment=0.61, cost=0.9, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.60, depth=2, field_size=6,  home_boost=1.5, rival_mean=85),
+    # Same AVP + FIVB pro circuit; slightly lower revenue than women's beach but still meaningful.
+    dict(sport='Volleyball',    discipline='Beach Men',        thesis='Develop',  mean_pre=81.4, std_pre=6.2, mean_prev=79.8, mean_prev2=79.1, mean_prev3=78.4, age_vs_peak= 0, prior_olympics=0, first_olympics=0, win_streak=3,  sentiment=0.61, cost=0.9, pro_pipeline=0.35, pipeline_erosion=0.0, fan_favorite=0.60, depth=2, field_size=6,  home_boost=1.5, rival_mean=85),
     # Volleyball Indoor Women: Serbia/Brazil ~87. USA is competitive at this level.
     # russia_rival=90: Russia was a perennial finalist in women's volleyball.
     # USAV federation funds most NGB operations; international pro leagues (Italy/Turkey) develop top players.
@@ -174,7 +177,9 @@ WINTER = pd.DataFrame([
     # Alpine Men: Switzerland/Norway ~85. USA at 79.5 is below the field.
     dict(sport='Alpine Skiing',  discipline='Men Slalom/GS',   thesis='Develop',  mean_pre=79.5, std_pre=8.8, mean_prev=77.4, mean_prev2=76.2, mean_prev3=75.1, age_vs_peak=-3, prior_olympics=0, first_olympics=1, win_streak=0,  sentiment=0.52, cost=0.8, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.65, depth=1, field_size=10, home_boost=1.2, rival_mean=85),
     # Ice Hockey Women: Canada ~91 is the defining rival. Almost perfectly matched.
-    dict(sport='Ice Hockey',     discipline='Women',           thesis='Maintain', mean_pre=92.0, std_pre=2.5, mean_prev=91.5, mean_prev2=92.5, mean_prev3=92.1, age_vs_peak= 2, prior_olympics=3, first_olympics=0, win_streak=2,  sentiment=0.70, cost=1.0, pro_pipeline=0.4, pipeline_erosion=0.0, fan_favorite=0.80, depth=5, field_size=3,  home_boost=1.5, rival_mean=91, late_roster=1),
+    # PWHL launched in 2024 — now a functioning professional league paying players.
+    # pro_pipeline raised to 0.45: meaningful but nascent; USOPC still covers significant NGB costs.
+    dict(sport='Ice Hockey',     discipline='Women',           thesis='Maintain', mean_pre=92.0, std_pre=2.5, mean_prev=91.5, mean_prev2=92.5, mean_prev3=92.1, age_vs_peak= 2, prior_olympics=3, first_olympics=0, win_streak=2,  sentiment=0.70, cost=1.0, pro_pipeline=0.45, pipeline_erosion=0.0, fan_favorite=0.80, depth=5, field_size=3,  home_boost=1.5, rival_mean=91, late_roster=1),
     # Freestyle Aerials: China ~88 is a consistently strong rival in both genders.
     # Russia was also a top-3 Aerials program globally; return would add a ~92 competitor to Women's field.
     dict(sport='Freestyle',      discipline='Women Aerials',   thesis='Develop',  mean_pre=89.8, std_pre=3.0, mean_prev=87.5, mean_prev2=85.1, mean_prev3=83.4, age_vs_peak=-1, prior_olympics=1, first_olympics=0, win_streak=2,  sentiment=0.62, cost=0.9, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.55, depth=2, field_size=6,  home_boost=1.5, rival_mean=88, russia_rival=92),
@@ -203,7 +208,9 @@ WINTER = pd.DataFrame([
     # Ice Hockey Men: Canada/Sweden ~85. USA at 82.3 is close but below the top.
     # russia_rival=89: Russia's Men's hockey program (KHL-depth roster) scores ~89 and would represent
     # the strongest single rival in the field — above Canada.
-    dict(sport='Ice Hockey',     discipline='Men',             thesis='Develop',  mean_pre=82.3, std_pre=6.5, mean_prev=79.8, mean_prev2=72.1, mean_prev3=79.4, age_vs_peak= 0, prior_olympics=0, first_olympics=0, win_streak=0,  sentiment=0.55, cost=1.1, pro_pipeline=0.4, pipeline_erosion=0.0, fan_favorite=0.80, depth=4, field_size=6,  home_boost=1.5, rival_mean=85, russia_rival=89, late_roster=1),
+    # NHL players constitute the entire national team. Player development and salaries are NHL-funded.
+    # pro_pipeline raised to 0.65: similar model to NBA Men's Basketball; USOPC handles Games logistics.
+    dict(sport='Ice Hockey',     discipline='Men',             thesis='Develop',  mean_pre=82.3, std_pre=6.5, mean_prev=79.8, mean_prev2=72.1, mean_prev3=79.4, age_vs_peak= 0, prior_olympics=0, first_olympics=0, win_streak=0,  sentiment=0.55, cost=1.1, pro_pipeline=0.65, pipeline_erosion=0.0, fan_favorite=0.80, depth=4, field_size=6,  home_boost=1.5, rival_mean=85, russia_rival=89, late_roster=1),
 ])
 
 # ── Paralympic Summer ─────────────────────────────────────────
@@ -713,7 +720,7 @@ P(gold) = share of trials where the US athlete beats the best of N opponents. Pr
 <tr><td>Field size</td><td>Genuine medal-contending nations [1–15]. P(gold) = P(US beats best of N opponents). Shallow fields (Women 4x400 ≈ 3) yield materially higher P(gold) than deep fields (Biathlon ≈ 15).</td></tr>
 <tr><td>Rival mean</td><td>Top competitor's absolute score — replaces the default eff_mean × 0.91 where real rivals diverge. Key examples: Norway ~95 (Cross-Country, USA ~75); China ~97 (Diving Platform, USA ~74); AUS/UK ~92 (Swimming Men Sprint, USA ~88). Defaults to eff_mean × 0.91 if not set. russia_rival activates with the Russia/Belarus toggle — largest shifts: Figure Skating Women (82→93), Wrestling Freestyle (80→88), Ice Hockey Men (85→89), Biathlon W/M (94→96, 96→97).</td></tr>
 <tr><td>Home boost</td><td>Multiplier on the base +1.5 score-point LA 2028 lift. Gymnastics 2.2×, T&F Hurdles/Sprint 1.8–2.0×, Volleyball Beach 1.8×, Swimming 1.3×, Basketball 1.2×, Tennis 1.0×, Rowing 0.8×.</td></tr>
-<tr><td>Marginal medal value</td><td>Expected golds per additional unit of capital. r = (1 − P(gold)) × 0.5 × (1 − pipeline). Pipeline scale: 0.0 = USOPC is primary funder (Gymnastics, Rowing, Wrestling); 0.55 = USAV/federation funded (Volleyball); 0.72 = USSF/NWSL self-funded (Soccer Women — federation revenue covers development, USOPC handles Games ops); 0.7 = WTA/ATP Tennis; 0.85 = NBA Men's Basketball (near-fully self-funded). High pipeline → low marginal USOPC ROI → LP naturally deprioritizes these programs at constrained budgets. Swimming, Track &amp; Field, and Gymnastics dominate LP selection because USOPC is the primary or sole development funder.</td></tr>
+<tr><td>Marginal medal value</td><td>Expected golds per additional unit of capital. r = (1 − P(gold)) × 0.5 × (1 − pipeline). Pipeline tiers: 0.0 = USOPC primary funder (Gymnastics, Rowing, Wrestling, Swimming, Track &amp; Field); 0.35–0.40 = AVP/FIVB pro tour (Beach Volleyball); 0.45 = PWHL (Ice Hockey Women, nascent league); 0.55 = USAV federation (Volleyball Indoor Women); 0.65 = NHL (Ice Hockey Men); 0.70–0.72 = USSF/NWSL and WTA/ATP (Soccer Women, Tennis); 0.85 = NBA (Basketball Men, near-fully self-funded). High pipeline → low marginal USOPC ROI → LP naturally concentrates budget on Swimming, Track &amp; Field, and Gymnastics where every dollar is fully leveraged.</td></tr>
 <tr><td>Efficient frontier</td><td>MILP solved at 35 budget levels (0.5 → max capital). Traces maximum expected golds at each funding level.</td></tr>
 </table>
 </div>
