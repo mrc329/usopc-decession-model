@@ -21,35 +21,82 @@ st.set_page_config(
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Mono:wght@300;400&display=swap');
-    html, body, [class*="css"] { font-family: 'EB Garamond', Georgia, serif; background-color: #181816; color: #e4e4e0; }
+
+    /* ── Dark mode (default) ── */
+    :root {
+        --bg:         #181816;
+        --fg:         #e4e4e0;
+        --muted:      #646460;
+        --dim:        #484844;
+        --faint:      #383834;
+        --border:     #303030;
+        --surface:    #242422;
+        --hr-color:   #282826;
+        --badge-bg:   #e4e4e0;
+        --badge-fg:   #181816;
+        --label-fg:   #8a8a86;
+        --th-protect: #e4e4e0;
+        --th-develop: #8a8a86;
+        --th-maintain:#484844;
+        --pill-border:#e4e4e0;
+        --pill-fg:    #e4e4e0;
+        --pill-sub:   #646460;
+        --quote-color:#555;
+    }
+
+    /* ── Light mode overrides ── */
+    @media (prefers-color-scheme: light) {
+        :root {
+            --bg:         #f8f8f6;
+            --fg:         #1c1c1a;
+            --muted:      #888882;
+            --dim:        #666660;
+            --faint:      #aaaaaa;
+            --border:     #ccccca;
+            --surface:    #ebebeb;
+            --hr-color:   #dededc;
+            --badge-bg:   #1c1c1a;
+            --badge-fg:   #f8f8f6;
+            --label-fg:   #666660;
+            --th-protect: #1c1c1a;
+            --th-develop: #6a6a66;
+            --th-maintain:#3a3a38;
+            --pill-border:#1c1c1a;
+            --pill-fg:    #1c1c1a;
+            --pill-sub:   #888882;
+            --quote-color:#555550;
+        }
+    }
+
+    html, body, [class*="css"] { font-family: 'EB Garamond', Georgia, serif; background-color: var(--bg); color: var(--fg); }
     .main .block-container { padding: 2rem 3rem 3rem 3rem; max-width: 1100px; }
-    h1 { font-family: 'EB Garamond', serif; font-size: 1.9rem; font-weight: 500; letter-spacing: -0.02em; border-bottom: 1px solid #e4e4e0; padding-bottom: 0.4rem; margin-bottom: 0.2rem; color: #e4e4e0; }
-    h2 { font-family: 'EB Garamond', serif; font-size: 1.2rem; font-weight: 500; margin-top: 1.8rem; margin-bottom: 0.3rem; color: #e4e4e0; }
-    h3 { font-family: 'DM Mono', monospace; font-size: 0.68rem; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: #646460; margin-bottom: 0.6rem; }
-    .stTabs [data-baseweb="tab-list"] { gap: 0; border-bottom: 1px solid #303030; background: transparent; }
-    .stTabs [data-baseweb="tab"] { font-family: 'DM Mono', monospace; font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: #646460; padding: 0.5rem 1.5rem; border: none; border-bottom: 2px solid transparent; background: transparent; }
-    .stTabs [aria-selected="true"] { color: #e4e4e0; border-bottom: 2px solid #e4e4e0; background: transparent; }
+    h1 { font-family: 'EB Garamond', serif; font-size: 1.9rem; font-weight: 500; letter-spacing: -0.02em; border-bottom: 1px solid var(--fg); padding-bottom: 0.4rem; margin-bottom: 0.2rem; color: var(--fg); }
+    h2 { font-family: 'EB Garamond', serif; font-size: 1.2rem; font-weight: 500; margin-top: 1.8rem; margin-bottom: 0.3rem; color: var(--fg); }
+    h3 { font-family: 'DM Mono', monospace; font-size: 0.68rem; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.6rem; }
+    .stTabs [data-baseweb="tab-list"] { gap: 0; border-bottom: 1px solid var(--border); background: transparent; }
+    .stTabs [data-baseweb="tab"] { font-family: 'DM Mono', monospace; font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); padding: 0.5rem 1.5rem; border: none; border-bottom: 2px solid transparent; background: transparent; }
+    .stTabs [aria-selected="true"] { color: var(--fg); border-bottom: 2px solid var(--fg); background: transparent; }
     .kpi-row { display: flex; gap: 2.5rem; margin: 1.2rem 0 1.8rem 0; flex-wrap: wrap; }
-    .kpi { border-left: 2px solid #e4e4e0; padding-left: 0.8rem; }
-    .kpi-value { font-family: 'DM Mono', monospace; font-size: 1.8rem; font-weight: 300; line-height: 1; color: #e4e4e0; }
-    .kpi-label { font-family: 'DM Mono', monospace; font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: #646460; margin-top: 0.2rem; }
-    .kpi-sub { font-family: 'EB Garamond', serif; font-size: 0.82rem; font-style: italic; color: #484844; margin-top: 0.1rem; }
+    .kpi { border-left: 2px solid var(--fg); padding-left: 0.8rem; }
+    .kpi-value { font-family: 'DM Mono', monospace; font-size: 1.8rem; font-weight: 300; line-height: 1; color: var(--fg); }
+    .kpi-label { font-family: 'DM Mono', monospace; font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-top: 0.2rem; }
+    .kpi-sub { font-family: 'EB Garamond', serif; font-size: 0.82rem; font-style: italic; color: var(--dim); margin-top: 0.1rem; }
     /* Tufte: thesis border encodes the thesis type — background would be chartjunk */
-    .thesis-card { background: transparent; border-left: 3px solid #e4e4e0; padding: 0.7rem 1rem; margin: 0.4rem 0; }
-    .thesis-label { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: #646460; }
-    .thesis-name { font-family: 'EB Garamond', serif; font-size: 1.05rem; font-weight: 500; color: #e4e4e0; margin: 0.15rem 0 0.1rem 0; }
-    .thesis-desc { font-family: 'EB Garamond', serif; font-size: 0.88rem; font-style: italic; color: #8a8a86; line-height: 1.4; }
+    .thesis-card { background: transparent; border-left: 3px solid var(--fg); padding: 0.7rem 1rem; margin: 0.4rem 0; }
+    .thesis-label { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+    .thesis-name { font-family: 'EB Garamond', serif; font-size: 1.05rem; font-weight: 500; color: var(--fg); margin: 0.15rem 0 0.1rem 0; }
+    .thesis-desc { font-family: 'EB Garamond', serif; font-size: 0.88rem; font-style: italic; color: var(--label-fg); line-height: 1.4; }
     /* Tufte: left border carries the structural signal; fill is noise */
-    .harris-quote { border-left: 3px solid #e4e4e0; padding: 0.5rem 1rem; margin: 0.8rem 0 1.2rem 0; font-style: italic; font-size: 0.95rem; color: #8a8a86; background: transparent; line-height: 1.5; }
+    .harris-quote { border-left: 3px solid var(--fg); padding: 0.5rem 1rem; margin: 0.8rem 0 1.2rem 0; font-style: italic; font-size: 0.95rem; color: var(--label-fg); background: transparent; line-height: 1.5; }
     /* Tufte: a decorative box around the methodology section is chartjunk — let type carry hierarchy */
     .harris-framework { background: transparent; border: none; padding: 1.2rem 0; margin: 1rem 0; line-height: 1.7; }
-    .harris-framework h4 { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; color: #646460; margin: 0 0 0.6rem 0; }
+    .harris-framework h4 { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin: 0 0 0.6rem 0; }
     .harris-framework table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
-    .harris-framework td { padding: 0.3rem 0.8rem 0.3rem 0; vertical-align: top; color: #8a8a86; }
-    .harris-framework td:first-child { font-family: 'DM Mono', monospace; font-size: 0.72rem; color: #646460; white-space: nowrap; padding-right: 1rem; }
-    .para-badge { display: inline-block; font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; background: #e4e4e0; color: #181816; padding: 0.1rem 0.4rem; margin-left: 0.4rem; vertical-align: middle; }
-    .caption { font-family: 'EB Garamond', serif; font-size: 0.88rem; font-style: italic; color: #484844; margin-top: 0.3rem; line-height: 1.5; }
-    hr { border: none; border-top: 1px solid #282826; margin: 1.5rem 0; }
+    .harris-framework td { padding: 0.3rem 0.8rem 0.3rem 0; vertical-align: top; color: var(--label-fg); }
+    .harris-framework td:first-child { font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--muted); white-space: nowrap; padding-right: 1rem; }
+    .para-badge { display: inline-block; font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; background: var(--badge-bg); color: var(--badge-fg); padding: 0.1rem 0.4rem; margin-left: 0.4rem; vertical-align: middle; }
+    .caption { font-family: 'EB Garamond', serif; font-size: 0.88rem; font-style: italic; color: var(--dim); margin-top: 0.3rem; line-height: 1.5; }
+    hr { border: none; border-top: 1px solid var(--hr-color); margin: 1.5rem 0; }
     #MainMenu { visibility: hidden; } footer { visibility: hidden; } header { visibility: hidden; }
 </style>
 """, unsafe_allow_html=True)
@@ -550,10 +597,10 @@ def render_tab(raw_df, context, key, home_games=False, russia_return=False):
         avg_pg = t_sel['p_gold'].mean() if not t_sel.empty else 0.0
         total_cost = t_sel['cost'].sum() if not t_sel.empty else 0.0
         with col:
-            st.markdown(f"""<div class="thesis-card" style="border-left-color:{meta['color']};">
+            st.markdown(f"""<div class="thesis-card" style="border-left-color:var(--th-{thesis.lower()},{meta['color']});">
             <div class="thesis-label">{thesis}</div>
             <div class="thesis-name">{ns} of {n} funded</div>
-            <div style="font-family:'DM Mono',monospace;font-size:0.68rem;color:#646460;margin:0.25rem 0 0.15rem 0;">
+            <div style="font-family:'DM Mono',monospace;font-size:0.68rem;color:var(--muted,#646460);margin:0.25rem 0 0.15rem 0;">
               avg P(gold) {avg_pg:.0%} &nbsp;·&nbsp; cost {total_cost:.1f} units
             </div>
             <div class="thesis-desc">{meta['desc']}</div></div>""", unsafe_allow_html=True)
@@ -564,13 +611,13 @@ def render_tab(raw_df, context, key, home_games=False, russia_return=False):
     if not selected.empty:
         pills = ''.join(
             f'<span style="display:inline-block;font-family:\'DM Mono\',monospace;font-size:0.65rem;'
-            f'letter-spacing:0.06em;border:1px solid #e4e4e0;padding:0.15rem 0.55rem;margin:0.2rem 0.3rem 0.2rem 0;'
-            f'color:#e4e4e0;">{r["sport"]} · {r["discipline"]} <span style="color:#646460;">{r["p_gold"]:.0%}</span></span>'
+            f'letter-spacing:0.06em;border:1px solid var(--pill-border,#e4e4e0);padding:0.15rem 0.55rem;margin:0.2rem 0.3rem 0.2rem 0;'
+            f'color:var(--pill-fg,#e4e4e0);">{r["sport"]} · {r["discipline"]} <span style="color:var(--pill-sub,#646460);">{r["p_gold"]:.0%}</span></span>'
             for _, r in selected.sort_values('p_gold', ascending=False).iterrows()
         )
         st.markdown(
             f'<div style="margin-bottom:1.4rem;"><div style="font-family:\'DM Mono\',monospace;font-size:0.62rem;'
-            f'letter-spacing:0.1em;text-transform:uppercase;color:#646460;margin-bottom:0.4rem;">Funded programs</div>'
+            f'letter-spacing:0.1em;text-transform:uppercase;color:var(--muted,#646460);margin-bottom:0.4rem;">Funded programs</div>'
             f'{pills}</div>',
             unsafe_allow_html=True
         )
@@ -668,13 +715,13 @@ def render_tab(raw_df, context, key, home_games=False, russia_return=False):
     show['Funded'] = show['Funded'].map({1: '✓', 0: '—'})
     show['Pipeline'] = show['Pipeline'].apply(lambda v: f'{int(v*100)}%' if v > 0 else '—')
     def hl(row):
-        return ['background-color:#242422;font-weight:500']*len(row) if row['Funded'] == '✓' else ['']*len(row)
+        return ['background-color:rgba(128,128,124,0.20);font-weight:600']*len(row) if row['Funded'] == '✓' else ['']*len(row)
     st.dataframe(
         show.style
             .apply(hl, axis=1)
-            .bar(subset=['P(gold)'],  color='#8a8a86', vmin=0, vmax=1)
-            .bar(subset=['P(medal)'], color='#484844', vmin=0, vmax=1)
-            .bar(subset=['Fan Fav'],  color='#646460', vmin=0, vmax=1)
+            .bar(subset=['P(gold)'],  color='#6b8caa', vmin=0, vmax=1)
+            .bar(subset=['P(medal)'], color='#8aabba', vmin=0, vmax=1)
+            .bar(subset=['Fan Fav'],  color='#7a9eb0', vmin=0, vmax=1)
             .format({'P(gold)':'{:.0%}','P(medal)':'{:.0%}','Cost':'{:.1f}','Readiness':'{:.2f}','Prev Games':'{:.1f}','Fan Fav':'{:.0%}','Depth':'{:.0f}','Field':'{:.0f}'})
             .hide(axis='index'),
         use_container_width=True
@@ -683,12 +730,12 @@ def render_tab(raw_df, context, key, home_games=False, russia_return=False):
 
 # ── App header ────────────────────────────────────────────────
 st.markdown("# USOPC Portfolio Investment Analytics")
-st.markdown("""<div style="font-family:'DM Mono',monospace;font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:#646460;margin:0.6rem 0 1.2rem 0;">LA 2028 &nbsp;·&nbsp; French Alps 2030 &nbsp;·&nbsp; Rocky Harris allocation framework</div>""", unsafe_allow_html=True)
+st.markdown("""<div style="font-family:'DM Mono',monospace;font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted,#646460);margin:0.6rem 0 1.2rem 0;">LA 2028 &nbsp;·&nbsp; French Alps 2030 &nbsp;·&nbsp; Rocky Harris allocation framework</div>""", unsafe_allow_html=True)
 
 st.markdown("""
 <div class="harris-framework">
 <h4>Rocky Harris · 2024 Allocation Overhaul — three inputs evaluated simultaneously</h4>
-<p style="font-style:italic;color:#555;margin:0.2rem 0 0.8rem 0;">"We manage this like a portfolio of investments. Every dollar we put in, we want to understand what is the return we're going to get — whether that's medals, revenue, or fan engagement." — Rocky Harris, USOPC CEO</p>
+<p style="font-style:italic;color:var(--quote-color,#555);margin:0.2rem 0 0.8rem 0;">"We manage this like a portfolio of investments. Every dollar we put in, we want to understand what is the return we're going to get — whether that's medals, revenue, or fan engagement." — Rocky Harris, USOPC CEO</p>
 <table>
 <tr><td>Medal probability</td><td>Estimated likelihood of podium performance across the quad. Primary return metric.</td></tr>
 <tr><td>Revenue across quad</td><td>Commercial value generated by the NGB. High-revenue programs justify capital even at lower medal probability.</td></tr>
