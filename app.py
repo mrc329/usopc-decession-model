@@ -99,17 +99,15 @@ SUMMER = pd.DataFrame([
     dict(sport='Track & Field', discipline='Men Middle Distance',    thesis='Develop',  mean_pre=85.8, std_pre=6.8, mean_prev=83.2, mean_prev2=79.8, mean_prev3=78.2, age_vs_peak=-5, prior_olympics=1, first_olympics=0, win_streak=1,  sentiment=0.63, cost=0.8, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.55, depth=2, field_size=10, home_boost=1.5, rival_mean=90),
     # Men Long Distance: Kenya/Ethiopia ~95. Grant Fisher top-5 Paris; USA not a gold threat.
     dict(sport='Track & Field', discipline='Men Long Distance',      thesis='Develop',  mean_pre=78.8, std_pre=7.4, mean_prev=76.5, mean_prev2=74.2, mean_prev3=72.1, age_vs_peak=-4, prior_olympics=1, first_olympics=0, win_streak=0,  sentiment=0.56, cost=0.8, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.45, depth=1, field_size=14, home_boost=1.2, rival_mean=95),
-    # Relays: rival_mean reflects the best non-USA relay program.
-    # Women 4x100: Jamaica ~91 is the primary rival.
-    dict(sport='Track & Field', discipline='Women 4x100 Relay',     thesis='Develop',  mean_pre=87.5, std_pre=5.2, mean_prev=85.8, mean_prev2=83.4, mean_prev3=81.2, age_vs_peak= 0, prior_olympics=1, first_olympics=0, win_streak=2,  sentiment=0.63, cost=0.7, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.75, depth=4, field_size=6,  home_boost=1.8, rival_mean=88),
-    # Women 4x400: Jamaica ~91. USA is dominant but Jamaica is a genuine rival.
-    dict(sport='Track & Field', discipline='Women 4x400 Relay',     thesis='Maintain', mean_pre=96.5, std_pre=2.1, mean_prev=95.8, mean_prev2=96.2, mean_prev3=94.8, age_vs_peak= 1, prior_olympics=3, first_olympics=0, win_streak=5,  sentiment=0.74, cost=0.7, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.80, depth=5, field_size=3,  home_boost=2.0, rival_mean=91),
-    # Men 4x100: Jamaica/South Africa ~88. Strong but USA faces consistent DQ risk.
-    dict(sport='Track & Field', discipline='Men 4x100 Relay',       thesis='Develop',  mean_pre=85.2, std_pre=6.8, mean_prev=83.5, mean_prev2=79.8, mean_prev3=84.2, age_vs_peak= 0, prior_olympics=1, first_olympics=0, win_streak=1,  sentiment=0.60, cost=0.7, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.75, depth=3, field_size=8,  home_boost=1.8, rival_mean=88),
-    # Men 4x400: Botswana/Jamaica ~91. USA dominates but Botswana is ascending rapidly.
-    dict(sport='Track & Field', discipline='Men 4x400 Relay',       thesis='Maintain', mean_pre=94.8, std_pre=2.4, mean_prev=94.2, mean_prev2=95.1, mean_prev3=93.8, age_vs_peak= 0, prior_olympics=3, first_olympics=0, win_streak=4,  sentiment=0.72, cost=0.7, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.80, depth=4, field_size=4,  home_boost=2.0, rival_mean=91),
-    # Mixed 4x400: Belgium/Jamaica ~90. USA won Paris 2024.
-    dict(sport='Track & Field', discipline='Mixed 4x400 Relay',     thesis='Maintain', mean_pre=93.8, std_pre=2.8, mean_prev=93.5, mean_prev2=94.1, mean_prev3=0,    age_vs_peak= 0, prior_olympics=2, first_olympics=0, win_streak=3,  sentiment=0.71, cost=0.6, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.70, depth=4, field_size=4,  home_boost=1.8, rival_mean=90),
+    # ── Relays ── consolidated by gender; each entry covers all sprint relay events (4x100, 4x400, etc.).
+    # Blended 60/40 weighting: 4x400 (dominant, Maintain) carries more weight than 4x100 (Develop).
+    # Women Relays: 4x400 dominant (Jamaica ~91) + 4x100 (Jamaica ~88). Depth=5: large shared athlete pool.
+    dict(sport='Track & Field', discipline='Women Relays',          thesis='Maintain', mean_pre=92.9, std_pre=3.4, mean_prev=91.8, mean_prev2=91.1, mean_prev3=89.4, age_vs_peak= 1, prior_olympics=2, first_olympics=0, win_streak=4,  sentiment=0.70, cost=0.8, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.80, depth=5, field_size=5,  home_boost=1.9, rival_mean=90),
+    # Men Relays: 4x400 dominant (Botswana/Jamaica ~91) + 4x100 (Jamaica/South Africa ~88).
+    # DQ risk on 4x100 baton exchanges captured in wider std. Depth=4 shared athlete pool.
+    dict(sport='Track & Field', discipline='Men Relays',            thesis='Maintain', mean_pre=91.0, std_pre=4.2, mean_prev=89.9, mean_prev2=89.0, mean_prev3=90.0, age_vs_peak= 0, prior_olympics=2, first_olympics=0, win_streak=3,  sentiment=0.66, cost=0.8, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.80, depth=4, field_size=6,  home_boost=1.9, rival_mean=90),
+    # Mixed Relay: Belgium/Jamaica ~90. USA won Paris 2024. Draws from both sprint programs.
+    dict(sport='Track & Field', discipline='Mixed Relay',           thesis='Maintain', mean_pre=93.8, std_pre=2.8, mean_prev=93.5, mean_prev2=94.1, mean_prev3=0,    age_vs_peak= 0, prior_olympics=2, first_olympics=0, win_streak=3,  sentiment=0.71, cost=0.6, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.70, depth=4, field_size=4,  home_boost=1.8, rival_mean=90),
     # ── Swimming ── rival_mean is the key correction vs. the old eff_mean*0.91 assumption.
     # Women Distance: Ariarne Titmus (AUS) ~93. Ledecky vs. Titmus is the defining rivalry.
     dict(sport='Swimming',      discipline='Women Distance',   thesis='Maintain', mean_pre=95.2, std_pre=3.8, mean_prev=94.1, mean_prev2=95.8, mean_prev3=92.4, age_vs_peak= 3, prior_olympics=4, first_olympics=0, win_streak=8,  sentiment=0.72, cost=0.9, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.90, depth=1, field_size=3,  home_boost=1.3, rival_mean=93),
@@ -120,14 +118,19 @@ SUMMER = pd.DataFrame([
     # Men Sprint: AUS/UK at ~92 — STRONGER than USA's 87.8. Most honest field in the portfolio.
     dict(sport='Swimming',      discipline='Men Sprint',       thesis='Develop',  mean_pre=87.8, std_pre=5.5, mean_prev=91.2, mean_prev2=87.5, mean_prev3=90.8, age_vs_peak=-4, prior_olympics=0, first_olympics=1, win_streak=3,  sentiment=0.64, cost=0.9, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.80, depth=2, field_size=10, home_boost=1.3, rival_mean=92),
     # Soccer Women: Spain/Germany/Netherlands ~88. USA had a poor Paris 2024 (quarter-final exit).
-    dict(sport='Soccer',        discipline='Women',            thesis='Maintain', mean_pre=91.5, std_pre=2.8, mean_prev=78.3, mean_prev2=71.5, mean_prev3=91.8, age_vs_peak= 1, prior_olympics=2, first_olympics=0, win_streak=3,  sentiment=0.69, cost=1.0, pro_pipeline=0.4, pipeline_erosion=0.0, fan_favorite=0.80, depth=5, field_size=5,  home_boost=1.5, rival_mean=88),
+    dict(sport='Soccer',        discipline='Women',            thesis='Maintain', mean_pre=91.5, std_pre=2.8, mean_prev=78.3, mean_prev2=71.5, mean_prev3=91.8, age_vs_peak= 1, prior_olympics=2, first_olympics=0, win_streak=3,  sentiment=0.69, cost=1.0, pro_pipeline=0.4, pipeline_erosion=0.0, fan_favorite=0.80, depth=5, field_size=5,  home_boost=1.5, rival_mean=88, late_roster=1),
     # Diving Platform: China is the dominant program globally at ~97. USA is a distant contender.
     # This is the starkest rival_mean correction — old model had field at 67.5 (74.2*0.91).
     dict(sport='Diving',        discipline='Platform',         thesis='Develop',  mean_pre=74.2, std_pre=6.8, mean_prev=72.8, mean_prev2=73.5, mean_prev3=71.8, age_vs_peak=-5, prior_olympics=0, first_olympics=1, win_streak=1,  sentiment=0.55, cost=0.8, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.70, depth=1, field_size=8,  home_boost=1.5, rival_mean=97),
     # Basketball Men: France ~88 is the benchmark rival (Paris 2024 silver). USA is above ~92.
-    dict(sport='Basketball',    discipline='Men',              thesis='Maintain', mean_pre=92.0, std_pre=2.0, mean_prev=93.5, mean_prev2=94.2, mean_prev3=95.1, age_vs_peak= 1, prior_olympics=2, first_olympics=0, win_streak=5,  sentiment=0.72, cost=1.0, pro_pipeline=0.4, pipeline_erosion=0.0, fan_favorite=0.90, depth=5, field_size=3,  home_boost=1.2, rival_mean=88),
+    # NBA fully funds player salaries, travel, and development. USOPC role is logistics/admin only.
+    # pro_pipeline raised to 0.85: near-zero marginal USOPC development ROI — NBA absorbs nearly all cost.
+    dict(sport='Basketball',    discipline='Men',              thesis='Maintain', mean_pre=92.0, std_pre=2.0, mean_prev=93.5, mean_prev2=94.2, mean_prev3=95.1, age_vs_peak= 1, prior_olympics=2, first_olympics=0, win_streak=5,  sentiment=0.72, cost=1.0, pro_pipeline=0.85, pipeline_erosion=0.0, fan_favorite=0.90, depth=5, field_size=3,  home_boost=1.2, rival_mean=88, late_roster=1),
     # Rowing Women Eight: NZ/Canada ~89. USA dominant but field is not weak.
-    dict(sport='Rowing',        discipline='Women Eight',      thesis='Maintain', mean_pre=90.2, std_pre=2.4, mean_prev=91.8, mean_prev2=92.4, mean_prev3=93.1, age_vs_peak= 0, prior_olympics=2, first_olympics=0, win_streak=4,  sentiment=0.74, cost=0.9, pro_pipeline=0.0, pipeline_erosion=0.4, fan_favorite=0.35, depth=4, field_size=6,  home_boost=0.8, rival_mean=89),
+    # pipeline_erosion=0.6: university Title IX cuts disproportionately hit women's rowing — the sport
+    # most often added/cut to balance Title IX compliance. Loss of college programs drains the entire
+    # women's pipeline, affecting Women Eight and all downstream women's rowing events.
+    dict(sport='Rowing',        discipline='Women Eight',      thesis='Maintain', mean_pre=90.2, std_pre=2.4, mean_prev=91.8, mean_prev2=92.4, mean_prev3=93.1, age_vs_peak= 0, prior_olympics=2, first_olympics=0, win_streak=4,  sentiment=0.74, cost=0.9, pro_pipeline=0.0, pipeline_erosion=0.6, fan_favorite=0.35, depth=4, field_size=6,  home_boost=0.8, rival_mean=89),
     # Wrestling: Azerbaijan/Japan ~80 are serious rivals. USA not dominant.
     # russia_rival=88: Russia was the most decorated wrestling nation globally. Return would be the
     # largest single rival uplift in the Summer portfolio — from 80 to 88.
@@ -138,7 +141,7 @@ SUMMER = pd.DataFrame([
     dict(sport='Volleyball',    discipline='Beach Men',        thesis='Develop',  mean_pre=81.4, std_pre=6.2, mean_prev=79.8, mean_prev2=79.1, mean_prev3=78.4, age_vs_peak= 0, prior_olympics=0, first_olympics=0, win_streak=3,  sentiment=0.61, cost=0.9, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.60, depth=2, field_size=6,  home_boost=1.5, rival_mean=85),
     # Volleyball Indoor Women: Serbia/Brazil ~87. USA is competitive at this level.
     # russia_rival=90: Russia was a perennial finalist in women's volleyball.
-    dict(sport='Volleyball',    discipline='Indoor Women',     thesis='Maintain', mean_pre=88.6, std_pre=3.4, mean_prev=87.1, mean_prev2=90.2, mean_prev3=89.7, age_vs_peak= 1, prior_olympics=2, first_olympics=0, win_streak=2,  sentiment=0.67, cost=1.0, pro_pipeline=0.4, pipeline_erosion=0.0, fan_favorite=0.60, depth=4, field_size=5,  home_boost=1.5, rival_mean=87, russia_rival=90),
+    dict(sport='Volleyball',    discipline='Indoor Women',     thesis='Maintain', mean_pre=88.6, std_pre=3.4, mean_prev=87.1, mean_prev2=90.2, mean_prev3=89.7, age_vs_peak= 1, prior_olympics=2, first_olympics=0, win_streak=2,  sentiment=0.67, cost=1.0, pro_pipeline=0.4, pipeline_erosion=0.0, fan_favorite=0.60, depth=4, field_size=5,  home_boost=1.5, rival_mean=87, russia_rival=90, late_roster=1),
     # Field Hockey Women: Netherlands ~93 is the dominant global program. USA is a developing challenger.
     # Old model had field at 70.5 (77.5*0.91) — Netherlands actually scores ~93. Major correction.
     dict(sport='Field Hockey',  discipline='Women',            thesis='Develop',  mean_pre=77.5, std_pre=6.8, mean_prev=74.8, mean_prev2=72.4, mean_prev3=70.8, age_vs_peak= 0, prior_olympics=0, first_olympics=0, win_streak=1,  sentiment=0.57, cost=0.9, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.25, depth=3, field_size=8,  home_boost=1.2, rival_mean=93),
@@ -167,7 +170,7 @@ WINTER = pd.DataFrame([
     # Alpine Men: Switzerland/Norway ~85. USA at 79.5 is below the field.
     dict(sport='Alpine Skiing',  discipline='Men Slalom/GS',   thesis='Develop',  mean_pre=79.5, std_pre=8.8, mean_prev=77.4, mean_prev2=76.2, mean_prev3=75.1, age_vs_peak=-3, prior_olympics=0, first_olympics=1, win_streak=0,  sentiment=0.52, cost=0.8, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.65, depth=1, field_size=10, home_boost=1.2, rival_mean=85),
     # Ice Hockey Women: Canada ~91 is the defining rival. Almost perfectly matched.
-    dict(sport='Ice Hockey',     discipline='Women',           thesis='Maintain', mean_pre=92.0, std_pre=2.5, mean_prev=91.5, mean_prev2=92.5, mean_prev3=92.1, age_vs_peak= 2, prior_olympics=3, first_olympics=0, win_streak=2,  sentiment=0.70, cost=1.0, pro_pipeline=0.4, pipeline_erosion=0.0, fan_favorite=0.80, depth=5, field_size=3,  home_boost=1.5, rival_mean=91),
+    dict(sport='Ice Hockey',     discipline='Women',           thesis='Maintain', mean_pre=92.0, std_pre=2.5, mean_prev=91.5, mean_prev2=92.5, mean_prev3=92.1, age_vs_peak= 2, prior_olympics=3, first_olympics=0, win_streak=2,  sentiment=0.70, cost=1.0, pro_pipeline=0.4, pipeline_erosion=0.0, fan_favorite=0.80, depth=5, field_size=3,  home_boost=1.5, rival_mean=91, late_roster=1),
     # Freestyle Aerials: China ~88 is a consistently strong rival in both genders.
     # Russia was also a top-3 Aerials program globally; return would add a ~92 competitor to Women's field.
     dict(sport='Freestyle',      discipline='Women Aerials',   thesis='Develop',  mean_pre=89.8, std_pre=3.0, mean_prev=87.5, mean_prev2=85.1, mean_prev3=83.4, age_vs_peak=-1, prior_olympics=1, first_olympics=0, win_streak=2,  sentiment=0.62, cost=0.9, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.55, depth=2, field_size=6,  home_boost=1.5, rival_mean=88, russia_rival=92),
@@ -196,7 +199,7 @@ WINTER = pd.DataFrame([
     # Ice Hockey Men: Canada/Sweden ~85. USA at 82.3 is close but below the top.
     # russia_rival=89: Russia's Men's hockey program (KHL-depth roster) scores ~89 and would represent
     # the strongest single rival in the field — above Canada.
-    dict(sport='Ice Hockey',     discipline='Men',             thesis='Develop',  mean_pre=82.3, std_pre=6.5, mean_prev=79.8, mean_prev2=72.1, mean_prev3=79.4, age_vs_peak= 0, prior_olympics=0, first_olympics=0, win_streak=0,  sentiment=0.55, cost=1.1, pro_pipeline=0.4, pipeline_erosion=0.0, fan_favorite=0.80, depth=4, field_size=6,  home_boost=1.5, rival_mean=85, russia_rival=89),
+    dict(sport='Ice Hockey',     discipline='Men',             thesis='Develop',  mean_pre=82.3, std_pre=6.5, mean_prev=79.8, mean_prev2=72.1, mean_prev3=79.4, age_vs_peak= 0, prior_olympics=0, first_olympics=0, win_streak=0,  sentiment=0.55, cost=1.1, pro_pipeline=0.4, pipeline_erosion=0.0, fan_favorite=0.80, depth=4, field_size=6,  home_boost=1.5, rival_mean=85, russia_rival=89, late_roster=1),
 ])
 
 # ── Paralympic Summer ─────────────────────────────────────────
@@ -206,14 +209,15 @@ PARA_SUMMER = pd.DataFrame([
     dict(sport='Para Swimming',  discipline='Multi-Class',   thesis='Protect',  mean_pre=94.8, std_pre=2.9, mean_prev=93.1, mean_prev2=91.8, mean_prev3=90.2, age_vs_peak=-2, prior_olympics=0, first_olympics=1, win_streak=8,  sentiment=0.31, cost=1.1, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.45, depth=2, field_size=4,  home_boost=1.5, rival_mean=91),
     dict(sport='Para Athletics', discipline='Sprint T64',    thesis='Protect',  mean_pre=93.2, std_pre=3.5, mean_prev=91.8, mean_prev2=90.2, mean_prev3=88.5, age_vs_peak= 0, prior_olympics=2, first_olympics=0, win_streak=6,  sentiment=0.58, cost=1.0, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.50, depth=2, field_size=4,  home_boost=1.5, rival_mean=90),
     # Wheelchair BB Men: Australia/GB ~87. USA is clearly dominant.
-    dict(sport='Wheelchair BB',  discipline='Men',           thesis='Maintain', mean_pre=90.5, std_pre=2.2, mean_prev=89.4, mean_prev2=88.6, mean_prev3=87.1, age_vs_peak= 1, prior_olympics=2, first_olympics=0, win_streak=3,  sentiment=0.72, cost=1.0, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.45, depth=4, field_size=4,  home_boost=1.5, rival_mean=87),
+    dict(sport='Wheelchair BB',  discipline='Men',           thesis='Maintain', mean_pre=90.5, std_pre=2.2, mean_prev=89.4, mean_prev2=88.6, mean_prev3=87.1, age_vs_peak= 1, prior_olympics=2, first_olympics=0, win_streak=3,  sentiment=0.72, cost=1.0, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.45, depth=4, field_size=4,  home_boost=1.5, rival_mean=87, late_roster=1),
     dict(sport='Para Cycling',   discipline='Time Trial',    thesis='Develop',  mean_pre=79.3, std_pre=5.9, mean_prev=76.2, mean_prev2=73.8, mean_prev3=71.5, age_vs_peak=-4, prior_olympics=0, first_olympics=1, win_streak=2,  sentiment=0.55, cost=0.9, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.30, depth=1, field_size=6,  home_boost=1.2, rival_mean=83),
     # Sitting VB Women: China ~88 is a perennial rival. USA competitive.
-    dict(sport='Sitting VB',     discipline='Women',         thesis='Maintain', mean_pre=88.4, std_pre=3.1, mean_prev=87.5, mean_prev2=86.2, mean_prev3=84.8, age_vs_peak= 1, prior_olympics=2, first_olympics=0, win_streak=2,  sentiment=0.68, cost=0.9, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.35, depth=4, field_size=4,  home_boost=1.5, rival_mean=88),
+    dict(sport='Sitting VB',     discipline='Women',         thesis='Maintain', mean_pre=88.4, std_pre=3.1, mean_prev=87.5, mean_prev2=86.2, mean_prev3=84.8, age_vs_peak= 1, prior_olympics=2, first_olympics=0, win_streak=2,  sentiment=0.68, cost=0.9, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.35, depth=4, field_size=4,  home_boost=1.5, rival_mean=88, late_roster=1),
     dict(sport='Para Archery',   discipline='Recurve',       thesis='Develop',  mean_pre=76.1, std_pre=6.4, mean_prev=73.4, mean_prev2=71.5, mean_prev3=69.8, age_vs_peak=-3, prior_olympics=0, first_olympics=1, win_streak=1,  sentiment=0.52, cost=0.8, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.25, depth=1, field_size=6,  home_boost=1.2, rival_mean=79),
     dict(sport='Para Athletics', discipline='Field F11',     thesis='Develop',  mean_pre=73.5, std_pre=7.1, mean_prev=70.8, mean_prev2=69.4, mean_prev3=67.5, age_vs_peak=-4, prior_olympics=0, first_olympics=1, win_streak=0,  sentiment=0.49, cost=0.8, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.25, depth=1, field_size=6,  home_boost=1.2, rival_mean=79),
-    # Para Rowing: GB/AUS ~81. Same pipeline erosion risk as Olympic Rowing.
-    dict(sport='Para Rowing',    discipline='Mixed Coxed 4', thesis='Develop',  mean_pre=77.8, std_pre=6.2, mean_prev=75.1, mean_prev2=73.2, mean_prev3=71.5, age_vs_peak= 0, prior_olympics=1, first_olympics=0, win_streak=2,  sentiment=0.57, cost=0.8, pro_pipeline=0.0, pipeline_erosion=0.4, fan_favorite=0.25, depth=3, field_size=5,  home_boost=1.2, rival_mean=81),
+    # Para Rowing: GB/AUS ~81. Women's college pipeline erosion cascades into Para pathways —
+    # many Para rowers enter through college adaptive or varsity programs that are being cut.
+    dict(sport='Para Rowing',    discipline='Mixed Coxed 4', thesis='Develop',  mean_pre=77.8, std_pre=6.2, mean_prev=75.1, mean_prev2=73.2, mean_prev3=71.5, age_vs_peak= 0, prior_olympics=1, first_olympics=0, win_streak=2,  sentiment=0.57, cost=0.8, pro_pipeline=0.0, pipeline_erosion=0.5, fan_favorite=0.25, depth=3, field_size=5,  home_boost=1.2, rival_mean=81),
 ])
 
 # ── Paralympic Winter ─────────────────────────────────────────
@@ -226,7 +230,7 @@ PARA_WINTER = pd.DataFrame([
     # Para XC Ski: Ukraine/Canada ~83. Field is stronger than USA's 74.2.
     dict(sport='Para XC Ski',    discipline='Vision Impaired',thesis='Develop',  mean_pre=74.2, std_pre=6.9, mean_prev=71.5, mean_prev2=69.8, mean_prev3=68.2, age_vs_peak=-3, prior_olympics=0, first_olympics=1, win_streak=0,  sentiment=0.48, cost=0.8, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.20, depth=1, field_size=8,  home_boost=1.0, rival_mean=83),
     # Sled Hockey: Canada ~90 is the defining rival. Virtually a two-team gold race.
-    dict(sport='Sled Hockey',    discipline='Men',            thesis='Maintain', mean_pre=91.8, std_pre=2.4, mean_prev=91.2, mean_prev2=90.5, mean_prev3=89.2, age_vs_peak= 0, prior_olympics=3, first_olympics=0, win_streak=4,  sentiment=0.74, cost=1.0, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.55, depth=4, field_size=3,  home_boost=1.5, rival_mean=90),
+    dict(sport='Sled Hockey',    discipline='Men',            thesis='Maintain', mean_pre=91.8, std_pre=2.4, mean_prev=91.2, mean_prev2=90.5, mean_prev3=89.2, age_vs_peak= 0, prior_olympics=3, first_olympics=0, win_streak=4,  sentiment=0.74, cost=1.0, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.55, depth=4, field_size=3,  home_boost=1.5, rival_mean=90, late_roster=1),
     # Wheelchair Curling: Canada/GB ~82. USA at 78.9 is slightly below the field.
     dict(sport='Wheelchair Curl',discipline='Mixed',          thesis='Develop',  mean_pre=78.9, std_pre=5.5, mean_prev=76.8, mean_prev2=74.8, mean_prev3=73.1, age_vs_peak= 1, prior_olympics=1, first_olympics=0, win_streak=2,  sentiment=0.59, cost=0.8, pro_pipeline=0.0, pipeline_erosion=0.0, fan_favorite=0.30, depth=3, field_size=5,  home_boost=1.2, rival_mean=82),
 ])
@@ -586,18 +590,50 @@ def render_tab(raw_df, context, key, home_games=False, russia_return=False):
     if not eroding.empty:
         for _, row in eroding.iterrows():
             eroded_cost = round(row['cost'] * (1 + row['pipeline_erosion'] * 0.3), 2)
+            is_rowing = 'Rowing' in row['sport']
+            if is_rowing:
+                pipeline_desc = (
+                    "Women's rowing is the sport most frequently added and cut to balance Title IX compliance. "
+                    "University program eliminations drain the entire women's pipeline — from club entry points "
+                    "to elite sculling — affecting Women's Eight, all women's sweep events, and downstream Para "
+                    "rowing pathways. This is a systemic women's pipeline issue, not isolated to a single event. "
+                    "USOPC is actively lobbying to reverse these cuts; federal executive action remains possible "
+                    "but unresolved."
+                )
+            else:
+                pipeline_desc = (
+                    "University programs are the primary athlete development pathway for this sport. "
+                    "Program cuts reduce the depth of the US talent pool. "
+                    "USOPC is actively lobbying to reverse these cuts; federal executive action remains possible "
+                    "but unresolved."
+                )
             st.markdown(f"""
             <div class="harris-quote">
             <strong>College pipeline erosion — {row['sport']} · {row['discipline']}</strong><br>
-            University programs are the primary athlete development pathway for this sport.
-            Schools eliminating rowing to manage costs have reduced the depth of the US talent pool.
-            USOPC is actively lobbying to reverse these cuts; federal executive action remains possible
-            but unresolved.<br><br>
+            {pipeline_desc}<br><br>
             Effective cost raised from <strong>{row['cost']:.1f} → {eroded_cost:.2f} units</strong>
             (pipeline erosion {int(row['pipeline_erosion']*100)}%). Outcome variance widened by
             {int(row['pipeline_erosion']*25)}%. These adjustments reflect USOPC absorbing development
             costs previously subsidized by college programs. If policy resolves favorably,
             revert <code>pipeline_erosion</code> to 0.0.
+            </div>
+            """, unsafe_allow_html=True)
+
+    # ── Late roster finalization flag ─────────────────────────────
+    if 'late_roster' in df.columns:
+        late_teams = df[df['late_roster'] > 0]
+        if not late_teams.empty:
+            sports_list = ' &nbsp;·&nbsp; '.join(
+                f"{r['sport']} {r['discipline']}" for _, r in late_teams.iterrows()
+            )
+            st.markdown(f"""
+            <div class="harris-quote">
+            <strong>Late roster finalization — team sports</strong><br>
+            {sports_list}<br><br>
+            These programs field complete rosters selected 6–18 months before the Games — well after
+            the USOPC allocation decision. The model captures <em>program-level</em> probability based
+            on the NGB's historical trajectory and current squad depth, not a fixed named roster.
+            Funding commitment is to the NGB program infrastructure; roster risk is absorbed post-allocation.
             </div>
             """, unsafe_allow_html=True)
 
@@ -673,7 +709,7 @@ P(gold) = share of trials where the US athlete beats the best of N opponents. Pr
 <tr><td>Field size</td><td>Genuine medal-contending nations [1–15]. P(gold) = P(US beats best of N opponents). Shallow fields (Women 4x400 ≈ 3) yield materially higher P(gold) than deep fields (Biathlon ≈ 15).</td></tr>
 <tr><td>Rival mean</td><td>Top competitor's absolute score — replaces the default eff_mean × 0.91 where real rivals diverge. Key examples: Norway ~95 (Cross-Country, USA ~75); China ~97 (Diving Platform, USA ~74); AUS/UK ~92 (Swimming Men Sprint, USA ~88). Defaults to eff_mean × 0.91 if not set. russia_rival activates with the Russia/Belarus toggle — largest shifts: Figure Skating Women (82→93), Wrestling Freestyle (80→88), Ice Hockey Men (85→89), Biathlon W/M (94→96, 96→97).</td></tr>
 <tr><td>Home boost</td><td>Multiplier on the base +1.5 score-point LA 2028 lift. Gymnastics 2.2×, T&F Hurdles/Sprint 1.8–2.0×, Volleyball Beach 1.8×, Swimming 1.3×, Basketball 1.2×, Tennis 1.0×, Rowing 0.8×.</td></tr>
-<tr><td>Marginal medal value</td><td>Expected golds per additional unit of capital. r = (1 − P(gold)) × 0.5 × (1 − pipeline). Pipeline scale: 0.0 = USOPC is primary funder; 0.4 = NBA/NHL/NCAA pipeline; 0.7 = WTA/ATP Tennis (self-funded). High pipeline → low marginal return.</td></tr>
+<tr><td>Marginal medal value</td><td>Expected golds per additional unit of capital. r = (1 − P(gold)) × 0.5 × (1 − pipeline). Pipeline scale: 0.0 = USOPC is primary funder; 0.4 = NHL/NWSL/NCAA pipeline; 0.7 = WTA/ATP Tennis (self-funded); 0.85 = NBA Men's Basketball (near-fully self-funded — USOPC role is logistics only). High pipeline → low marginal return.</td></tr>
 <tr><td>Efficient frontier</td><td>MILP solved at 35 budget levels (0.5 → max capital). Traces maximum expected golds at each funding level.</td></tr>
 </table>
 </div>
@@ -709,10 +745,14 @@ with tab1:
         'Gymnastics now modeled separately by gender: Women\'s is a Protect program (dominant, preparation-gap risk); '
         'Men\'s is a Develop program (Paris 2024 team bronze signals ascending trajectory). '
         'Track & Field split by gender and event cluster — Women 400m/Hurdles (McLaughlin-Levrone) is the '
-        'single most dominant US track program, classified Maintain. Swimming split by gender: '
+        'single most dominant US track program, classified Maintain. Relay programs consolidated by gender '
+        '(Women Relays, Men Relays, Mixed Relay) to represent the full relay program rather than individual '
+        'distances — baton-exchange and DQ risk absorbed in wider std. Swimming split by gender: '
         'Women\'s Distance (Ledecky era, Maintain) anchors the portfolio; Men\'s Distance and both Sprint '
-        'programs are Develop. Perennially dominant programs (Soccer Women, Basketball Men) '
-        'require maintenance capital — low marginal return above the floor.'
+        'programs are Develop. Basketball Men (pro_pipeline=0.85): NBA absorbs nearly all athlete development '
+        'cost — USOPC role is logistics and admin; marginal USOPC investment ROI is near zero. '
+        'Soccer Women and Volleyball Indoor Women require maintenance capital for NGB operations despite '
+        'strong pro pipelines.'
     ), key='budget_summer', home_games=True, russia_return=russia_return)
 
 with tab2:
