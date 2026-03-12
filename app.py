@@ -633,7 +633,7 @@ def render_tab(raw_df, context, key, home_games=False, russia_return=False):
 
 # ── App header ────────────────────────────────────────────────
 st.markdown("# USOPC Portfolio Investment Analytics")
-st.markdown("""<div style="font-family:'DM Mono',monospace;font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:#646460;margin:-0.2rem 0 1.2rem 0;">LA 2028 &nbsp;·&nbsp; French Alps 2030 &nbsp;·&nbsp; Rocky Harris allocation framework</div>""", unsafe_allow_html=True)
+st.markdown("""<div style="font-family:'DM Mono',monospace;font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:#646460;margin:0.6rem 0 1.2rem 0;">LA 2028 &nbsp;·&nbsp; French Alps 2030 &nbsp;·&nbsp; Rocky Harris allocation framework</div>""", unsafe_allow_html=True)
 
 st.markdown("""
 <div class="harris-framework">
@@ -647,7 +647,18 @@ st.markdown("""
 
 <h4 style="margin-top:1rem;">How the numbers are calculated</h4>
 <table>
-<tr><td>P(gold), P(medal)</td><td>8,000 Monte Carlo simulations per program. Six adjustments applied before sampling: (1) Recency-weighted mean — four cycles where available: 45% most recent, 27%, 17%, 11%; falls back to 50/30/20 or 65/35. (2) Blended std — 50% stated + 50% empirical across cycles. (3) Age-vs-peak — std widened 4% per year past peak. (4) Program depth — each depth level above 1 compresses std by 6% (floor at depth=5: −24%), reflecting multi-athlete injury diversification. (5) Home Games lift — base +1.5 score points scaled by per-sport home_boost multiplier (Gymnastics 2.2×, T&F Sprint/Hurdles 1.8–2.0×, Swimming 1.3×, Tennis 1.0×). (6) College pipeline erosion — std widened up to 25% when feeder programs at risk. Athlete score drawn from Normal(eff_mean, eff_std). Field modeled as the maximum of field_size independent draws from Normal(eff_mean × 0.91, eff_std × 1.4) — correctly raises the expected best-opponent score for sports with deeper international competition. P(gold) = fraction of simulations where athlete beats the best opponent. Protect thesis programs take an exponential preparation gap penalty scaled by prior Olympic experience.</td></tr>
+<tr><td>P(gold), P(medal)</td><td>
+8,000 Monte Carlo simulations per program. Six adjustments applied before sampling:
+<ol style="margin:0.4rem 0 0.4rem 1.2rem;padding:0;line-height:1.8;">
+<li><strong>Recency-weighted mean</strong> — four cycles where available: 45% most recent, 27%, 17%, 11%; falls back to 50/30/20 or 65/35.</li>
+<li><strong>Blended std</strong> — 50% stated + 50% empirical across cycles.</li>
+<li><strong>Age-vs-peak</strong> — std widened 4% per year past peak.</li>
+<li><strong>Program depth</strong> — each depth level above 1 compresses std by 6% (floor at depth=5: −24%), reflecting multi-athlete injury diversification.</li>
+<li><strong>Home Games lift</strong> — base +1.5 score points scaled by per-sport home_boost multiplier (Gymnastics 2.2×, T&amp;F Sprint/Hurdles 1.8–2.0×, Swimming 1.3×, Tennis 1.0×).</li>
+<li><strong>College pipeline erosion</strong> — std widened up to 25% when feeder programs at risk.</li>
+</ol>
+Athlete score drawn from Normal(eff_mean, eff_std). Field modeled as the maximum of field_size independent draws from Normal(eff_mean × 0.91, eff_std × 1.4) — correctly raises the expected best-opponent score for sports with deeper international competition. P(gold) = fraction of simulations where athlete beats the best opponent. Protect thesis programs take an exponential preparation gap penalty scaled by prior Olympic experience.
+</td></tr>
 <tr><td>Expected golds</td><td>Sum of P(gold) across funded programs. If two programs have P(gold) = 0.7 and 0.6, expected golds = 1.3 — the average number of golds you'd win across many simulated Games, not a guaranteed count.</td></tr>
 <tr><td>P(any medal)</td><td>1 − ∏(1 − P(medal)) across funded programs, assuming independence.</td></tr>
 <tr><td>Which programs to fund</td><td>Binary LP: maximize ΣP(gold)·x subject to Σcost·x ≤ budget, x ∈ {0,1}.</td></tr>
